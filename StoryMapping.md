@@ -65,6 +65,42 @@ Storyboard
   </tr>
 </table>
 
+<hr></hr>
+Updated storyboard for sprint 1. We removed the plan to change background setting at each new level and divided the statistics display into two sprints.  We also moved varying asteroids size into sprint 2 and refined the asteroids sprint.
+<table width="75%" border="1">
+  <tr>
+    <td> User Story</td>
+    <td> As a space pirate, I want to navigate my spacecraft </td>
+    <td> through outer space  </td>
+    <td> while gathering rare materials from asteroids </td>
+    <td> and being chased by space police. </td>
+  </tr>
+
+  <tr>
+    <td> Sprint 1 </td>
+    <td> I have a spaceship and I can rotate 360 degrees </td>
+    <td> Black screen with score and other statistics displayed, and power ups (minerals) are available </td>
+    <td> Asteroids float through space with different directions and speeds </td>
+    <td> Space police show up and approach </td>
+  </tr>
+
+  <tr>
+    <td> Sprint 2 </td>
+    <td> My spaceship has a laser and mobile functionality </td>
+    <td> Statistics update accordingly after each event </td>
+    <td> Asteroids of varying sizes only collide with player's ship or its laser</td>
+    <td> Space police always shoots at the pirate on sight. </td>
+  </tr>
+
+  <tr> 
+    <td> Sprint 3 </td>
+    <td> My spaceship is the Black Pearl </td>
+    <td> Visual and sound features are implemented </td>
+    <td> Bigger asteroids break into smaller size units</td>
+    <td> Space police shoots faster on higher difficulty </td>
+  </tr>
+</table>
+
 
 
 <hr></hr>

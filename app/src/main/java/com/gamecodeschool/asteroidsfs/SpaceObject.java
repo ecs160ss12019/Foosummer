@@ -7,7 +7,7 @@ import android.graphics.RectF;
 
 public class SpaceObject {
 
-    private RectF mRect; // Give access to precise position and size of asteroid
+    private RectF mRect;        // Give access to precise position and size of object
     private float xVelocity;
     private float yVelocity;
     private float width;
@@ -27,6 +27,30 @@ public class SpaceObject {
     public RectF getRect() {
         return mRect;
     }
+    public float getWidth() {
+        return width;
+    }
+    public void setWidth(float width) {
+        this.width = width;
+    }
+    public float getHeight() {
+        return height;
+    }
+    public void setHeight(float height) {
+        this.height = height;
+    }
+    public float getXVelocity() {
+        return xVelocity;
+    }
+    public void setXVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+    public float getYVelocity() {
+        return yVelocity;
+    }
+    public void setYVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
 
 
     // Draw object
@@ -39,11 +63,22 @@ public class SpaceObject {
 
     // Update the object's position (called each frame/loop)
     // Move the object based on the velocity and current frame rate (mFPS)
-    public void update(long fps){
+    public void update(long fps, int x, int y){
         // Move the top left corner
-        mRect.left = mRect.left + (xVelocity / fps);
-        mRect.top = mRect.top + (yVelocity / fps);
-        // Match up the bottom right corner based on the size of the asteroid
+        mRect.left = mRect.left + (xVelocity / fps) ;
+        mRect.top = mRect.top + (yVelocity / fps) ;
+
+        // If asteroid travels off the screen -> wrap around
+        if (mRect.left < 0)
+            mRect.left = x;
+        if (mRect.left > x)
+            mRect.left = 0;
+        if (mRect.top < 0)
+            mRect.top = y;
+        if (mRect.top > y)
+            mRect.top = 0;
+
+        // Match up the bottom right corner based on the size of the ball
         mRect.right = mRect.left + width;
         mRect.bottom = mRect.top + height;
     }
