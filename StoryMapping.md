@@ -1,14 +1,10 @@
-FooSummer Story Board - "I'm a Space Pirate"
-=================================================================
+# FooSummer Story Board - "I'm a Space Pirate"
 
-BHAG
------------------------------------------------------------------
+## BHAG
 You are a space pirate that is hiding from the Galaxy Federation Space Police Force (GFSPF) in an asteroid belt. Your goal is to escape the GFSPF while gathering rare materials present in the asteroids.
 
 
-User Stories
------------------------------------------------------------------
-
+## User Stories
 As a space pirate I want to use a spacecraft and laser to navigate outer space while escaping the space police force and destroying asteroids.
 
 As a space pirate I have a spaceship and I can rotate 360 degrees.
@@ -24,13 +20,11 @@ As a space pirate I want to use power ups (minerals) available to help me shoot 
 As an asteroid belt I want my asteroids to have different sizes and move in different directions, and at different speeds.
 
 
-Tables
-=================================================================
+## Tables
 As a space pirate, I want to pilot my spaceship to avoid the GFSPF and collect rare materials by destroying the asteroids.
 
 
-<hr></hr>
-Storyboard
+### Storyboard
 <table width="75%" border="1">
   <tr>
     <td> User Story</td>
@@ -65,8 +59,9 @@ Storyboard
   </tr>
 </table>
 
-<hr></hr>
-Updated storyboard for sprint 1. We removed the plan to change background setting at each new level and divided the statistics display into two sprints.  We also moved varying asteroids size into sprint 2 and refined the asteroids sprint.
+
+### Updated Storyboard
+We removed the plan to change background setting at each new level and divided the statistics display into two sprints.  We also moved varying asteroids size into sprint 2 and refined the asteroids sprint.
 <table width="75%" border="1">
   <tr>
     <td> User Story</td>
@@ -102,9 +97,7 @@ Updated storyboard for sprint 1. We removed the plan to change background settin
 </table>
 
 
-
-<hr></hr>
-Acceptance Tests
+### Acceptance Tests
 <table width="75%" border="1">
   <tr>
     <td> User Story</td>
