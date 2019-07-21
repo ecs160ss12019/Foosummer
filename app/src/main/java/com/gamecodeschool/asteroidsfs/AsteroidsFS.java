@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
-import android.app.Activity;
-import android.graphics.Point;
-import android.os.Bundle;
-import android.view.Display;
 
 // main
-public class AsteroidsFS extends Activity{
+public class AsteroidsFS extends Activity {
     private AsteroidsGame myAsteroidsGame;
 
     @Override

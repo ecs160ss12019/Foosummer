@@ -16,25 +16,25 @@ public class Laser extends SpaceObject {
     public void draw(Canvas myCanvas) {
         Paint myPaint = new Paint();
         myPaint.setColor(Color.argb(255, 75, 180, 250));
-        myCanvas.drawRect(super.getRect(), myPaint);
+        myCanvas.drawRect(super.getHitbox(), myPaint);
     }
 
 
     // Update the laser position (called each frame/loop)
-    // Move the asteroid based on the velocity and current frame rate (mFPS)
+    // Allow laser to travel off the screen
     public void update(long fps) {
         // Move the top left corner
-        super.getRect().left = super.getRect().left + (super.getXVelocity() / fps) ;
-        super.getRect().top = super.getRect().top + (super.getYVelocity() / fps) ;
+        super.getHitbox().left = super.getHitbox().left + (super.getVelocityX() / fps) ;
+        super.getHitbox().top = super.getHitbox().top + (super.getVelocityY() / fps) ;
         // Match up the bottom right corner based on the size of the ball
-        super.getRect().right = super.getRect().left + super.getWidth();
-        super.getRect().bottom = super.getRect().top + super.getHeight();
+        super.getHitbox().right = super.getHitbox().left + super.getWidth();
+        super.getHitbox().bottom = super.getHitbox().top + super.getHeight();
     }
 
 
     public void increaseVelocity() {
         // increase the speed by 10%
-        super.setXVelocity(super.getXVelocity() * 1.1f);
-        super.setYVelocity(super.getYVelocity() * 1.1f);
+        super.setVelocityX(super.getVelocityX() * 1.1f);
+        super.setVelocityY(super.getVelocityY() * 1.1f);
     }
 }
