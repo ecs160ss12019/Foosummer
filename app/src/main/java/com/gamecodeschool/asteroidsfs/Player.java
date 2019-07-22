@@ -134,17 +134,35 @@ public class Player {
 
 			centerCoords = new Point((int)(mRect.left+0.5*(mRect.right-mRect.left)),
 					(int)(mRect.top+0.5*(mRect.bottom-mRect.top)));
+
+			// Fix these conditions because ship gets stuck kind of stuck at bounds
 			if(centerCoords.x > maxXCoord){
 				centerCoords.x = (int)maxXCoord;
 			}
-			else if(centerCoords.x < 0){
+			if(centerCoords.x < 0){
 				centerCoords.x = 0;
 			}
-			else if(centerCoords.y > maxYCoord){
+			if(centerCoords.y > maxYCoord){
 				centerCoords.y = (int)maxYCoord;
 			}
-			else if(centerCoords.y < 0){
+			if(centerCoords.y < 0){
 				centerCoords.y = 0;
+			}
+			if (centerCoords.x < 0 && centerCoords.y < 0){
+				centerCoords.x = 0;
+				centerCoords.y = 0;
+			}
+			if (centerCoords.x > maxXCoord && centerCoords.y > maxYCoord){
+				centerCoords.x = (int)maxXCoord;
+				centerCoords.y = (int)maxYCoord;
+			}
+			if (centerCoords.x > maxXCoord && centerCoords.y < 0){
+				centerCoords.x = (int)maxXCoord;
+				centerCoords.y = 0;
+			}
+			if(centerCoords.x < 0 && centerCoords.y > maxYCoord){
+				centerCoords.x = 0;
+				centerCoords.y = (int)maxYCoord;
 			}
 
 
@@ -157,7 +175,7 @@ public class Player {
 
 			Log.d("player: ", "value of mRect.top: " + mRect.top);
 			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y)
+			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;
