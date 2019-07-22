@@ -238,14 +238,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     i = 0;
                 }
 
-                /*
-                Log.d("ADebugTag", "collision detected: " + hit);
-                Log.d("ADebugTag", "value of i: " + i);
-                */
+                Log.d("ADebugTag", "collision detected: " + asteroidPlayerHit);
 
                 //sprint 2
                 // asteroid hit player's ship - decrement player's hitpoints
-                //if(asteroidPlayerHit){}
+
+                int numHits = 0;
+                if(asteroidPlayerHit){
+                    myShip.updateHitPoints(5);
+                    numHits += 1;
+                }
+                Log.d("ADebugTag", "player hit points: " + myShip.getHitPoints());
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
@@ -348,7 +351,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             mBitmapHeadCurrent = Bitmap
                     .createBitmap(mBitmapHeadUp,
                             0, 0, blockSize*3, blockSize*3, matrix, true);
+
+            // https://stackoverflow.com/questions/32816570/how-can-i-remove-black-background-of-after-rotate-bitmap-image-in-android-5-0
             mBitmapHeadCurrent.setHasAlpha(true);
+
             myCanvas.drawBitmap(mBitmapHeadCurrent,
                     myShip.getRectLeft(),
                     myShip.getRectTop(), myPaint);

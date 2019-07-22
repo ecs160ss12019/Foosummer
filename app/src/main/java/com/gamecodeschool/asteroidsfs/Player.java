@@ -19,6 +19,7 @@ public class Player {
 	private float mYVelocity;
 	private float mShipWidth;
 	private float mShipHeight;
+	private float hitPoints = 20;
 	private int lives = 3;
 	private int score = 0;
 	private float mPlayerSpeed;
@@ -57,6 +58,18 @@ public class Player {
 	float getRectLeft() {return mRect.left;}
 
 	float getRectTop() {return mRect.top;}
+
+	void updateHitPoints(float decrVal) {
+		if (decrVal > 0) // some type of input validation here?
+		hitPoints -= decrVal;
+		if (hitPoints == 0){
+			// call to AsteroidsGame to print game over
+			// reset ship location
+		}
+
+	}
+
+	float getHitPoints() {return hitPoints;} // for debugging
 
 
 	// Update the bat- Called each frame/loop
