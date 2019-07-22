@@ -5,16 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.BitmapFactory;
 
-import android.graphics.Matrix;
 // these imports deal with ArrayList class in java
-import java.util.*;
 import java.util.ArrayList;
 
 import java.util.Random;
