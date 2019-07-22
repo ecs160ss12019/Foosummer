@@ -126,8 +126,8 @@ public class GameView {
                         //
                         // // ASTEROIDS
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getHitbox().left,
-                                                render.mAsteroids.get(i).getHitbox().top, myPaint);
+                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getPosition().x,
+                                                render.mAsteroids.get(i).getPosition().y, myPaint);
                         }
                         //
                         // // POWER UPS

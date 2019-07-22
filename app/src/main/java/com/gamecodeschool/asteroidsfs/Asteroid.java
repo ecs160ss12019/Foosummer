@@ -17,8 +17,8 @@ public class Asteroid extends SpaceObject {
     }
 
     // Using this constructor does not generate a RectF in the SpaceObject.
-    public Asteroid(int angle, int xPos, int yPos, float velocityMagnitude, float asteroidSize) {
-        super((float)xPos, (float)yPos, angle, velocityMagnitude, asteroidSize);
+    public Asteroid(double angle, PointF pos, float velocityMagnitude, float asteroidSize) {
+        super(pos, angle, velocityMagnitude, asteroidSize);
         this.hit = false;
 //        bitmap = GameView.createAsteroidBitmap((int)asteroidSize*2);
     }

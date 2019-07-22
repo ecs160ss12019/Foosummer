@@ -15,6 +15,10 @@ public class SpaceObject {
     private float width;
     private float height;
 
+    private float velMagnitude;
+    private float hitRadius;
+    private double angle; // in radians!
+
 
     public SpaceObject(PointF position, float width, float height, float velocityX, float velocityY) {
         this.position = position;
@@ -25,13 +29,19 @@ public class SpaceObject {
         this.velocityY = velocityY;
     }
 
-    public SpaceObject(float positionX, float positionY, int angle, float velocityMagnitude, float hitCircleSize) {
+    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitCircleSize) {
+        // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         float sideLength = hitCircleSize / 2;
-        hitbox = new RectF(positionX-sideLength, positionY-sideLength, positionX+sideLength,positionY+sideLength);
+        hitbox = new RectF(pos.x - sideLength, pos.y - sideLength,
+                pos.x + sideLength,pos.y + sideLength);
         width = hitCircleSize;
         height = width;
-        velocityX = velocityMagnitude * (float) Math.cos(angle);
-        velocityY = velocityMagnitude * (float) Math.sin(angle);
+        // END LEGACY CODE;
+        
+        position = pos;
+        velMagnitude = velocityMagnitude;
+        hitRadius = hitCircleSize;
+        this.angle = angle;
     }
 
 
@@ -58,6 +68,9 @@ public class SpaceObject {
     }
     public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
+    }
+    public float getHitRadius() {
+        return hitRadius;
     }
 
 
@@ -91,12 +104,26 @@ public class SpaceObject {
         hitbox.bottom = hitbox.top + height;
     }
 
-    // Uploaded
     public void update(long time, final Display screen) {
         hitbox.left = hitbox.left + (velocityX * time) ;
         hitbox.top = hitbox.top + (velocityY * time) ;
 
-        // If object travels off the screen -> wrap around
+        // UPDATING NEW POSITION VARIABLE.
+        position.x += velMagnitude * Math.cos(angle);
+        position.y += velMagnitude * Math.sin(angle);
+
+        if(position.x < 0) {
+            position.x = screen.height;
+        }
+        else if(position.y < 0) {
+            position.y = screen.height;
+        }
+        else if(position.x > screen.width) {
+            position.x = 0;
+        }
+        else if(position.y > screen.height) {
+            position.y = 0;
+        }
         if (hitbox.left < 0)
             hitbox.left = screen.width;
         if (hitbox.left > screen.width)
@@ -105,9 +132,14 @@ public class SpaceObject {
             hitbox.top = screen.height;
         if (hitbox.top > screen.height)
             hitbox.top = 0;
+    }
 
-        // Match up the bottom right corner based on the size of the ball
-        hitbox.right = hitbox.left + width;
-        hitbox.bottom = hitbox.top + height;
+    // This should be used to compared two objects to see if they collided.
+    static public boolean detectCollision(SpaceObject A, SpaceObject B) {
+        int distance = (int)Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x), 2) 
+                        + Math.pow((A.getPosition().y - B.getPosition().y), 2));
+
+        // The objects overlap if their distance apart is less than sum of their radius.
+        return distance <= (int)(A.getHitRadius() + B.getHitRadius());
     }
 }

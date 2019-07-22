@@ -1,5 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.graphics.PointF;
+
 import java.util.Random;
 
 /*
@@ -47,10 +49,13 @@ public class ObjectFactory {
                 switch(type) {
                         // case PLAYER:
                         case ASTEROID:
-                                
-                                return new Asteroid(rand.nextInt(maxAngle),
-                                        rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY,
+                                PointF point = new PointF(
+                                        (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
+                                        (float)(rand.nextInt(zone2.yDiff()) + zone2.minY));
+                                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
+                                return new Asteroid(angle,
+                                        point,
                                         currentVelocityMagnitutde,
                                         rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) * objectSizeFactor);
                         // case LASER:
