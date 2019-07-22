@@ -1,6 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
 import org.junit.Test;
+import android.graphics.RectF;
 
 import static org.junit.Assert.*;
 

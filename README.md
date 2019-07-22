@@ -15,4 +15,4 @@ You are a space pirate that is hiding from the Galaxy Federation Space Police Fo
 
 [Story Mapping](https://github.com/ecs160ss12019/Foosummer/blob/master/StoryMapping.md)
 
-[CRC Sprint 1](https://github.com/ecs160ss12019/Foosummer/blob/master/CRC_Cards_Sprint_1.md)
+[CRC Cards](https://github.com/ecs160ss12019/Foosummer/blob/master/CRC_Cards.md)
