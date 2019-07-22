@@ -243,36 +243,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 update();
 
-                // check for collision between player and asteroids
-                Asteroid myAsteroid = asteroids.get(i);
-                boolean asteroidPlayerHit = detectCollision(myShip.getRect(), myAsteroid.getRect());
-                i++;
-                if(i > 4){
-                    i = 0;
-                }
-
-                Log.d("ADebugTag", "collision detected: " + asteroidPlayerHit);
-
-                /* ***** sprint 2 ****** */
-
-                // asteroid hit player's ship - decrement player's hitpoints
-                //int numHits = 0;
-                if(asteroidPlayerHit){
-                    myShip.updateHitPoints(5);
-                    //numHits += 1;
-                }
-                Log.d("ADebugTag", "player hit points: " + myShip.getHitPoints());
-
-                // check for collision between player and police laser
-                boolean playerOppLaserHit = detectCollision(myShip.getRect(), opponentShip.getRect());
-
-                if(playerOppLaserHit){
-                    myShip.updateHitPoints(5);
-                }
-                // check for collision between player's laser and powerup
-                // check for collision between player's laser and asteroids
 
             }
+
+            CollisionEngine myCollision = new CollisionEngine();
+
 
             // The movement has been handled and collisions
             // detected now we can draw the scene.
@@ -517,23 +492,5 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     }
 
 
-
-
-
-
-    /* 
-        We go through run through all object pairs that can be collided.
-        meteor - player's laser.
-        meteor - player
-        enemy - player
-        enemy laser - player
-        enemy - player's laser
-
-        These should cover the basic cases of collision within the game.
-    */
-
-    public boolean detectCollision(RectF objectA, RectF objectB) {
-            return RectF.intersects(objectA, objectB);
-    }
 
 }
