@@ -62,9 +62,9 @@ public class Player {
 	void updateHitPoints(float decrVal) {
 		if (decrVal > 0) // some type of input validation here?
 		hitPoints -= decrVal;
-		if (hitPoints == 0){
+		if (hitPoints <= 0){
 			// call to AsteroidsGame to print game over
-			// reset ship location
+			// reset ship location and hitPoints
 		}
 
 	}
