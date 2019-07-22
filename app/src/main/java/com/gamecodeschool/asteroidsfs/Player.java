@@ -157,7 +157,7 @@ public class Player {
 
 			Log.d("player: ", "value of mRect.top: " + mRect.top);
 			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y)
+			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;
