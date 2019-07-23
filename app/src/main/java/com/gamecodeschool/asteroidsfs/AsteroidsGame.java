@@ -217,7 +217,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void update() {
         // PLAYER
         myShip.update(timeElapsed, getContext(), blockSize, screenX, screenY);
-//        myShip.configMatrix();
+        myShip.configMatrix(gameView.getBitmapDim(), blockSize);
 
         // ASTEROIDS
         for(int i = 0 ; i < asteroids.size() ; i++) {

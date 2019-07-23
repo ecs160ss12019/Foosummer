@@ -63,8 +63,8 @@ public class Player {
 
 		// Configure the size of the player's
 		// hitbox based on the screen resolution
-		mLength = screenX / 30;
-		mHeight = screenY / 30;
+		mLength = screenX / 25;
+		mHeight = screenY / 25;
 
 		// start player ship location at center
 		// of the screen
@@ -193,13 +193,14 @@ public class Player {
 		return this.mBitmapHeadCurrent;
 	}
 
-//	public Matrix configMatrix(){
-//		this.playerMatrix.setRotate(this.getDegree(),
-//				shipBitmap.getWidth() / 2, shipBitmap.getHeight() / 2);
-//
-//		this.playerMatrix.postTranslate((render.mPlayer.getCenterCoords().x) - render.mBlockSize,
-//				(render.mPlayer.getCenterCoords().y) - render.mBlockSize);
-//	}
+	public Matrix configMatrix(Point bitmapDim, int blockSize){
+		this.playerMatrix.setRotate(this.getDegree(),
+				bitmapDim.x / 2, bitmapDim.y / 2);
+
+		this.playerMatrix.postTranslate((centerCoords.x) - blockSize,
+				(centerCoords.y) - blockSize);
+		return this.playerMatrix;
+	}
 
 	public Point getCenterCoords() {
 		return this.centerCoords;

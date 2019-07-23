@@ -30,7 +30,7 @@ public class GameView {
 
         // Bitmaps that is contained within the gameview.
         Bitmap mAsteroids;
-        Bitmap shipBitmap;
+        public Bitmap shipBitmap;
         Bitmap mBackGround;
 
         GameView(Context context, SurfaceHolder surfHolder) {
@@ -48,6 +48,11 @@ public class GameView {
                 shipBitmap.setHasAlpha(true);
 
 
+        }
+
+        public Point getBitmapDim(){
+                Point bitMapDim = new Point(shipBitmap.getWidth(), shipBitmap.getHeight());
+                return bitMapDim;
         }
 
         // Draw the game objects and the HUD.
@@ -68,16 +73,6 @@ public class GameView {
                         // Draw the objects
                         // myCanvas.drawRect(myShipHitbox, myPaint);
                         // myCanvas.drawArc(myShipHitbox.getCirc(), 0, 360, false, myPaint);
-
-
-                        // abstract into Player class & call below functions into AsteroidsGame.update()
-                        render.mPlayer.getMatrix().setRotate(render.mPlayer.getDegree(),
-                                                shipBitmap.getWidth() / 2, shipBitmap.getHeight() / 2);
-
-//                        render.mPlayer.getMatrix().setRotate(render.mPlayer.getDegree())
-
-                        render.mPlayer.getMatrix().postTranslate((render.mPlayer.getCenterCoords().x) - render.mBlockSize,
-                                                (render.mPlayer.getCenterCoords().y) - render.mBlockSize);
 
 
 
