@@ -281,7 +281,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 nowPaused = false;
 
-                if(pointerId == 1 && motionEvent.getX(1) < screenX / 2){
+                if( motionEvent.getX(1) < screenX / 2){
                     // If finger pressed on upper left of screen
                     // then the ship will rotate counter-clockwise
                     if(motionEvent.getY(1) < screenY / 2){
@@ -294,6 +294,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                         myShip.setRotationState(2);
                         Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
                     }
+                }
+                else if(motionEvent.getX(1) > screenX / 2){
+                    myShip.setMoveState(true);
                 }
 
                 break;
@@ -325,8 +328,18 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 Log.d("Controlls", "Action Pointer UP "+ pointerId);
                 Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
 
+                if((pointerId == 0 || pointerId == 1) &&
+                        ((motionEvent.getX(0) < screenX / 2) ||
+                        ((motionEvent.getX(1) < screenX / 2))))
+                {
+                   myShip.setRotationState(0);
+                }
+
                 if(pointerId == 1 && motionEvent.getX(1) < screenX / 2){
                     myShip.setRotationState(0);
+                }
+                if(pointerId == 1 && motionEvent.getX(1) > screenX / 2){
+                    myShip.setMoveState(false);
                 }
 
                 break;

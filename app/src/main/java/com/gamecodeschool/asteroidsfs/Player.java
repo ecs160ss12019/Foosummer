@@ -122,7 +122,7 @@ public class Player {
 		}
 
 		if (moveState == true) {
-			movementMagnitude += 0.1f;
+			movementMagnitude += 0.01f;
 			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * 0.0174533);
 			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * 0.0174533);
 			// + mXVelocity/fps;
@@ -135,47 +135,34 @@ public class Player {
 			centerCoords = new Point((int)(mRect.left+0.5*(mRect.right-mRect.left)),
 					(int)(mRect.top+0.5*(mRect.bottom-mRect.top)));
 
-			// Fix these conditions because ship gets stuck kind of stuck at bounds
-			if(centerCoords.x > maxXCoord){
-				centerCoords.x = (int)maxXCoord;
-			}
-			if(centerCoords.x < 0){
-				centerCoords.x = 0;
-			}
-			if(centerCoords.y > maxYCoord){
-				centerCoords.y = (int)maxYCoord;
-			}
-			if(centerCoords.y < 0){
-				centerCoords.y = 0;
-			}
-			if (centerCoords.x < 0 && centerCoords.y < 0){
-				centerCoords.x = 0;
-				centerCoords.y = 0;
-			}
-			if (centerCoords.x > maxXCoord && centerCoords.y > maxYCoord){
-				centerCoords.x = (int)maxXCoord;
-				centerCoords.y = (int)maxYCoord;
-			}
-			if (centerCoords.x > maxXCoord && centerCoords.y < 0){
-				centerCoords.x = (int)maxXCoord;
-				centerCoords.y = 0;
-			}
-			if(centerCoords.x < 0 && centerCoords.y > maxYCoord){
-				centerCoords.x = 0;
-				centerCoords.y = (int)maxYCoord;
-			}
+			if (mRect.left < 0)
+				mRect.left = x-100;
+				mRect.right = mRect.left + 96;
+			if (mRect.left > x)
+				mRect.left =  0+100;
+				mRect.right = mRect.left + 96;
+			if (mRect.top < 0)
+				mRect.top = y-100;
+				mRect.bottom = mRect.top + 96;
+			if (mRect.top > y)
+				mRect.top = 0+100;
+				mRect.bottom = mRect.top + 96;
 
-
-//			Log.d("player: ", "degree: " + degree);
-//			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
-//			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
-//			Log.d("player: ", "value of dx: " + dx);
-//			Log.d("player: ", "value of dy: " + dy);
-//			Log.d("player: ", "value of mRect.left: " + mRect.left);
-//
-//			Log.d("player: ", "value of mRect.top: " + mRect.top);
-//			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-//			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
+			Log.e("boundary: ","max_X: " + maxXCoord);
+			Log.e("boundary: ", "max_Y: " + maxYCoord);
+			Log.d("player: ", "degree: " + degree);
+			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
+			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
+			Log.d("player: ", "value of dx: " + dx);
+			Log.d("player: ", "value of dy: " + dy);
+			Log.d("player: ", "value of mRect.left: " + mRect.left);
+			Log.d("player: ", "value of mRect.right: " + mRect.right);
+			Log.d("player: ", "value of mRect.LRdiff: " + (mRect.right-mRect.left));
+			Log.d("player: ", "value of mRect.top: " + mRect.top);
+			Log.d("player: ", "value of mRect.bottom: " + mRect.bottom);
+			Log.d("player: ", "value of mRect.BTdiff: " + (mRect.bottom-mRect.top));
+			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
+			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;
@@ -183,7 +170,6 @@ public class Player {
 			this.dx = 0;
 			this.dy = 0;
 			movementMagnitude = 0;
-
 		}
 
 		// setRotate() function?
