@@ -99,15 +99,15 @@ public class GameView {
                         shipBitmap.setHasAlpha(true);
 
                         if(AsteroidsGame.DEBUGGING == true) {
-                                Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
-                                Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
-                                Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
-                                Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
-                                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getCenterCoords().x);
-                                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getCenterCoords().y);
-                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
-                                Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
-                                Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
+//                                Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
+//                                Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
+//                                Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
+//                                Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
+//                                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getCenterCoords().x);
+//                                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getCenterCoords().y);
+//                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
+//                                Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
+//                                Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
                         }
 
                         // myShipHitbox func that will return shipBitmap

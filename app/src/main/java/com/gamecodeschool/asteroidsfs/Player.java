@@ -122,7 +122,7 @@ public class Player {
 		}
 
 		if (moveState == true) {
-			movementMagnitude += 1.1f;
+			movementMagnitude += 0.1f;
 			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * 0.0174533);
 			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * 0.0174533);
 			// + mXVelocity/fps;
@@ -166,16 +166,16 @@ public class Player {
 			}
 
 
-			Log.d("player: ", "degree: " + degree);
-			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
-			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
-			Log.d("player: ", "value of dx: " + dx);
-			Log.d("player: ", "value of dy: " + dy);
-			Log.d("player: ", "value of mRect.left: " + mRect.left);
-
-			Log.d("player: ", "value of mRect.top: " + mRect.top);
-			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
+//			Log.d("player: ", "degree: " + degree);
+//			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
+//			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
+//			Log.d("player: ", "value of dx: " + dx);
+//			Log.d("player: ", "value of dy: " + dy);
+//			Log.d("player: ", "value of mRect.left: " + mRect.left);
+//
+//			Log.d("player: ", "value of mRect.top: " + mRect.top);
+//			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
+//			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;
