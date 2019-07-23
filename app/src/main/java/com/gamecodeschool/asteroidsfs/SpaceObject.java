@@ -105,8 +105,8 @@ public class SpaceObject {
     }
 
     public void update(long time, final Display screen) {
-        hitbox.left = hitbox.left + (velocityX * time) ;
-        hitbox.top = hitbox.top + (velocityY * time) ;
+        // hitbox.left = hitbox.left + (velocityX * time) ;
+        // hitbox.top = hitbox.top + (velocityY * time) ;
 
         // UPDATING NEW POSITION VARIABLE.
         position.x += velMagnitude * Math.cos(angle);
@@ -124,14 +124,6 @@ public class SpaceObject {
         else if(position.y > screen.height) {
             position.y = 0;
         }
-        if (hitbox.left < 0)
-            hitbox.left = screen.width;
-        if (hitbox.left > screen.width)
-            hitbox.left = 0;
-        if (hitbox.top < 0)
-            hitbox.top = screen.height;
-        if (hitbox.top > screen.height)
-            hitbox.top = 0;
     }
 
     // This should be used to compared two objects to see if they collided.

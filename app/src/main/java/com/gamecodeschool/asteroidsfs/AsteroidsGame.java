@@ -22,7 +22,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     // Toggle for debugging
-    static final boolean DEBUGGING = true;
+    static final boolean DEBUGGING = false;
 
     // Drawing objects
     private SurfaceHolder myHolder;
@@ -79,7 +79,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //    private OpponentShip npcShip; 
     private ArrayList<Asteroid> asteroids;
 //    private Laser npcLaser; // vector of lasers associated per npc ship?
-    private PowerUps mineralPowerUps[]; // vector of mineral powerups
+    private ArrayList<PowerUps> mineralPowerUps; // vector of mineral powerups
 //    private Drawable mCustomImage;
 
     private GameView gameView;
@@ -116,12 +116,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // Initialize powerups - eventually have them scale with levels?
         // currently hardcoded to 1 for now
         // ill change it to spawn upon a certain point threshold or timed later
-        mineralPowerUps = new PowerUps[1];
-        Random rn = new Random();
-        for(int i = 0; i < mineralPowerUps.length; i++){
-            mineralPowerUps[i] = new PowerUps(rn.nextInt(screenX), rn.nextInt(screenY),
-                    screenY / 50, screenY / 50, hitsLeft, -(screenY/8), (screenY/8));
-        }
+        mineralPowerUps = new ArrayList<PowerUps>();
+
       
 
         display = new Display(x, y);
@@ -156,6 +152,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             asteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
 
+        for(int i = 0; i < 3; i++) {
+            mineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP, 3));
+        }
     }
 
 
@@ -224,8 +223,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         //POWER UPS
         // PowerUp position - currently stationary
-        for(int i = 0; i < mineralPowerUps.length; i++) {
-            mineralPowerUps[i].update(timeElapsed, screenX, screenY);
+        for(int i = 0; i < mineralPowerUps.size(); i++) {
+            mineralPowerUps.get(i).update(timeElapsed, screenX, screenY);
         }
     }
 
@@ -333,6 +332,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     public boolean detectCollision(RectF objectA, RectF objectB) {
             return RectF.intersects(objectA, objectB);
+
+            for(int i = 0; i < asteroids.size(); i++) {
+                if(RectF.intersect(myPlayer.getHitbox(), asteroids.get(i).getHitbox())) {
+                    takeAction();
+                }
+            }
     }
 
 

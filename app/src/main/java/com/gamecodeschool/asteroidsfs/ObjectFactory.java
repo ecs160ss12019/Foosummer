@@ -46,13 +46,14 @@ public class ObjectFactory {
 
         // Switch Object getter. Chose enum switch, supposedly this is the fastest.
         public SpaceObject getSpaceObject(SpaceObjectType type) {
+                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
                 switch(type) {
-                        // case PLAYER:
                         case ASTEROID:
                                 PointF point = new PointF(
                                         (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
                                         (float)(rand.nextInt(zone2.yDiff()) + zone2.minY));
-                                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
 
                                 return new Asteroid(angle,
                                         point,
@@ -60,11 +61,25 @@ public class ObjectFactory {
                                         rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) * objectSizeFactor);
                         // case LASER:
                         // case OPPONENT:
-                        // case POWERUP:
+//                        case POWERUP:
+//                            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
+//                                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+//                                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
+//                                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
+//                                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
+        }
+        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
+                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
+                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY, 
+                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
+                        (float)(currentVelocityMagnitutde * Math.cos(angle)),
+                        (float)(currentVelocityMagnitutde * Math.sin(angle)));
         }
 
 
