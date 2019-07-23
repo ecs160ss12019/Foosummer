@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
     If the two object's rectf collides, it should return true. If not, should return false.
  */
 
+//FIXME have to redo collision test due to object changes.
 public class collisionTest {
     // asteroids.add(new Asteroid(asteroidXPosition,
     // asteroidYPosition,
@@ -30,6 +31,6 @@ public class collisionTest {
         }
 
         // After 3 incremented position update. A and B should collide.
-        assertTrue(RectF.intersects(A.getRect(), B.getRect()));
+        assertTrue(RectF.intersects(A.getHitbox(), B.getHitbox()));
     }
 }
