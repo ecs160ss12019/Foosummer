@@ -17,32 +17,29 @@ public class CollisionEngine {
             myAsteroid = render.mAsteroids.get(i);
             asteroidPlayerHit = RectF.intersects(render.mPlayer.getHitbox(), myAsteroid.getHitbox());
 
-            // asteroid hit player's ship - decrement player's hit points
-            if (asteroidPlayerHit) {
-                render.mPlayer.updateHitPoints(5);
+            // asteroid hit player's ship - decrement player's life
+            if (asteroidPlayerHit) {}
+        }
+
+        // check for collision between player and police laser
+        //boolean playerOppLaserHit = detectCollision(render.mPlayer.getHitbox(), opponentShip.getRect());
+
+        //if(playerOppLaserHit){render.mPlayer.updateHitPoints(5);}
+
+
+        // check for collision between player's laser and power ups
+        /*PowerUps myPowerUp;
+        boolean laserPowerUpHit;
+        for(int i = 0; i < render.mMineralPowerUps.length; i++){
+            myPowerUp = render.mMineralPowerUps[i];
+            laserPowerUpHit = RectF.intersects(render.mPlayerLaser.getRect(), myPowerUp.getRect());
+
+            if(laserPowerUpHit){
+                //power up activates
             }
+        }*/
 
-            Log.d("ADebugTag", "player hit points: " + render.mPlayer.getHitPoints());
-
-            // check for collision between player and police laser
-            //boolean playerOppLaserHit = detectCollision(render.mPlayer.getHitbox(), opponentShip.getRect());
-
-            //if(playerOppLaserHit){render.mPlayer.updateHitPoints(5);}
-
-
-            // check for collision between player's laser and power ups
-        /*PowerUps myPowerUp = render.mMineralPowerUps[i];
-        boolean laserPowerUpHit = detectCollision(render.mPlayer.getHitbox(), myPowerUp.getRect());
-        i++;
-        if(i > 2){i = 0;}
-
-        if(laserPowerUpHit){
-            //power up activates
-        }
-*/
-            // check for collision between player's laser and asteroids
-
-        }
+        // check for collision between player's laser and asteroids
 
 
     /*

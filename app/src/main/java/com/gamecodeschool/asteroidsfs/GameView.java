@@ -32,6 +32,7 @@ public class GameView {
         Bitmap mAsteroids;
         Bitmap shipBitmap;
         Bitmap mBackGround;
+        Bitmap mOpponentBitmap;
 
         GameView(Context context, SurfaceHolder surfHolder) {
                 ourContext = context;
@@ -46,6 +47,8 @@ public class GameView {
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
 
+                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
+                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, 100, 100, false);
 
         }
 
@@ -135,7 +138,10 @@ public class GameView {
                                 render.mMineralPowerUps[i].draw(myCanvas);
                         }
 
-
+                        // // OPPONENT
+                        for (int i = 0; i < render.mOpponents.size(); i++) {
+                                render.mOpponents.get(i).draw(myCanvas, mOpponentBitmap);
+                        }
                         // Choose the font size
                         // myPaint.setTextSize(fontSize);
 

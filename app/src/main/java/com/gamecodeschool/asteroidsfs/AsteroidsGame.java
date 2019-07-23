@@ -76,7 +76,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //    private Space mySpace;
 
     public Player myShip;
-//    private OpponentShip npcShip; 
+    private ArrayList<Opponent> opponents;
     private ArrayList<Asteroid> asteroids;
 //    private Laser npcLaser; // vector of lasers associated per npc ship?
     private PowerUps mineralPowerUps[]; // vector of mineral powerups
@@ -113,6 +113,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Initialize asteroids
         asteroids = new ArrayList<Asteroid>();
+
+        opponents = new ArrayList<Opponent>();
 
 
         // Initialize powerups - eventually have them scale with levels?
@@ -160,7 +162,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0; i < 3; i++) {
             asteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
-
+        for(int i = 0; i < 3; i++) {
+            opponents.add((Opponent)factory.getSpaceObject(objType.OPPONENT));
+        }
     }
 
 
@@ -230,6 +234,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // PowerUp position - currently stationary
         for(int i = 0; i < mineralPowerUps.length; i++) {
             mineralPowerUps[i].update(myFPS, screenX, screenY);
+        }
+
+        // OPPONENT
+        for(int i = 0 ; i < opponents.size(); i++) {
+            opponents.get(i).update(timeElapsed, display);
         }
     }
 
@@ -344,6 +353,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         mRender.mAsteroids = asteroids;
         mRender.mMineralPowerUps = mineralPowerUps;
         mRender.mBlockSize = blockSize;
+        mRender.mOpponents = opponents;
     }
 
 }
