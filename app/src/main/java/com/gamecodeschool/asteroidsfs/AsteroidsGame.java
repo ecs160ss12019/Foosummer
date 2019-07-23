@@ -22,7 +22,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     // Toggle for debugging
-    static final boolean DEBUGGING = true;
+    static final boolean DEBUGGING = false;
 
     // Drawing objects
     private SurfaceHolder myHolder;
@@ -172,6 +172,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
+
                     gameView.draw(mRender);
                 }
                     
@@ -216,6 +217,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void update() {
         // PLAYER
         myShip.update(timeElapsed, getContext(), blockSize, screenX, screenY);
+//        myShip.configMatrix();
 
         // ASTEROIDS
         for(int i = 0 ; i < asteroids.size() ; i++) {
