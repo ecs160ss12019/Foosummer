@@ -86,6 +86,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private Render mRender = new Render();
     // temp Context
 
+    private CollisionEngine myCollision;
 
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
@@ -113,6 +114,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // Initialize asteroids
         asteroids = new ArrayList<Asteroid>();
 
+
         // Initialize powerups - eventually have them scale with levels?
         // currently hardcoded to 1 for now
         // ill change it to spawn upon a certain point threshold or timed later
@@ -129,6 +131,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         factory = new ObjectFactory(display);
         
         bundleRender();
+
+        // Initialize collision detection object
+        myCollision =  new CollisionEngine();
 
         // enemyShip = new ...()
         // myLaser = new ..()
@@ -172,7 +177,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
+                    myCollision.checkCollision(mRender);
                     gameView.draw(mRender);
+
                 }
 
 
@@ -190,8 +197,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 Log.d("ADebugTag", "value of i: " + i);
                 */
 
-
-            CollisionEngine myCollision = new CollisionEngine();
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup

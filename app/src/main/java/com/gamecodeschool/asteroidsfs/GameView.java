@@ -131,9 +131,10 @@ public class GameView {
                         }
                         //
                         // // POWER UPS
-                        // for(int i = 0; i < mineralPowerUps.length; i++){
-                        // mineralPowerUps[i].draw(myCanvas);
-                        // }
+                        for(int i = 0; i < render.mMineralPowerUps.length; i++){
+                                render.mMineralPowerUps[i].draw(myCanvas);
+                        }
+
 
                         // Choose the font size
                         // myPaint.setTextSize(fontSize);
