@@ -111,22 +111,41 @@ public class Player {
 			if(degree < 0){
 				degree = 360;
 			}
-			degree -= 5;
+			degree -= 3;
 		} else if (rotateState == 2) {
 			if (degree > 360) {
 				degree = 0;
 			}
-			degree += 5;
+			degree += 3;
 		} else {
 			degree = degree;
 		}
 
 		if (moveState == true) {
-			movementMagnitude += 0.01f;
-			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * 0.0174533);
-			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * 0.0174533);
-			// + mXVelocity/fps;
-			// + mYVelocity/fps;
+			movementMagnitude += 0.2f;
+			if(movementMagnitude > 1){
+				this.mXVelocity = 1 * (float) Math.cos(degree * 0.0174533);
+				this.mYVelocity = 1 * (float) Math.sin(degree * 0.0174533);
+			}
+			else{
+				this.mXVelocity = movementMagnitude * (float) Math.cos(degree * 0.0174533);
+				this.mYVelocity = movementMagnitude * (float) Math.sin(degree * 0.0174533);
+			}
+
+			// remove this to reincorporate drag.... this is a bit clunky
+			if(dx > 0 && mXVelocity < 0){
+				dx = -0.2f;
+			}
+			if(dx < 0 && mXVelocity > 0){
+				dx = 0.2f;
+			}
+			if(dy > 0 && mYVelocity < 0){
+				dy = -0.2f;
+			}
+			if(dy < 0 && mYVelocity > 0){
+				dy = 0.2f;
+			}
+
 			this.dx += mXVelocity / fps;
 			this.dy += mYVelocity / fps;
 			// mRect.offset(this.dx, this.dy);
@@ -148,21 +167,22 @@ public class Player {
 				mRect.top = 0+100;
 				mRect.bottom = mRect.top + 96;
 
-			Log.e("boundary: ","max_X: " + maxXCoord);
-			Log.e("boundary: ", "max_Y: " + maxYCoord);
+//			Log.e("boundary: ","max_X: " + maxXCoord);
+//			Log.e("boundary: ", "max_Y: " + maxYCoord);
+			Log.e("player: ", "movementMagnitude: " + movementMagnitude);
 			Log.d("player: ", "degree: " + degree);
 			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
 			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
 			Log.d("player: ", "value of dx: " + dx);
 			Log.d("player: ", "value of dy: " + dy);
-			Log.d("player: ", "value of mRect.left: " + mRect.left);
-			Log.d("player: ", "value of mRect.right: " + mRect.right);
-			Log.d("player: ", "value of mRect.LRdiff: " + (mRect.right-mRect.left));
-			Log.d("player: ", "value of mRect.top: " + mRect.top);
-			Log.d("player: ", "value of mRect.bottom: " + mRect.bottom);
-			Log.d("player: ", "value of mRect.BTdiff: " + (mRect.bottom-mRect.top));
-			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
+//			Log.d("player: ", "value of mRect.left: " + mRect.left);
+//			Log.d("player: ", "value of mRect.right: " + mRect.right);
+//			Log.d("player: ", "value of mRect.LRdiff: " + (mRect.right-mRect.left));
+//			Log.d("player: ", "value of mRect.top: " + mRect.top);
+//			Log.d("player: ", "value of mRect.bottom: " + mRect.bottom);
+//			Log.d("player: ", "value of mRect.BTdiff: " + (mRect.bottom-mRect.top));
+//			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
+//			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;

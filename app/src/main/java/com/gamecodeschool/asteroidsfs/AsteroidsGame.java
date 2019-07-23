@@ -245,8 +245,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
             // The player has put their finger on the screen
             case MotionEvent.ACTION_DOWN:
-//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-//                pointerId = motionEvent.getPointerId(index);
+                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                pointerId = motionEvent.getPointerId(index);
 //                Log.e("Controlls", "Action DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 // If the game was paused unpause
@@ -277,9 +277,25 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_POINTER_DOWN:
                 index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
                 pointerId = motionEvent.getPointerId(index);
-                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
-                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
+//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 nowPaused = false;
+
+                if(motionEvent.getX(0) < screenX / 2){
+                    if(motionEvent.getY(0) < screenY / 2){
+                        // rotate ship counter-clockwise
+                        myShip.setRotationState(1);
+//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+                    }
+                    else if (motionEvent.getY(0) > screenY / 2){
+                        // rotate ship clockwise
+                        myShip.setRotationState(2);
+//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+                    }
+                }
+                else if(motionEvent.getX(0) > screenX ){
+                    myShip.setMoveState(true);
+                }
 
                 if( motionEvent.getX(1) < screenX / 2){
                     // If finger pressed on upper left of screen
@@ -287,12 +303,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     if(motionEvent.getY(1) < screenY / 2){
                         // rotate ship counter-clockwise
                         myShip.setRotationState(1);
-                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
                     }
-                    else{
+                    else if (motionEvent.getY(1) > screenY / 2){
                         // rotate ship clockwise
                         myShip.setRotationState(2);
-                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
                     }
                 }
                 else if(motionEvent.getX(1) > screenX / 2){
@@ -306,8 +322,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // The player lifted their finger
             // from anywhere on screen.
             case MotionEvent.ACTION_UP:
-//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-//                pointerId = motionEvent.getPointerId(index);
+                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                pointerId = motionEvent.getPointerId(index);
 //                Log.d("Controlls", "Action UP "+ pointerId);
 //                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
 
@@ -315,7 +331,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     // stop position
                     myShip.setMoveState(false);
                 }
-                else if(motionEvent.getX() < screenX / 2){
+                if(motionEvent.getX() < screenX / 2){
                     // stop rotation / fix orientation
                     myShip.setRotationState(0);
                 }
@@ -325,8 +341,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_POINTER_UP: // when order of touch and release is the same
                 index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
                 pointerId = motionEvent.getPointerId(index);
-                Log.d("Controlls", "Action Pointer UP "+ pointerId);
-                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//                Log.d("Controlls", "Action Pointer UP "+ pointerId);
+//                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
 
                 if((pointerId == 0 || pointerId == 1) &&
                         ((motionEvent.getX(0) < screenX / 2) ||
@@ -339,6 +355,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     myShip.setRotationState(0);
                 }
                 if(pointerId == 1 && motionEvent.getX(1) > screenX / 2){
+                    myShip.setMoveState(false);
+                }
+                if(pointerId == 0 && motionEvent.getX(0) < screenX / 2){
+                    myShip.setRotationState(0);
+                }
+                if(pointerId == 0 && motionEvent.getX(0) > screenX / 2){
                     myShip.setMoveState(false);
                 }
 
