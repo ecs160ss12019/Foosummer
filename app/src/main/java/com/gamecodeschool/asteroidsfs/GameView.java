@@ -29,23 +29,31 @@ public class GameView {
         Matrix shipMatrix = new Matrix();
 
         // Bitmaps that is contained within the gameview.
-        Bitmap mAsteroids;
+        Bitmap mAsteroid1;
+        Bitmap mAsteroid2;
+        Bitmap mAsteroid3;
         Bitmap shipBitmap;
         Bitmap mBackGround;
 
-        GameView(Context context, SurfaceHolder surfHolder) {
+        GameView(Context context, SurfaceHolder surfHolder, Display screen) {
+                int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
                 ourContext = context;
                 myHolder = surfHolder;
                 myPaint = new Paint();
-                mAsteroids = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
-                mAsteroids = Bitmap.createScaledBitmap(mAsteroids, 100, 100, false);
+                // Preload bitmaps for asteroids and make 3 different scale ones.
+                Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
+                mAsteroid1 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 1,
+                        asteroidSizeFactor * 1, false);
+                mAsteroid2 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 2,
+                        asteroidSizeFactor * 2, false);
+                mAsteroid3 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 3,
+                        asteroidSizeFactor * 3, false);
 
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.sqspaceship);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
-
 
         }
 
@@ -127,13 +135,20 @@ public class GameView {
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getBitmapX(),
+                                switch(render.mAsteroids.get(i).getSize()) {
+                                case 1:
+                                        myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
                                                 render.mAsteroids.get(i).getBitmapY(), myPaint);
-
-//                                myCanvas.drawCircle(render.mAsteroids.get(i).getPosition().x,
-//                                        render.mAsteroids.get(i).getPosition().y,
-//                                        20.0f, myPaint);
-
+                                        break;
+                                case 2:
+                                        myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
+                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        break;
+                                case 3:
+                                        myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
+                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        break;
+                                }
                         }
                         //
                         // // POWER UPS
