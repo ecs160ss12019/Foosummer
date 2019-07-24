@@ -130,10 +130,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         
         bundleRender();
 
-        // enemyShip = new ...()
-        // myLaser = new ..()
-        // enemyLaser = new ..()
-
         startNewGame();
 
     }
@@ -211,12 +207,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
 
-
-
-
     private void update() {
         // PLAYER
-        myShip.update(timeElapsed, getContext(), blockSize, screenX, screenY);
+        myShip.update(timeElapsed, blockSize, screenX, screenY);
         myShip.configMatrix(gameView.getBitmapDim(), blockSize);
 
         // ASTEROIDS

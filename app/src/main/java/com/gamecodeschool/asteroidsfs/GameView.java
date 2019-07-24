@@ -69,13 +69,6 @@ public class GameView {
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
 
-                        //FIXME delete proposals for commented out block of code we will not be needing anymore.
-                        // Draw the objects
-                        // myCanvas.drawRect(myShipHitbox, myPaint);
-                        // myCanvas.drawArc(myShipHitbox.getCirc(), 0, 360, false, myPaint);
-
-
-
 
                         if(AsteroidsGame.DEBUGGING == true) {
                                 Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
@@ -89,7 +82,7 @@ public class GameView {
                                 Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
                         }
 
-                        // myShipHitbox func that will return shipBitmap
+                        // draw the ship and its hitbox
                         myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
                         myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
 
@@ -112,12 +105,12 @@ public class GameView {
                         // mineralPowerUps[i].draw(myCanvas);
                         // }
 
-                        // Choose the font size
-                        // myPaint.setTextSize(fontSize);
+//                         Choose the font size
+//                         myPaint.setTextSize(fontSize);
 
-                        // Draw the HUD
-                        // myCanvas.drawText("Score: " + score + " Lives: " + lives, fontMargin ,
-                        // fontSize, myPaint);
+//                         Draw the HUD
+//                         myCanvas.drawText("Score: " + score + " Lives: " + lives, fontMargin ,
+//                         fontSize, myPaint);
 
                         // if(DEBUGGING){
                         // printDebuggingText();
