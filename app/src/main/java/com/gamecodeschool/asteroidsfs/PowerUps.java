@@ -53,10 +53,9 @@ public class PowerUps {
         mRect.bottom = mRect.top + height;
     }
 
-    public void draw(Canvas myCanvas) {
-        Paint myPaint = new Paint();
-        myPaint.setColor(Color.argb(255, 205, 210, 120));
-        myCanvas.drawRect(mRect, myPaint);
+    public void draw(Canvas myCanvas, Paint inPaint) {
+        inPaint.setColor(Color.argb(255, 205, 210, 120));
+        myCanvas.drawRect(mRect, inPaint);
     }
 
 

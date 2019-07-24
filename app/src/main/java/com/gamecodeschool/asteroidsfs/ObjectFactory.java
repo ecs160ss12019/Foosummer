@@ -1,5 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.graphics.PointF;
+
 import java.util.Random;
 
 /*
@@ -10,14 +12,16 @@ public class ObjectFactory {
         final private int maxAngle = 360;
         final private Display screen;
         final private float defaultVelocity; // Default is 10 seconds to cross width of screen.
+        final private float defaultLaserVelocity;
         final private Zone zone1; // Area in between 25% to 100% of screen
         final private Zone zone2; // Area in between 50% to 100% of screen
         final private int objectSizeFactor;
 
-        final private float TIME = 10; // time it should take to cross screen in seconds
+        final private float TIME = 20; // time it should take to cross screen in seconds
         final private float MS_PER_S = 1000; // 1000 milliseconds per 1 second
         final private int MAX_ASTEROID_SIZE_LEVEL = 3;
         final private int DIVISION_FACTOR = 25;
+        final private float LASER_VEL_FACTOR = 3;
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
 
@@ -39,27 +43,46 @@ public class ObjectFactory {
                 objectSizeFactor = display.width / DIVISION_FACTOR;
 
                 currentVelocityMagnitutde = defaultVelocity;
+                defaultLaserVelocity = ((float)display.width) / LASER_VEL_FACTOR;
         }
 
 
         // Switch Object getter. Chose enum switch, supposedly this is the fastest.
         public SpaceObject getSpaceObject(SpaceObjectType type) {
+                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
                 switch(type) {
-                        // case PLAYER:
                         case ASTEROID:
-                                
-                                return new Asteroid(rand.nextInt(maxAngle),
-                                        rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY,
+                                PointF point = new PointF(
+                                        (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
+                                        (float)(rand.nextInt(zone2.yDiff()) + zone2.minY));
+
+
+                                return new Asteroid(angle,
+                                        point,
                                         currentVelocityMagnitutde,
                                         rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) * objectSizeFactor);
                         // case LASER:
                         // case OPPONENT:
-                        // case POWERUP:
+//                        case POWERUP:
+//                            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
+//                                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+//                                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
+//                                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
+//                                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
+        }
+        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
+                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+
+                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY, 
+                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
+                        (float)(currentVelocityMagnitutde * Math.cos(angle)),
+                        (float)(currentVelocityMagnitutde * Math.sin(angle)));
         }
 
 
@@ -68,7 +91,7 @@ public class ObjectFactory {
         currentVelocityMagnitutde += speecIncrement;
 }
 
-        public void resetSpeed() {
+        public void reset() {
                 currentVelocityMagnitutde = defaultVelocity;
         }
 
