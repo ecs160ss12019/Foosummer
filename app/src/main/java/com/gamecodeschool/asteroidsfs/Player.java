@@ -52,8 +52,6 @@ public class Player {
 	private Bitmap mBitmapHeadUp;
 	private Bitmap mBitmapHeadCurrent;
 
-	//Laser Gun
-	ArrayList<Laser> lasers;
 
 	Player(int screenX, int screenY) {
 
@@ -93,15 +91,10 @@ public class Player {
 		mYVelocity = 0;
 		movementMagnitude = 0;
 
-
-		lasers = new ArrayList<Laser>();
 	}
 
 	public RectF getHitbox() {
 		return mRect;
-	}
-	public ArrayList<Laser> getLasers(){
-		return lasers;
 	}
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
@@ -157,7 +150,7 @@ public class Player {
 
 			Log.d("player: ", "value of mRect.top: " + mRect.top);
 			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y)
+			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
     }
 		else{
 			this.mXVelocity = 0;
@@ -201,10 +194,6 @@ public class Player {
 	}
 
 	public void shoot(int x, int y) {
-		lasers.add(new Laser(new PointF(x/2,y/2),y/100, y/100, -(y/5), (y/5)));
 
-//		for(int i = 0; i < lasers.size(); i++) {
-//			lasers.get(i).update(fps, x, y);
-//		}
 	}
 }
