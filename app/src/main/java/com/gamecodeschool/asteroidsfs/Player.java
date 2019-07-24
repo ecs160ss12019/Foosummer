@@ -31,8 +31,7 @@ public class Player {
 	private int rotateState;
 	// true if player is moving, false if player is stationary
 	private boolean moveState;
-	//Laser Gun
-	ArrayList<Laser> lasers;
+
 
 
 	Player(int screenX, int screenY) {
@@ -70,8 +69,9 @@ public class Player {
 		dy = 0;
 		movementMagnitude = 0;
 
-		lasers = new ArrayList<Laser>();
+
 	}
+
 
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
@@ -95,7 +95,7 @@ public class Player {
 
 	public RectF getHitbox() {return mRect;}
 
-	public ArrayList<Laser> getLasers() {return lasers;}
+
 
 	public float getPlayerLength() {return this.mLength;}
 
@@ -215,10 +215,6 @@ public class Player {
 
 
 	public void shoot(int x, int y) {
-		lasers.add(new Laser(new PointF(x/2,y/2),y/100, y/100, -(y/5), (y/5)));
 
-//		for(int i = 0; i < lasers.size(); i++) {
-//			lasers.get(i).update(fps, x, y);
-//		}
 	}
 }

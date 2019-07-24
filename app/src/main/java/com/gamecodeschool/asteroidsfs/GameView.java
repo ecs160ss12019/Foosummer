@@ -64,7 +64,7 @@ public class GameView {
                         myCanvas = myHolder.lockCanvas();
 
                         // Fills the screen with background "space" image
-                        myCanvas.drawBitmap(mBackGround, 0, 0, null);
+                        myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
 
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
@@ -95,15 +95,21 @@ public class GameView {
                         // }
                         //
                         // // ASTEROIDS
+//                        myPaint.setColor(Color.red(250));
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getHitbox().left,
-                                                render.mAsteroids.get(i).getHitbox().top, myPaint);
+                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getBitmapX(),
+                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+
+//                                myCanvas.drawCircle(render.mAsteroids.get(i).getPosition().x,
+//                                        render.mAsteroids.get(i).getPosition().y,
+//                                        20.0f, myPaint);
+
                         }
                         //
                         // // POWER UPS
-                        // for(int i = 0; i < mineralPowerUps.length; i++){
-                        // mineralPowerUps[i].draw(myCanvas);
-                        // }
+                        for(int i = 0; i < render.mMineralPowerUps.size(); i++){
+                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+                        }
 
 //                         Choose the font size
 //                         myPaint.setTextSize(fontSize);
