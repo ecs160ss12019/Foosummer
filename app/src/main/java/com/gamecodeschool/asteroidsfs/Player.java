@@ -82,13 +82,14 @@ public class Player {
 
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
-	void update(long timeElapsed, int blockSize, int x, int y) {
+	void update(long timeElapsed) {
 		float maxVelocity = 1;
 		float velocityRate = 0.2f;
 		double radToDeg = 0.0174533;
 		float maxDeg = 360;
 		float minDeg = 0;
 		float rotationRate = 3;
+		float wrapAroundOffset = 96;
 
 		if(rotateState == 1){
 			if(degree < minDeg){
@@ -136,18 +137,18 @@ public class Player {
 					(int)(mRect.top+0.5*(mRect.bottom-mRect.top)));
 
 			// wrap around for the Player ship
-			if (mRect.left < 0)
-				mRect.left = x-100;
-				mRect.right = mRect.left + 96;
-			if (mRect.left > x)
-				mRect.left =  0+100;
-				mRect.right = mRect.left + 96;
-			if (mRect.top < 0)
-				mRect.top = y-100;
-				mRect.bottom = mRect.top + 96;
-			if (mRect.top > y)
-				mRect.top = 0+100;
-				mRect.bottom = mRect.top + 96;
+			if (mRect.right < 0)
+				mRect.left = maxXCoord-wrapAroundOffset;
+				mRect.right = mRect.left + wrapAroundOffset;
+			if (mRect.left > maxXCoord)
+				mRect.left =  0;
+				mRect.right = mRect.left + wrapAroundOffset;
+			if (mRect.bottom < 0)
+				mRect.top = maxYCoord-wrapAroundOffset;
+				mRect.bottom = mRect.top + wrapAroundOffset;
+			if (mRect.top > maxYCoord)
+				mRect.top = 0;
+				mRect.bottom = mRect.top + wrapAroundOffset;
 
 //			Log.e("boundary: ","max_X: " + maxXCoord);
 //			Log.e("boundary: ", "max_Y: " + maxYCoord);
