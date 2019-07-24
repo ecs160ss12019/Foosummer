@@ -193,7 +193,9 @@ public class Player {
 		return this.mHeight;
 	}
 
-	public void shoot(int x, int y) {
-
-	}
+	// commented out until implementation.
+	//FIXME TODO: Instantiate a new SpaceObject with a laser magnitude, and copy over current position and angle! We should have laser radius stored somewhere..
+//	public Laser shoot() {
+//		Laser();
+//	}
 }

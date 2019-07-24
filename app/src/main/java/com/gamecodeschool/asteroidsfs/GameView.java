@@ -9,14 +9,6 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.content.Context;
-import android.graphics.RectF;
-import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
-import android.widget.ImageView;
-import android.view.View;
-import android.app.Activity;
-
-import java.util.ArrayList;
 
 // make this an interface
 
@@ -64,8 +56,8 @@ public class GameView {
         }
 
         // Draw the game objects and the HUD.
-        // Receives Render packet that contains objects to be rendered by GameView.
-        void draw(Render render) {
+        // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
+        void draw(SObjectsCollection render) {
                 // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
