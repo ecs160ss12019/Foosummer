@@ -26,11 +26,11 @@ public class GameView {
         private Canvas myCanvas;
         private Paint myPaint;
         private Context ourContext;
-        Matrix shipMatrix = new Matrix();
+        //Matrix shipMatrix = new Matrix();
 
         // Bitmaps that is contained within the gameview.
         Bitmap mAsteroids;
-        Bitmap shipBitmap;
+        public Bitmap shipBitmap;
         Bitmap mBackGround;
 
         GameView(Context context, SurfaceHolder surfHolder) {
@@ -45,8 +45,14 @@ public class GameView {
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
+                shipBitmap.setHasAlpha(true);
 
 
+        }
+
+        public Point getBitmapDim(){
+                Point bitMapDim = new Point(shipBitmap.getWidth(), shipBitmap.getHeight());
+                return bitMapDim;
         }
 
         // Draw the game objects and the HUD.
@@ -63,40 +69,6 @@ public class GameView {
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
 
-                        //FIXME delete proposals for commented out block of code we will not be needing anymore.
-                        // Draw the objects
-                        // myCanvas.drawRect(myShipHitbox, myPaint);
-                        // myCanvas.drawArc(myShipHitbox.getCirc(), 0, 360, false, myPaint);
-
-                        // A bitmap for each direction the ship can face
-                        // Bitmap shipBitmap;
-
-                        // shipBitmap = BitmapFactory
-                        // .decodeResource(ourContext.getResources(),
-                        // R.drawable.sqspaceship);
-
-                        // // // Modify the bitmaps to face the ship
-                        // // // in the correct direction
-                        // shipBitmap = Bitmap
-                        // .createScaledBitmap(shipBitmap,
-                        // mBlockSize*2, mBlockSize*2, true);
-                        //
-                        //
-                        // // set parameters depending on degree orientation vs location of box
-                        // // shipMatrix.preRotate(myShipDegree);
-                        // shipBitmap = Bitmap
-                        // .createBitmap(shipBitmap,
-                        // 0, 0, (mBlockSize*2), (mBlockSize*2), shipMatrix, true);
-                        shipMatrix.setRotate(render.mPlayer.getDegree(),
-                                                shipBitmap.getWidth() / 2, shipBitmap.getHeight() / 2);
-                        // shipMatrix.setTranslate();
-                        // shipMatrix.postTranslate((myShipHitbox.left -
-                        // shipBitmap.getWidth()+mBlockSize),
-                        //// (myShipHitbox.top - shipBitmap.getHeight()+mBlockSize)
-                        //// );
-                        shipMatrix.postTranslate((render.mPlayer.getCenterCoords().x) - render.mBlockSize,
-                                                (render.mPlayer.getCenterCoords().y) - render.mBlockSize);
-                        shipBitmap.setHasAlpha(true);
 
                         if(AsteroidsGame.DEBUGGING == true) {
                                 Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
@@ -105,18 +77,16 @@ public class GameView {
                                 Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
                                 Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getCenterCoords().x);
                                 Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getCenterCoords().y);
-                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
+//                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
                                 Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
                                 Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
                         }
 
-                        // myShipHitbox func that will return shipBitmap
+                        // draw the ship and its hitbox
                         myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
-                        myCanvas.drawBitmap(shipBitmap, shipMatrix, myPaint);
-                        // myCanvas.drawBitmap(shipBitmap,
+                        myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
 
-                        // shipMatrix, myPaint);
-                        // shipMatrix.mapRect(myShipHitbox.getRect());
+
 
                         // // LASERS
                         // // Draw lasers
@@ -141,12 +111,12 @@ public class GameView {
                                 render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
                         }
 
-                        // Choose the font size
-                        // myPaint.setTextSize(fontSize);
+//                         Choose the font size
+//                         myPaint.setTextSize(fontSize);
 
-                        // Draw the HUD
-                        // myCanvas.drawText("Score: " + score + " Lives: " + lives, fontMargin ,
-                        // fontSize, myPaint);
+//                         Draw the HUD
+//                         myCanvas.drawText("Score: " + score + " Lives: " + lives, fontMargin ,
+//                         fontSize, myPaint);
 
                         // if(DEBUGGING){
                         // printDebuggingText();
