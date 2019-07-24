@@ -64,6 +64,13 @@ public class ObjectFactory {
                                         point,
                                         currentVelocityMagnitutde,
                                         sizeMultiplier * asteroidSizeFactor, sizeMultiplier);
+                        // case LASER:
+                        case OPPONENT:
+
+                                return new Opponent(new PointF(screen.width, screen.height), rand.nextInt(zone2.xDiff()) + zone2.minX,
+                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY,
+                                        (float)(currentVelocityMagnitutde*Math.cos(angle)), (float)(currentVelocityMagnitutde*Math.sin(angle)));
+
                 //        case POWERUP:
                 //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
                 //                        rand.nextInt(zone1.yDiff()) + zone1.minY,

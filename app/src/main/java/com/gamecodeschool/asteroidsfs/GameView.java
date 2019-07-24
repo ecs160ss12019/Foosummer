@@ -28,6 +28,7 @@ public class GameView {
         Bitmap mAsteroid3;
         Bitmap shipBitmap;
         Bitmap mBackGround;
+        Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
@@ -55,7 +56,8 @@ public class GameView {
                                                 asteroidSizeFactor / LaserSizeFactor, false);
                 shipBitmap.setHasAlpha(true);
 
-
+                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
+                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, 100, 100, false);
         }
 
         public Point getBitmapDim(){
@@ -123,6 +125,15 @@ public class GameView {
                         for(int i = 0; i < render.mMineralPowerUps.size(); i++){
                                 render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
                         }
+
+                        // // OPPONENT
+                       // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
+                        for (int i = 0; i < render.mOpponents.size(); i++) {
+                                render.mOpponents.get(i).draw(myCanvas, mOpponentBitmap);
+                        }
+                        // Choose the font size
+                        // myPaint.setTextSize(fontSize);
+
 
 //                         Choose the font size
 //                         myPaint.setTextSize(fontSize);

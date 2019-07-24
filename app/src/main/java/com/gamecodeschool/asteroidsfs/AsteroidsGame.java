@@ -1,9 +1,13 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.ArrayList;
@@ -11,6 +15,11 @@ import java.util.ArrayList;
 
 
 class AsteroidsGame extends SurfaceView implements Runnable{
+
+    Canvas canvas;
+    Paint paint;
+
+
     private final int NUM_BLOCKS_WIDE = 40;
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
 
@@ -46,6 +55,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     SpaceObjectType objType; // Enum used for object creation.
 
+    private CollisionEngine myCollision;
 
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
@@ -64,11 +74,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
+        // Initialize opponents
+        opponents = new ArrayList<Opponent>();
 
         startNewGame();
     }
-
-
 
 
 
@@ -85,6 +95,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0; i < 5; i++) {
             gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
+        for(int i = 0; i < 3; i++) {
+            opponents.add((Opponent)factory.getSpaceObject(objType.OPPONENT));
 
         for(int i = 0; i < 3; i++) {
             gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP, 3));
@@ -105,6 +117,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
+                    myCollision.checkCollision(mRender, getContext());
+
                     gameView.draw(gamePcs);
                 }
                     
@@ -179,7 +193,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display.width, display.height);
         }
+
+                // OPPONENT
+        for(int i = 0 ; i < opponents.size(); i++) {
+            opponents.get(i).update(timeElapsed, display);
     }
+
 
 
     // Handle all the screen touches
@@ -358,9 +377,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
 
-
-
-
     /* 
         We go through run through all object pairs that can be collided.
         meteor - player's laser.
@@ -374,4 +390,23 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     public boolean detectCollision(RectF objectA, RectF objectB) {
             return RectF.intersects(objectA, objectB);
     }
+
+    private void gameOver(){
+        // Draw some huge white text
+        paint.setColor(Color.argb(255, 255, 255, 255));
+        paint.setTextSize(blockSize * 10);
+
+        canvas.drawText("Game over!", blockSize * 4,
+                blockSize * 14, paint);
+
+        // Draw some text to prompt restarting
+        paint.setTextSize(blockSize * 2);
+        canvas.drawText("Tap screen to start again",
+                blockSize * 8,
+                blockSize * 18, paint);
+
+        startNewGame();
+    }
+
 }
+

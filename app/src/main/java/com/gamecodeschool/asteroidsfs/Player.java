@@ -228,7 +228,6 @@ public class Player {
 
 
 
-
 	// commented out until implementation.
 	//FIXME TODO: Instantiate a new SpaceObject with a laser magnitude, and copy over current position and angle! We should have laser radius stored somewhere..
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {
