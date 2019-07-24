@@ -20,25 +20,21 @@ import java.util.Timer;
 
 import java.util.ArrayList;
 
+//extends SpaceObject
 public class Player {
 
 	private RectF mRect;
-	private float mLength;
-	private float mHeight;
-	private float maxXCoord;
-	private float maxYCoord;
-	private float mXCoord;
-	private float mYCoord;
-	private float dx;
-	private float dy;
-	private float mXVelocity;
-	private float mYVelocity;
+	private PointF hitboxDim;
+	private PointF maxCoords;
+	private PointF currCoords;
+	private PointF newPos;
+	private PointF currVelocity;
 //	private float mShipWidth;
 //	private float mShipHeight;
 	private int lives = 3;
 	private int score = 0;
 	private float degree;
-	private Point centerCoords;
+	private PointF centerCoords;
 	private float movementMagnitude;
 	protected Matrix playerMatrix = new Matrix();
 	// 0 = stopped, 1 = clockwise, 2 = counter-clockwise
@@ -47,55 +43,47 @@ public class Player {
 	// true if player is moving, false if player is stationary
 	private boolean moveState;
 
-
-
 	// Vars required for timed shooting.
 	private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
 	private final long SHOOT_INTERVAL = 500;
 
-
+//	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(int screenX, int screenY) {
+		//super(pos, angle, velocityMagnitude, hitCircleSize);
 		// max resolution of screen
-		maxXCoord = screenX;
-		maxYCoord = screenY;
+		maxCoords = new PointF(screenX, screenY);
 
 		configHitboxSize();
 		configHitboxLocation();
 
-
-
 		// Intialize mRect (hitbox) based on the size and position
-		mRect = new RectF(mXCoord, mYCoord, mXCoord + mLength - SCALE_TO_CENTER,
-				mYCoord + mLength - SCALE_TO_CENTER);
-//			Log.e("player: ", "value of mLength: " + mLength);
+		mRect = new RectF(currCoords.x, currCoords.y,
+				currCoords.x + hitboxDim.x - SCALE_TO_CENTER,
+				currCoords.y + hitboxDim.x - SCALE_TO_CENTER);
+//			Log.e("player: ", "value of hitboxDim.x: " + hitboxDim.x);
 //		    Log.e("player: ", "value of mRect.left: " + mRect.left);
 //			Log.e("player: ", "value of mRect.right: " + mRect.right);
 //			Log.e("player: ", "value of mRect.top: " + mRect.top);
 //			Log.e("player: ", "value of mRect.bottom: " + mRect.bottom);
 
-		centerCoords = new Point((int) (mRect.left + 0.5 * (mRect.right - mRect.left)),
-				(int) (mRect.top + 0.5 * (mRect.bottom - mRect.top)));
+		setPlayerCenter();
 
 		// Initialize speed of Player to 0
-		mXVelocity = 0;
-		mYVelocity = 0;
-		dx = 0;
-		dy = 0;
+		currVelocity = new PointF(0, 0);
+		newPos = new PointF(0, 0);
 		movementMagnitude = 0;
 	}
 
 	void configHitboxLocation(){
 		// start player ship location at center
 		// of the screen
-		this.mXCoord = maxXCoord / 2;
-		this.mYCoord = maxYCoord / 2;
+		this.currCoords = new PointF(maxCoords.x / 2, maxCoords.y / 2);
 	}
 
 	void configHitboxSize(){
 		// Configure the size of the player's
 		// hitbox based on the screen resolution
-		this.mLength = maxXCoord / 25;
-		this.mHeight = maxYCoord / 25;
+		this.hitboxDim = new PointF(maxCoords.x / 25, maxCoords.y / 25);
 	}
 
 	// Update the Player- Called each frame/loop
@@ -114,15 +102,15 @@ public class Player {
 		return this.playerMatrix;
 	}
 
-	public Point getCenterCoords() {return this.centerCoords;}
+	public PointF getCenterCoords() {return this.centerCoords;}
 
 	public float getDegree() {return this.degree;}
 
 	public RectF getHitbox() {return mRect;}
 
-	public float getPlayerLength() {return this.mLength;}
+	public float getPlayerLength() {return this.hitboxDim.x;}
 
-	public float getPlayerHeight() {return this.mHeight;}
+	public float getPlayerHeight() {return this.hitboxDim.y;}
 
 	public Matrix getMatrix() {return this.playerMatrix;}
 
@@ -153,27 +141,27 @@ public class Player {
 			computePlayerVelocity();
 
 			// remove this to reincorporate drag.... this is a bit clunky
-			if(dx > 0 && mXVelocity < 0){dx = -VELOCITY_RATE;}
-			if(dx < 0 && mXVelocity > 0){dx = VELOCITY_RATE;}
-			if(dy > 0 && mYVelocity < 0){dy = -VELOCITY_RATE;}
-			if(dy < 0 && mYVelocity > 0){dy = VELOCITY_RATE;}
+			if(newPos.x > 0 && currVelocity.x < 0){newPos.x = -VELOCITY_RATE;}
+			if(newPos.x < 0 && currVelocity.x > 0){newPos.x = VELOCITY_RATE;}
+			if(newPos.y > 0 && currVelocity.y < 0){newPos.y = -VELOCITY_RATE;}
+			if(newPos.y < 0 && currVelocity.y > 0){newPos.y = VELOCITY_RATE;}
 
 			// adds velocity to offset to the new position of the Player (hitbox)
-			dx += mXVelocity/timeElapsed;
-			dy += mYVelocity/timeElapsed;
-			mRect.offset(dx, dy);
+			newPos.x += currVelocity.x/timeElapsed;
+			newPos.y += currVelocity.y/timeElapsed;
+			mRect.offset(newPos.x, newPos.y);
 
 			setPlayerCenter();
 			wrapAroundPlayer();
-//			Log.e("boundary: ","max_X: " + maxXCoord);
-//			Log.e("boundary: ", "max_Y: " + maxYCoord);
+//			Log.e("boundary: ","max_X: " + maxCoords.x);
+//			Log.e("boundary: ", "max_Y: " + maxCoords.y);
 
 //			Log.e("player: ", "movementMagnitude: " + movementMagnitude);
 //			Log.d("player: ", "degree: " + degree);
-//			Log.d("player: ", "value of mXVelocity: " + mXVelocity);
-//			Log.d("player: ", "value of mYVelocity: " + mYVelocity);
-//			Log.d("player: ", "value of dx: " + dx);
-//			Log.d("player: ", "value of dy: " + dy);
+//			Log.d("player: ", "value of currVelocity.x: " + currVelocity.x);
+//			Log.d("player: ", "value of currVelocity.y: " + currVelocity.y);
+//			Log.d("player: ", "value of newPos.x: " + newPos.x);
+//			Log.d("player: ", "value of newPos.y: " + newPos.y);
 
 //			Log.d("player: ", "value of mRect.left: " + mRect.left);
 //			Log.d("player: ", "value of mRect.right: " + mRect.right);
@@ -185,10 +173,10 @@ public class Player {
 //			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
 		}
 		else{
-			this.mXVelocity = 0;
-			this.mYVelocity = 0;
-			this.dx = 0;
-			this.dy = 0;
+			this.currVelocity.x = 0;
+			this.currVelocity.y = 0;
+			this.newPos.x = 0;
+			this.newPos.y = 0;
 			movementMagnitude = 0;
 		}
 	}
@@ -196,15 +184,15 @@ public class Player {
 	void wrapAroundPlayer(){
 		// wrap around for the Player ship
 		if (mRect.right < 0)
-			mRect.left = maxXCoord-WRAP_AROUND_OFFSET;
+			mRect.left = maxCoords.x-WRAP_AROUND_OFFSET;
 		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
-		if (mRect.left > maxXCoord)
+		if (mRect.left > maxCoords.x)
 			mRect.left =  0;
 		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
 		if (mRect.bottom < 0)
-			mRect.top = maxYCoord-WRAP_AROUND_OFFSET;
+			mRect.top = maxCoords.y-WRAP_AROUND_OFFSET;
 		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
-		if (mRect.top > maxYCoord)
+		if (mRect.top > maxCoords.y)
 			mRect.top = 0;
 		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
 	}
@@ -212,17 +200,17 @@ public class Player {
 	void computePlayerVelocity(){
 		movementMagnitude += VELOCITY_RATE;
 		if(movementMagnitude > MAX_VELOCITY){
-			this.mXVelocity = MAX_VELOCITY * (float) Math.cos(degree * RAD_TO_DEG);
-			this.mYVelocity = MAX_VELOCITY * (float) Math.sin(degree * RAD_TO_DEG);
+			this.currVelocity.x = MAX_VELOCITY * (float) Math.cos(degree * RAD_TO_DEG);
+			this.currVelocity.y = MAX_VELOCITY * (float) Math.sin(degree * RAD_TO_DEG);
 		}
 		else{
-			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * RAD_TO_DEG);
-			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * RAD_TO_DEG);
+			this.currVelocity.x = movementMagnitude * (float) Math.cos(degree * RAD_TO_DEG);
+			this.currVelocity.y = movementMagnitude * (float) Math.sin(degree * RAD_TO_DEG);
 		}
 	}
 
 	void setPlayerCenter(){
-		centerCoords = new Point((int)(mRect.left+0.5*(mRect.right-mRect.left)),
+		centerCoords = new PointF((int)(mRect.left+0.5*(mRect.right-mRect.left)),
 				(int)(mRect.top+0.5*(mRect.bottom-mRect.top)));
 	}
 
