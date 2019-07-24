@@ -155,6 +155,14 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mAsteroids.get(i).update(timeElapsed, display);
         }
 
+        // PLAYER LASER we call different update since this has a boolean attached to it.
+        for(int i = 0; i < gamePcs.mPlayerLasers.size(); i++) {
+            if(gamePcs.mPlayerLasers.get(i).updateL(timeElapsed, display)) {
+                gamePcs.mPlayerLasers.remove(i);
+                i--;
+            }
+        }
+
         //POWER UPS
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
