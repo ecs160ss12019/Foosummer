@@ -12,7 +12,7 @@ public class Laser extends SpaceObject {
 
     // This one will return false if out of bound.
     // True means it's still inside screen space.
-    public boolean update(long time, final Display screen)  {
+    public boolean updateL(long time, final Display screen)  {
         boolean retVal = false;
         position.x += velMagnitude * Math.cos(angle) * time;
         position.y += velMagnitude * Math.sin(angle) * time;
