@@ -119,16 +119,12 @@ public class GameView {
                         // myShipHitbox func that will return shipBitmap
                         myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
                         myCanvas.drawBitmap(shipBitmap, shipMatrix, myPaint);
-                        // myCanvas.drawBitmap(shipBitmap,
 
-                        // shipMatrix, myPaint);
-                        // shipMatrix.mapRect(myShipHitbox.getRect());
-
-                        // // LASERS
-                        // // Draw lasers
-                        // for(int i = 0; i < myLasers.size(); i++) {
-                        // myLasers.get(i).draw(myCanvas);
-                        // }
+                        // LASERS
+                        for(int i = 0; i < render.mPlayerLasers.size(); i++) {
+                                myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
+                                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
+                        }
                         //
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));

@@ -18,9 +18,11 @@ public class ObjectFactory {
         final private Zone zone2; // Area in between 50% to 100% of screen
 
         final private float TIME = 20; // time it should take to cross screen in seconds
+        final private float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
         final private float MS_PER_S = 1000; // 1000 milliseconds per 1 second
         final private int MAX_ASTEROID_SIZE_LEVEL = 3;
         static final public int DIVISION_FACTOR = 25;
+        final private int LASER_SIZE_FACTOR = 2;
         final private float LASER_VEL_FACTOR = 3;
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
@@ -43,7 +45,7 @@ public class ObjectFactory {
                 
 
                 currentVelocityMagnitutde = defaultVelocity;
-                defaultLaserVelocity = ((float)display.width) / LASER_VEL_FACTOR;
+                defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
         }
 
 
@@ -62,14 +64,12 @@ public class ObjectFactory {
                                         point,
                                         currentVelocityMagnitutde,
                                         sizeMultiplier * asteroidSizeFactor, sizeMultiplier);
-                        // case LASER:
-                        // case OPPONENT:
-//                        case POWERUP:
-//                            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
-//                                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-//                                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
-//                                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
-//                                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
+                //        case POWERUP:
+                //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
+                //                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+                //                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
+                //                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
+                //                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
 
                 }
                 //FIXME have to run some sort of Null point exception.
@@ -84,6 +84,12 @@ public class ObjectFactory {
                         screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
                         (float)(currentVelocityMagnitutde * Math.cos(angle)),
                         (float)(currentVelocityMagnitutde * Math.sin(angle)));
+        }
+
+        public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
+                SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
+                                                screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
+                return new Laser(temp, dmg);
         }
 
 

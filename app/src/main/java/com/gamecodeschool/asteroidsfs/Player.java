@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import java.util.Timer;
 
 import java.util.ArrayList;
 
@@ -52,6 +53,9 @@ public class Player {
 	private Bitmap mBitmapHeadUp;
 	private Bitmap mBitmapHeadCurrent;
 
+	// Vars required for timed shooting.
+	private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
+	private final long SHOOT_INTERVAL = 500;
 
 	Player(int screenX, int screenY) {
 
@@ -111,7 +115,7 @@ public class Player {
 			}
 			degree += 5;
 		} else {
-			degree = degree;
+			this.degree = degree;
 		}
 
 		if (moveState == true) {
@@ -195,7 +199,18 @@ public class Player {
 
 	// commented out until implementation.
 	//FIXME TODO: Instantiate a new SpaceObject with a laser magnitude, and copy over current position and angle! We should have laser radius stored somewhere..
-//	public Laser shoot() {
-//		Laser();
-//	}
+	public Laser shoot(long timeIncrement, ObjectFactory fac) {
+		laserTimer += timeIncrement;
+		if (laserTimer > SHOOT_INTERVAL) {
+			laserTimer = 0;
+			//FIXME TODO: The last int, 1, is a temporary place in for laser damage variable stored in player. This should be able to go up w/ upgrade (maybe)
+			return fac.getPlayerLaser(new PointF(centerCoords.x, centerCoords.y),(degree * Math.PI / 180), 1);
+		}
+
+		return null;
+	}
+
+	public long getTimer() {return laserTimer; }
+
+
 }
