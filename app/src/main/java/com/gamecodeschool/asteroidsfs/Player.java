@@ -14,6 +14,8 @@ public class Player {
 	private float mHeight;
 	private float maxXCoord;
 	private float maxYCoord;
+	private float mXCoord;
+	private float mYCoord;
 	private float dx;
 	private float dy;
 	private float mXVelocity;
@@ -32,23 +34,16 @@ public class Player {
 	// true if player is moving, false if player is stationary
 	private boolean moveState;
 
-
-
 	Player(int screenX, int screenY) {
 		int centeredScaleFactor = 15;
 		// max resolution of screen
 		maxXCoord = screenX;
 		maxYCoord = screenY;
 
-		// Configure the size of the player's
-		// hitbox based on the screen resolution
-		mLength = screenX / 25;
-		mHeight = screenY / 25;
+		configHitboxSize();
+		configHitboxLocation();
 
-		// start player ship location at center
-		// of the screen
-		float mXCoord = screenX / 2;
-		float mYCoord = screenY / 2;
+
 
 		// Intialize mRect (hitbox) based on the size and position
 		mRect = new RectF(mXCoord, mYCoord, mXCoord + mLength - centeredScaleFactor,
@@ -68,10 +63,21 @@ public class Player {
 		dx = 0;
 		dy = 0;
 		movementMagnitude = 0;
-
-
 	}
 
+	void configHitboxLocation(){
+		// start player ship location at center
+		// of the screen
+		this.mXCoord = maxXCoord / 2;
+		this.mYCoord = maxYCoord / 2;
+	}
+
+	void configHitboxSize(){
+		// Configure the size of the player's
+		// hitbox based on the screen resolution
+		this.mLength = maxXCoord / 25;
+		this.mHeight = maxYCoord / 25;
+	}
 
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
@@ -94,8 +100,6 @@ public class Player {
 	public float getDegree() {return this.degree;}
 
 	public RectF getHitbox() {return mRect;}
-
-
 
 	public float getPlayerLength() {return this.mLength;}
 
