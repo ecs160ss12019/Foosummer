@@ -35,6 +35,9 @@ public class ObjectFactory {
         private float opponentVelocity;
         SpaceObjectType objType;
 
+        private PointF defaultShipSize;
+        final private float shipScaleFactor = 25;
+
 
         // When this object is first made for the game engine. The screen 
         ObjectFactory(Display display) {
@@ -51,6 +54,9 @@ public class ObjectFactory {
                 currentVelocityMagnitutde = defaultVelocity;
                 defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
                 opponentVelocity = ((float)display.width) / OPPONENT_TIME / MS_PER_S;
+
+                defaultShipSize = new PointF(screen.width / shipScaleFactor,
+                        screen.height / shipScaleFactor);
         }
 
 
@@ -59,6 +65,9 @@ public class ObjectFactory {
                 double angle = rand.nextInt(maxAngle) * Math.PI / 180;
 
                 switch(type) {
+                        case PLAYER:
+                                return new Player(new PointF(screen.width/2, screen.height/2),
+                                        defaultShipSize.x);
                         case ASTEROID:
                                 PointF point = new PointF(
                                         (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),

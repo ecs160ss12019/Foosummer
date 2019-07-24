@@ -10,23 +10,21 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
 import static com.gamecodeschool.asteroidsfs.GameConfig.WRAP_AROUND_OFFSET;
 
 
-
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.graphics.Point;
 import java.util.Timer;
-
 import java.util.ArrayList;
 
 //extends SpaceObject
-public class Player {
+public class Player extends SpaceObject{
 
 	private RectF mRect;
-	private PointF hitboxDim;
+//	private PointF hitboxDim;
 	private PointF maxCoords;
-	private PointF currCoords;
+//	private PointF currCoords;
 	private PointF newPos;
 	private PointF currVelocity;
 //	private float mShipWidth;
@@ -48,18 +46,22 @@ public class Player {
 	private final long SHOOT_INTERVAL = 500;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
-	Player(int screenX, int screenY) {
-		//super(pos, angle, velocityMagnitude, hitCircleSize);
-		// max resolution of screen
-		maxCoords = new PointF(screenX, screenY);
+	Player(PointF pos, float playerLength) {
+		super(pos, 0, 0, playerLength);
 
-		configHitboxSize();
-		configHitboxLocation();
+		// max resolution of screen
+		maxCoords = new PointF(pos.x*2, pos.y*2);
+
+//		configHitboxSize();
+//		configHitboxLocation();
+		//currCoords.x = pos.x
+		//currCoords.y = pos.y
+		//hitboxDim.x = playerLength
 
 		// Intialize mRect (hitbox) based on the size and position
-		mRect = new RectF(currCoords.x, currCoords.y,
-				currCoords.x + hitboxDim.x - SCALE_TO_CENTER,
-				currCoords.y + hitboxDim.x - SCALE_TO_CENTER);
+		mRect = new RectF(pos.x, pos.y,
+				pos.x + playerLength - SCALE_TO_CENTER,
+				pos.y + playerLength - SCALE_TO_CENTER);
 //			Log.e("player: ", "value of hitboxDim.x: " + hitboxDim.x);
 //		    Log.e("player: ", "value of mRect.left: " + mRect.left);
 //			Log.e("player: ", "value of mRect.right: " + mRect.right);
@@ -74,23 +76,27 @@ public class Player {
 		movementMagnitude = 0;
 	}
 
-	void configHitboxLocation(){
-		// start player ship location at center
-		// of the screen
-		this.currCoords = new PointF(maxCoords.x / 2, maxCoords.y / 2);
-	}
+//	void configHitboxLocation(){
+//		// start player ship location at center
+//		// of the screen
+//		this.currCoords = new PointF(maxCoords.x / 2, maxCoords.y / 2);
+//	}
 
-	void configHitboxSize(){
-		// Configure the size of the player's
-		// hitbox based on the screen resolution
-		this.hitboxDim = new PointF(maxCoords.x / 25, maxCoords.y / 25);
-	}
+//	void configHitboxSize(){
+//		// Configure the size of the player's
+//		// hitbox based on the screen resolution
+//		this.hitboxDim = new PointF(maxCoords.x / 25, maxCoords.y / 25);
+//	}
 
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
-	void update(long timeElapsed) {
+	@Override
+	public void update(long timeElapsed, Display display ) {
+		super.update(timeElapsed, display);
+
 		rotatePlayer();
-		movePlayer(timeElapsed);
+//		movePlayer(timeElapsed);
+		this.mRect.offsetTo(position.x, position.y);
 	}
 
 	public Matrix configMatrix(Point bitmapDim, int blockSize){
@@ -107,10 +113,6 @@ public class Player {
 	public float getDegree() {return this.degree;}
 
 	public RectF getHitbox() {return mRect;}
-
-	public float getPlayerLength() {return this.hitboxDim.x;}
-
-	public float getPlayerHeight() {return this.hitboxDim.y;}
 
 	public Matrix getMatrix() {return this.playerMatrix;}
 
@@ -149,6 +151,7 @@ public class Player {
 			// adds velocity to offset to the new position of the Player (hitbox)
 			newPos.x += currVelocity.x/timeElapsed;
 			newPos.y += currVelocity.y/timeElapsed;
+//			mRect.offsetTo();
 			mRect.offset(newPos.x, newPos.y);
 
 			setPlayerCenter();
