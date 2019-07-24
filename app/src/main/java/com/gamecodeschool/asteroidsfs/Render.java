@@ -10,7 +10,6 @@ public class Render {
         Player mPlayer;
         int mBlockSize;
         ArrayList<Asteroid> mAsteroids;
-        ArrayList<Laser> mPlayerLaser;
         // ArrayList<Laser> mEnemeyLaser; // to be implemented once we have enemy ship.
         ArrayList<PowerUps> mMineralPowerUps;
 }

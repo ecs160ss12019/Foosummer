@@ -34,10 +34,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private long timeElapsed;
     // Number of milliseconds in a second
     private final int MILLIS_IN_SECOND = 1000;
-
-    // Screen resolution
-    private int screenX;
-    private int screenY;
     /* 
         JSC: Let's eventually replace screen resolution 
         with this object variable (that contains the screen x y size)
@@ -90,14 +86,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
         super(context);
+        display = new Display(x, y);
 
 
         blockSize = x / NUM_BLOCKS_WIDE;
-
-
-        this.screenX = x;
-        this.screenY = y;
-
 
         // Initialize the objects
         // ready for drawing with
@@ -108,24 +100,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameView = new GameView(context, myHolder);
 
         // Initialize the objects
-        myShip = new Player(screenX, screenY);
+        myShip = new Player(display.width, display.height);
 
         // Initialize asteroids
         asteroids = new ArrayList<Asteroid>();
 
-        // Initialize powerups - eventually have them scale with levels?
-        // currently hardcoded to 1 for now
-        // ill change it to spawn upon a certain point threshold or timed later
         mineralPowerUps = new ArrayList<PowerUps>();
 
-      
-
-        display = new Display(x, y);
         gameProgress = new GameProgress();
         factory = new ObjectFactory(display);
         
         bundleRender();
-
         // enemyShip = new ...()
         // myLaser = new ..()
         // enemyLaser = new ..()
@@ -147,8 +132,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void startNewGame() {
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
         gameProgress.reset();
-        factory.resetSpeed();
-        for(int i = 0; i < 3; i++) {
+        factory.reset();
+        for(int i = 0; i < 10; i++) {
             asteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
 
@@ -214,7 +199,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     private void update() {
         // PLAYER
-        myShip.update(timeElapsed, getContext(), blockSize, screenX, screenY);
+        myShip.update(timeElapsed, getContext(), blockSize, display.width, display.height);
 
         // ASTEROIDS
         for(int i = 0 ; i < asteroids.size() ; i++) {
@@ -224,7 +209,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //POWER UPS
         // PowerUp position - currently stationary
         for(int i = 0; i < mineralPowerUps.size(); i++) {
-            mineralPowerUps.get(i).update(timeElapsed, screenX, screenY);
+            mineralPowerUps.get(i).update(timeElapsed, display.width, display.height);
         }
     }
 
@@ -246,16 +231,16 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
                 // If finger pressed on right side of screen
                 // then the ship will accelerate
-                if(motionEvent.getX() > screenX / 2){
+                if(motionEvent.getX() > display.width / 2){
                     // call method that will accelerate ship
                     myShip.setMoveState(true);
                 }
 
                 // If finger pressed on left side of screen...
-                if(motionEvent.getX() < screenX / 2){
+                if(motionEvent.getX() < display.width / 2){
                     // If finger pressed on upper left of screen
                     // then the ship will rotate counter-clockwise
-                    if(motionEvent.getY() < screenY / 2){
+                    if(motionEvent.getY() < display.height / 2){
                         // rotate ship counter-clockwise
                         myShip.setRotationState(1);
                     }
@@ -270,12 +255,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // The player lifted their finger
             // from anywhere on screen.
             case MotionEvent.ACTION_UP:
-                if(motionEvent.getX() > screenX / 2){
+                if(motionEvent.getX() > display.width / 2){
                     // stop position
                     myShip.setMoveState(false);
                 }
 
-                if(motionEvent.getX() < screenX / 2){
+                if(motionEvent.getX() < display.width / 2){
                     // stop rotation / fix orientation
                     myShip.setRotationState(0);
                 }
@@ -332,14 +317,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     public boolean detectCollision(RectF objectA, RectF objectB) {
             return RectF.intersects(objectA, objectB);
-
-            for(int i = 0; i < asteroids.size(); i++) {
-                if(RectF.intersect(myPlayer.getHitbox(), asteroids.get(i).getHitbox())) {
-                    takeAction();
-                }
-            }
     }
-
 
     private void bundleRender(){
         mRender.mPlayer = myShip;
