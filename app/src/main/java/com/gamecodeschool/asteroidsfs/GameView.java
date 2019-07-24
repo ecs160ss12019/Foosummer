@@ -21,6 +21,7 @@ import java.util.ArrayList;
 // make this an interface
 
 public class GameView {
+        final private int LaserSizeFactor = 2;
 
         private SurfaceHolder myHolder;
         private Canvas myCanvas;
@@ -34,6 +35,7 @@ public class GameView {
         Bitmap mAsteroid3;
         Bitmap shipBitmap;
         Bitmap mBackGround;
+        Bitmap mPlayerLaserBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -54,6 +56,10 @@ public class GameView {
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
+                // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
+                mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
+                mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
+                                                asteroidSizeFactor / LaserSizeFactor, false);
 
         }
 
