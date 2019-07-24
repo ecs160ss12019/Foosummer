@@ -14,4 +14,5 @@ public class Render {
         // ArrayList<Laser> mEnemeyLaser; // to be implemented once we have enemy ship.
         PowerUps mMineralPowerUps[];
         ArrayList<Opponent> mOpponents;
+        GameProgress gameProgress;
 }

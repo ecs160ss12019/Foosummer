@@ -17,7 +17,7 @@ public class Opponent extends SpaceObject{
         super(position, width, height, velocityX, velocityY);
         this.hit = false;
     }
-
+/*
     public Bitmap getBitmap() {
         return bitmap;
     }
@@ -27,7 +27,7 @@ public class Opponent extends SpaceObject{
     public float getVerticalPos() {
         return super.getHitbox().top;
     }
-
+*/
     // Draw opponent w/ picture
     public void draw(Canvas canvas, Bitmap OpponentBitmap) {
         Paint myPaint = new Paint();

@@ -1,10 +1,13 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.ArrayList;
@@ -17,6 +20,11 @@ import java.util.*;
 import java.util.Random;
 
 class AsteroidsGame extends SurfaceView implements Runnable{
+
+    Canvas canvas;
+    Paint paint;
+
+
     private final int NUM_BLOCKS_WIDE = 40;
     int blockSize;
 
@@ -113,7 +121,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Initialize asteroids
         asteroids = new ArrayList<Asteroid>();
-
+        // Initialize opponents
         opponents = new ArrayList<Opponent>();
 
 
@@ -144,8 +152,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         startNewGame();
 
     }
-
-
 
 
 
@@ -184,28 +190,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     myCollision.checkCollision(mRender);
                     gameView.draw(mRender);
 
+
+                    /*if(gameProgress.getGameStatus()){
+                        gameOver();
+                    }*/
+
+
+
                 }
 
-
-                // check for collision between player and asteroids
-                // Asteroid myAsteroid = asteroids.get(i);
-                // boolean asteroidPlayerHit = detectCollision(myShip.getRect(), myAsteroid.getHitbox());
-                // i++;
-                // if(i > 4){
-                //     i = 0;
-                // }
-
-
-                /*
-                Log.d("ADebugTag", "collision detected: " + hit);
-                Log.d("ADebugTag", "value of i: " + i);
-                */
-
-
-                // check for collision between player and police laser
-                // check for collision between player's laser and powerup
-                // check for collision between player's laser and asteroids
-                //detectCollisions();
             }
 
             // How long did this frame/loop take?
@@ -354,6 +347,25 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         mRender.mMineralPowerUps = mineralPowerUps;
         mRender.mBlockSize = blockSize;
         mRender.mOpponents = opponents;
+        mRender.gameProgress = gameProgress;
+    }
+
+    private void gameOver(){
+        // Draw some huge white text
+        paint.setColor(Color.argb(255, 255, 255, 255));
+        paint.setTextSize(blockSize * 10);
+
+        canvas.drawText("Game over!", blockSize * 4,
+                blockSize * 14, paint);
+
+        // Draw some text to prompt restarting
+        paint.setTextSize(blockSize * 2);
+        canvas.drawText("Tap screen to start again",
+                blockSize * 8,
+                blockSize * 18, paint);
+
+        startNewGame();
     }
 
 }
+
