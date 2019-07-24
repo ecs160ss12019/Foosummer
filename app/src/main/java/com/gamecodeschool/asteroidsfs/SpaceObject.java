@@ -32,25 +32,22 @@ public class SpaceObject {
         this.angle = angle;
     }
 
-    public PointF getPosition() {
-        return position;
+    public SpaceObject(SpaceObject cpy) {
+        position = cpy.position;
+        velMagnitude = cpy.velMagnitude;
+        hitRadius = cpy.hitRadius;
+        angle = cpy.angle;
     }
+
     public float getVelocityX() {
         return (float)(velMagnitude * Math.cos(angle));
     }
     public float getVelocityY() {
         return (float)(velMagnitude * Math.sin(angle));
     }
-    // Commented out since this might not be
-//    public void setVelocityX(float velocityX) {
-//        this.velocityX = velocityX;
-//    }
-//    public void setVelocityY(float velocityY) {
-//        this.velocityY = velocityY;
-//    }
-    public float getHitRadius() {
-        return hitRadius;
-    }
+    
+    public PointF getPosition() {return position;}
+    public float getHitRadius() {return hitRadius;}
 
     // Following two getters returns coordinate for top left corner for bitmap. When used together.
     public float getBitmapX() {
@@ -79,15 +76,4 @@ public class SpaceObject {
             position.y = 0;
         }
     }
-
-    /* An example of how a collision detection for this base object would work.
-     * This is done through radial sum of two objects and comparing that to the distance of two objects.
-     */
-    // static public boolean detectCollision(SpaceObject A, SpaceObject B) {
-    //     int distance = (int)Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x), 2) 
-    //                     + Math.pow((A.getPosition().y - B.getPosition().y), 2));
-
-    //     // The objects overlap if their distance apart is less than sum of their radius.
-    //     return distance <= (int)(A.getHitRadius() + B.getHitRadius());
-    // }
 }

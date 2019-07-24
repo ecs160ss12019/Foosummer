@@ -6,21 +6,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.content.Context;
-import android.graphics.RectF;
-import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
-import android.widget.ImageView;
-import android.view.View;
-import android.app.Activity;
-
-import java.util.ArrayList;
 
 // make this an interface
 
 public class GameView {
+        final private int LaserSizeFactor = 2;
 
         private SurfaceHolder myHolder;
         private Canvas myCanvas;
@@ -29,22 +23,36 @@ public class GameView {
         //Matrix shipMatrix = new Matrix();
 
         // Bitmaps that is contained within the gameview.
-        Bitmap mAsteroids;
-        public Bitmap shipBitmap;
+        Bitmap mAsteroid1;
+        Bitmap mAsteroid2;
+        Bitmap mAsteroid3;
+        Bitmap shipBitmap;
         Bitmap mBackGround;
+        Bitmap mPlayerLaserBM;
 
-        GameView(Context context, SurfaceHolder surfHolder) {
+        GameView(Context context, SurfaceHolder surfHolder, Display screen) {
+                int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
                 ourContext = context;
                 myHolder = surfHolder;
                 myPaint = new Paint();
-                mAsteroids = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
-                mAsteroids = Bitmap.createScaledBitmap(mAsteroids, 100, 100, false);
+                // Preload bitmaps for asteroids and make 3 different scale ones.
+                Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
+                mAsteroid1 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 1,
+                        asteroidSizeFactor * 1, false);
+                mAsteroid2 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 2,
+                        asteroidSizeFactor * 2, false);
+                mAsteroid3 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 3,
+                        asteroidSizeFactor * 3, false);
 
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.sqspaceship);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
+                // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
+                mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
+                mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
+                                                asteroidSizeFactor / LaserSizeFactor, false);
                 shipBitmap.setHasAlpha(true);
 
 
@@ -56,8 +64,8 @@ public class GameView {
         }
 
         // Draw the game objects and the HUD.
-        // Receives Render packet that contains objects to be rendered by GameView.
-        void draw(Render render) {
+        // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
+        void draw(SObjectsCollection render) {
                 // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
@@ -86,24 +94,29 @@ public class GameView {
                         myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
                         myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
 
-
-
-                        // // LASERS
-                        // // Draw lasers
-                        // for(int i = 0; i < myLasers.size(); i++) {
-                        // myLasers.get(i).draw(myCanvas);
-                        // }
+                        // LASERS
+                        for(int i = 0; i < render.mPlayerLasers.size(); i++) {
+                                myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
+                                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
+                        }
                         //
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getBitmapX(),
+                                switch(render.mAsteroids.get(i).getSize()) {
+                                case 1:
+                                        myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
                                                 render.mAsteroids.get(i).getBitmapY(), myPaint);
-
-//                                myCanvas.drawCircle(render.mAsteroids.get(i).getPosition().x,
-//                                        render.mAsteroids.get(i).getPosition().y,
-//                                        20.0f, myPaint);
-
+                                        break;
+                                case 2:
+                                        myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
+                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        break;
+                                case 3:
+                                        myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
+                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        break;
+                                }
                         }
                         //
                         // // POWER UPS
