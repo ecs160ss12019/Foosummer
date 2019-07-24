@@ -129,7 +129,8 @@ public class GameView {
                         // // OPPONENT
                        // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
                         for (int i = 0; i < render.mOpponents.size(); i++) {
-                                render.mOpponents.get(i).draw(myCanvas, mOpponentBitmap);
+                                myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                        render.mOpponents.get(i).getBitmapY(), myPaint);
                         }
                         // Choose the font size
                         // myPaint.setTextSize(fontSize);

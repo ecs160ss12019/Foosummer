@@ -12,40 +12,40 @@ import java.util.ArrayList;
 public class CollisionEngine {
     int totalHits = 0;
 
-    public void checkCollision(Render render, Context context) {
+    public void checkCollision(SObjectsCollection gamePcs, Context context) {
 
         // check for collision between objects and act accordingly
 
         // check for collision between player and asteroids
         Asteroid myAsteroid;
 
-        for (int i = 0; i < render.mAsteroids.size(); i++) {
-            myAsteroid = render.mAsteroids.get(i);
+        for (int i = 0; i < gamePcs.mAsteroids.size(); i++) {
+            myAsteroid = gamePcs.mAsteroids.get(i);
 
 
             // asteroid hit player's ship - decrement player's life
 
-            if (RectF.intersects(render.mPlayer.getHitbox(), myAsteroid.getHitbox())) {
-                startTimer(context, render); // grace period after a collision - 3 seconds
-
-                Log.d("CollisionEngine", "asteroidPlayerHit: " + RectF.intersects(render.mPlayer.getHitbox(), myAsteroid.getHitbox()));
-                Log.d("CollisionEngine", "lives left after timer function: " + render.gameProgress.getMyLives());
-                //Log.d("CollisionEngine", "total hits after timer function: " + totalHits);
-            }
+//            if (RectF.intersects(gamePcs.mPlayer.getHitbox(), myAsteroid.getPosition())) {
+//                startTimer(context, gamePcs); // grace period after a collision - 3 seconds
+//
+//                Log.d("CollisionEngine", "asteroidPlayerHit: " + RectF.intersects(gamePcs.mPlayer.getHitbox(), myAsteroid.getHitbox()));
+//                Log.d("CollisionEngine", "lives left after timer function: " + gamePcs.gameProgress.getMyLives());
+//                //Log.d("CollisionEngine", "total hits after timer function: " + totalHits);
+//            }
         }
 
         // check for collision between player and police laser
-        //boolean playerOppLaserHit = detectCollision(render.mPlayer.getHitbox(), opponentShip.getRect());
+        //boolean playerOppLaserHit = detectCollision(gamePcs.mPlayer.getHitbox(), opponentShip.getRect());
 
-        //if(playerOppLaserHit){render.mPlayer.updateHitPoints(5);}
+        //if(playerOppLaserHit){gamePcs.mPlayer.updateHitPoints(5);}
 
 
         // check for collision between player's laser and power ups
         /*PowerUps myPowerUp;
         boolean laserPowerUpHit;
-        for(int i = 0; i < render.mMineralPowerUps.length; i++){
-            myPowerUp = render.mMineralPowerUps[i];
-            laserPowerUpHit = RectF.intersects(render.mPlayerLaser.getRect(), myPowerUp.getRect());
+        for(int i = 0; i < gamePcs.mMineralPowerUps.length; i++){
+            myPowerUp = gamePcs.mMineralPowerUps[i];
+            laserPowerUpHit = RectF.intersects(gamePcs.mPlayerLaser.getRect(), myPowerUp.getRect());
 
             if(laserPowerUpHit){
                 //power up activates
@@ -75,7 +75,7 @@ public class CollisionEngine {
 
 /*
     //start timer function
-    public void startTimer(final Render render) {
+    public void startTimer(final SObjectsCollection gamePcs) {
         cTimer = new CountDownTimer(3000, 1000) {
             int i = 0;
             public void onTick(long millisUntilFinished) {
@@ -85,7 +85,7 @@ public class CollisionEngine {
             public void onFinish() {
                 totalHits += 1;
                 // decrement player's life
-                render.gameProgress.decLife();
+                gamePcs.gameProgress.decLife();
             }
         };
         cTimer.start();
@@ -99,7 +99,7 @@ public class CollisionEngine {
     }
 
 
-    public void startTimer(final Context context, final Render render) {
+    public void startTimer(final Context context, final SObjectsCollection gamePcs) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             public void run() {
@@ -113,7 +113,7 @@ public class CollisionEngine {
                     public void onFinish() {
                         //totalHits += 1;
                         // decrement player's life
-                        //render.gameProgress.decLife();
+                        //gamePcs.gameProgress.decLife();
                         Log.d("CollisionEngine", "grace period done!");
 
                        /* Log.d("CollisionEngine", "total hits from inside onFinish " + totalHits);*/

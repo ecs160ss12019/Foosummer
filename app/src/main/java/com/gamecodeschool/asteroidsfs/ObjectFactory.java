@@ -14,11 +14,13 @@ public class ObjectFactory {
         final private Display screen;
         final private float defaultVelocity; // Default is 10 seconds to cross width of screen.
         final private float defaultLaserVelocity;
+        final private int defaultOpponentHealth = 3;
         final private Zone zone1; // Area in between 25% to 100% of screen
         final private Zone zone2; // Area in between 50% to 100% of screen
 
         final private float TIME = 20; // time it should take to cross screen in seconds
         final private float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
+        final private float OPPONENT_TIME = 7;
         final private float MS_PER_S = 1000; // 1000 milliseconds per 1 second
         final private int MAX_ASTEROID_SIZE_LEVEL = 3;
         static final public int DIVISION_FACTOR = 25;
@@ -29,6 +31,8 @@ public class ObjectFactory {
 
         private float currentVelocityMagnitutde;
         private Random rand = new Random();
+        private int opponentHealth = 3;
+        private float opponentVelocity;
         SpaceObjectType objType;
 
 
@@ -46,6 +50,7 @@ public class ObjectFactory {
 
                 currentVelocityMagnitutde = defaultVelocity;
                 defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
+                opponentVelocity = ((float)display.width) / OPPONENT_TIME / MS_PER_S;
         }
 
 
@@ -67,9 +72,11 @@ public class ObjectFactory {
                         // case LASER:
                         case OPPONENT:
 
-                                return new Opponent(new PointF(screen.width, screen.height), rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY,
-                                        (float)(currentVelocityMagnitutde*Math.cos(angle)), (float)(currentVelocityMagnitutde*Math.sin(angle)));
+                                return new Opponent(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
+                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                        rand.nextInt(maxAngle) * Math.PI/180,
+                                        opponentVelocity, 100,
+                                        opponentHealth);
 
                 //        case POWERUP:
                 //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,

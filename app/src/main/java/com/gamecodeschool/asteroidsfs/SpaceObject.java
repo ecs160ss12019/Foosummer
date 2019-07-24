@@ -24,11 +24,11 @@ public class SpaceObject {
     protected float hitRadius;
     protected double angle; // in radians!
 
-    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitCircleSize) {
+    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
         // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         position = pos;
         velMagnitude = velocityMagnitude;
-        hitRadius = hitCircleSize;
+        hitRadius = hitRadius;
         this.angle = angle;
     }
 

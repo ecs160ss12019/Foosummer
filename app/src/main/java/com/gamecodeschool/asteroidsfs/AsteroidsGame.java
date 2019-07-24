@@ -74,8 +74,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
-        // Initialize opponents
-        opponents = new ArrayList<Opponent>();
 
         startNewGame();
     }
@@ -96,8 +94,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
         for(int i = 0; i < 3; i++) {
-            opponents.add((Opponent)factory.getSpaceObject(objType.OPPONENT));
-
+            gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
+        }
         for(int i = 0; i < 3; i++) {
             gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP, 3));
         }
@@ -117,29 +115,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-                    myCollision.checkCollision(mRender, getContext());
+//                    myCollision.checkCollision(gamePcs, getContext());
 
                     gameView.draw(gamePcs);
                 }
-                    
-
-                // check for collision between player and asteroids
-                // Asteroid myAsteroid = gamePcs.mAsteroidsget(i);
-                // boolean asteroidPlayerHit = detectCollision(gamePcs.mPlayer.getRect(), myAsteroid.getHitbox());
-                // i++;
-                // if(i > 4){
-                //     i = 0;
-                // }
-
-
-                /*
-                Log.d("ADebugTag", "collision detected: " + hit);
-                Log.d("ADebugTag", "value of i: " + i);
-                */
-
-                //sprint 2
-                // asteroid hit player's ship - decrement player's hitpoints
-                //if(asteroidPlayerHit){}
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
@@ -195,8 +174,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
                 // OPPONENT
-        for(int i = 0 ; i < opponents.size(); i++) {
-            opponents.get(i).update(timeElapsed, display);
+        for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
+            gamePcs.mOpponents.get(i).update(timeElapsed, display);
+        }
     }
 
 
