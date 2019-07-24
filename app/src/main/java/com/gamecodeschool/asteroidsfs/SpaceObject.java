@@ -67,7 +67,7 @@ public class SpaceObject {
         position.y += velMagnitude * Math.sin(angle) * time;
 
         if(position.x < 0) {
-            position.x = screen.height;
+            position.x = screen.width;
         }
         else if(position.y < 0) {
             position.y = screen.height;
