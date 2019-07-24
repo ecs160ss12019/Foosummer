@@ -1,5 +1,16 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_DEG;
+import static com.gamecodeschool.asteroidsfs.GameConfig.MIN_DEG;
+import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_VELOCITY;
+import static com.gamecodeschool.asteroidsfs.GameConfig.RAD_TO_DEG;
+import static com.gamecodeschool.asteroidsfs.GameConfig.ROTATE_RATE;
+import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_TO_CENTER;
+import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
+import static com.gamecodeschool.asteroidsfs.GameConfig.WRAP_AROUND_OFFSET;
+
+
+
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -44,7 +55,6 @@ public class Player {
 
 
 	Player(int screenX, int screenY) {
-		int centeredScaleFactor = 15;
 		// max resolution of screen
 		maxXCoord = screenX;
 		maxYCoord = screenY;
@@ -55,8 +65,8 @@ public class Player {
 
 
 		// Intialize mRect (hitbox) based on the size and position
-		mRect = new RectF(mXCoord, mYCoord, mXCoord + mLength - centeredScaleFactor,
-				mYCoord + mLength - centeredScaleFactor);
+		mRect = new RectF(mXCoord, mYCoord, mXCoord + mLength - SCALE_TO_CENTER,
+				mYCoord + mLength - SCALE_TO_CENTER);
 //			Log.e("player: ", "value of mLength: " + mLength);
 //		    Log.e("player: ", "value of mRect.left: " + mRect.left);
 //			Log.e("player: ", "value of mRect.right: " + mRect.right);
@@ -121,18 +131,15 @@ public class Player {
 	void setRotationState(int playerRotate) {rotateState = rotationStates[playerRotate];}
 
 	void rotatePlayer(){
-		float maxDeg = 360;
-		float minDeg = 0;
-		float rotationRate = 3;
 
 		if(rotateState == 1){
-			if(degree < minDeg){
-				degree = maxDeg;
+			if(degree < MIN_DEG){
+				degree = MAX_DEG;
 			}
-			degree -= rotationRate;
+			degree -= ROTATE_RATE;
 		} else if (rotateState == 2) {
-			if (degree > maxDeg) {
-				degree = minDeg;
+			if (degree > MAX_DEG) {
+				degree = MIN_DEG;
 			}
 			degree += 5;
 		} else {
@@ -141,15 +148,15 @@ public class Player {
 	}
 
 	void movePlayer(long timeElapsed) {
-		float velocityRate = 0.2f;
+
 		if (moveState == true) {
-			computePlayerVelocity(velocityRate);
+			computePlayerVelocity();
 
 			// remove this to reincorporate drag.... this is a bit clunky
-			if(dx > 0 && mXVelocity < 0){dx = -velocityRate;}
-			if(dx < 0 && mXVelocity > 0){dx = velocityRate;}
-			if(dy > 0 && mYVelocity < 0){dy = -velocityRate;}
-			if(dy < 0 && mYVelocity > 0){dy = velocityRate;}
+			if(dx > 0 && mXVelocity < 0){dx = -VELOCITY_RATE;}
+			if(dx < 0 && mXVelocity > 0){dx = VELOCITY_RATE;}
+			if(dy > 0 && mYVelocity < 0){dy = -VELOCITY_RATE;}
+			if(dy < 0 && mYVelocity > 0){dy = VELOCITY_RATE;}
 
 			// adds velocity to offset to the new position of the Player (hitbox)
 			dx += mXVelocity/timeElapsed;
@@ -187,33 +194,30 @@ public class Player {
 	}
 
 	void wrapAroundPlayer(){
-		float wrapAroundOffset = 96;
 		// wrap around for the Player ship
 		if (mRect.right < 0)
-			mRect.left = maxXCoord-wrapAroundOffset;
-		mRect.right = mRect.left + wrapAroundOffset;
+			mRect.left = maxXCoord-WRAP_AROUND_OFFSET;
+		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
 		if (mRect.left > maxXCoord)
 			mRect.left =  0;
-		mRect.right = mRect.left + wrapAroundOffset;
+		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
 		if (mRect.bottom < 0)
-			mRect.top = maxYCoord-wrapAroundOffset;
-		mRect.bottom = mRect.top + wrapAroundOffset;
+			mRect.top = maxYCoord-WRAP_AROUND_OFFSET;
+		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
 		if (mRect.top > maxYCoord)
 			mRect.top = 0;
-		mRect.bottom = mRect.top + wrapAroundOffset;
+		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
 	}
 
-	void computePlayerVelocity(float velocityRate){
-		float maxVelocity = 1;
-		double radToDeg = 0.0174533;
-		movementMagnitude += velocityRate;
-		if(movementMagnitude > maxVelocity){
-			this.mXVelocity = maxVelocity * (float) Math.cos(degree * radToDeg);
-			this.mYVelocity = maxVelocity * (float) Math.sin(degree * radToDeg);
+	void computePlayerVelocity(){
+		movementMagnitude += VELOCITY_RATE;
+		if(movementMagnitude > MAX_VELOCITY){
+			this.mXVelocity = MAX_VELOCITY * (float) Math.cos(degree * RAD_TO_DEG);
+			this.mYVelocity = MAX_VELOCITY * (float) Math.sin(degree * RAD_TO_DEG);
 		}
 		else{
-			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * radToDeg);
-			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * radToDeg);
+			this.mXVelocity = movementMagnitude * (float) Math.cos(degree * RAD_TO_DEG);
+			this.mYVelocity = movementMagnitude * (float) Math.sin(degree * RAD_TO_DEG);
 		}
 	}
 
