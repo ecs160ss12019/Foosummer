@@ -32,6 +32,13 @@ public class SpaceObject {
         this.angle = angle;
     }
 
+    public SpaceObejct(SpaceObject cpy) {
+        this.position = cpy.position;
+        this.velMagnitude = cpy.velMagnitude;
+        this.hitRadius = cpy.hitRadius;
+        this.angle = cpy.angle;
+    }
+
     public PointF getPosition() {
         return position;
     }
