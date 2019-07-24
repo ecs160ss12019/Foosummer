@@ -55,7 +55,7 @@ public class GameProgress {
         else {
             gameOver = false;
         }
-        Log.d("GameProgress", "myLives: " + myLives);
+        Log.d("GameProgress", "myLives after decrementing: " + myLives);
 
 
     }

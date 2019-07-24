@@ -1,7 +1,10 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.content.Context;
 import android.graphics.RectF;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -9,14 +12,12 @@ import java.util.ArrayList;
 public class CollisionEngine {
     int totalHits = 0;
 
-    public void checkCollision(Render render) {
+    public void checkCollision(Render render, Context context) {
 
         // check for collision between objects and act accordingly
 
         // check for collision between player and asteroids
         Asteroid myAsteroid;
-
-
 
         for (int i = 0; i < render.mAsteroids.size(); i++) {
             myAsteroid = render.mAsteroids.get(i);
@@ -25,13 +26,11 @@ public class CollisionEngine {
             // asteroid hit player's ship - decrement player's life
 
             if (RectF.intersects(render.mPlayer.getHitbox(), myAsteroid.getHitbox())) {
-                startTimer(render); // grace period after a collision
-
-                int lives = render.gameProgress.getMyLives();
+                startTimer(context, render); // grace period after a collision - 3 seconds
 
                 Log.d("CollisionEngine", "asteroidPlayerHit: " + RectF.intersects(render.mPlayer.getHitbox(), myAsteroid.getHitbox()));
-                Log.d("CollisionEngine", "lives left: " + lives);
-                Log.d("CollisionEngine", "total hits: " + totalHits);
+                Log.d("CollisionEngine", "lives left after timer function: " + render.gameProgress.getMyLives());
+                //Log.d("CollisionEngine", "total hits after timer function: " + totalHits);
             }
         }
 
@@ -69,11 +68,12 @@ public class CollisionEngine {
     }
 
     // Sources: https://stackoverflow.com/questions/10032003/how-to-make-a-countdown-timer-in-android
-    // https://developer.android.com/reference/android/os/CountDownTimer
+    // https://stackoverflow.com/questions/3134683/android-toast-in-a-thread
 
     //Declare timer
     CountDownTimer cTimer = null;
 
+/*
     //start timer function
     public void startTimer(final Render render) {
         cTimer = new CountDownTimer(3000, 1000) {
@@ -89,7 +89,7 @@ public class CollisionEngine {
             }
         };
         cTimer.start();
-    }
+    }*/
 
 
     //cancel timer
@@ -98,5 +98,30 @@ public class CollisionEngine {
             cTimer.cancel();
     }
 
+
+    public void startTimer(final Context context, final Render render) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run() {
+                cTimer = new CountDownTimer(3000, 100) {
+                    int i = 0;
+
+                    public void onTick(long millisUntilFinished) {
+                        i++;
+                        Log.d("CollisionEngine", "grace period implemented " + i);
+                    }
+                    public void onFinish() {
+                        //totalHits += 1;
+                        // decrement player's life
+                        //render.gameProgress.decLife();
+                        Log.d("CollisionEngine", "grace period done!");
+
+                       /* Log.d("CollisionEngine", "total hits from inside onFinish " + totalHits);*/
+                    }
+                };
+                cTimer.start();
+            }
+        });
+    }
 }
 

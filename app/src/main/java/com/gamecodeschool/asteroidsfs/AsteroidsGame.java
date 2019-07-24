@@ -187,7 +187,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-                    myCollision.checkCollision(mRender);
+                    myCollision.checkCollision(mRender, getContext());
                     gameView.draw(mRender);
 
 
