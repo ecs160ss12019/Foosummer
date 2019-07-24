@@ -152,7 +152,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
 
-        Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
+        if(DEBUGGING) {
+            Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
+        }
 
         if(shootResult != null) {
             gamePcs.mPlayerLasers.add(shootResult);
