@@ -76,4 +76,12 @@ public class SpaceObject {
             position.y = 0;
         }
     }
+
+    // two circles if the sum of radius is greater/equal distance between two center coordinates.
+    static boolean collisionCheck(SpaceObject A, SpaceObject B) {
+        double radialSum = A.hitRadius + B.hitRadius;
+        double distance = Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x),2)
+                                + Math.pow((A.getPosition().y - B.getPosition().y),2));
+        return radialSum >= distance;
+    }
 }
