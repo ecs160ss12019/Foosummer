@@ -55,7 +55,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     SpaceObjectType objType; // Enum used for object creation.
 
-    private CollisionEngine myCollision;
+    private CollisionEngine mCollision;
 
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
@@ -73,6 +73,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         factory = new ObjectFactory(display);
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
+        mCollision = new CollisionEngine();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
         startNewGame();
@@ -116,10 +117,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-//                    myCollision.checkCollision(gamePcs, getContext());
-
                     gameView.draw(gamePcs);
                 }
+                mCollision.checkCollision(gamePcs, gameProgress);
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
@@ -131,7 +131,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // Store the answer in timeThisFrame
             long timeThisFrame = System.currentTimeMillis() - frameStartTime;
             timeElapsed = timeThisFrame;
-
         }
     }
 
