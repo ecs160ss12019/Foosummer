@@ -29,7 +29,7 @@ public class ObjectFactory {
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
 
-        private float currentVelocityMagnitutde;
+        private float currentVelocityMagnitude;
         private Random rand = new Random();
         private int opponentHealth = 3;
         private float opponentVelocity;
@@ -51,7 +51,7 @@ public class ObjectFactory {
                                 display.width, display.height);
                 
 
-                currentVelocityMagnitutde = defaultVelocity;
+                currentVelocityMagnitude = defaultVelocity;
                 defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
                 opponentVelocity = ((float)display.width) / OPPONENT_TIME / MS_PER_S;
 
@@ -76,7 +76,7 @@ public class ObjectFactory {
 
                                 return new Asteroid(angle,
                                                 point,
-                                                currentVelocityMagnitutde,
+                                                currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
                         // case LASER:
                         case OPPONENT:
@@ -91,8 +91,8 @@ public class ObjectFactory {
                 //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
                 //                        rand.nextInt(zone1.yDiff()) + zone1.minY,
                 //                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
-                //                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
-                //                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
+                //                    (float)(currentVelocityMagnitude * Math.cos(angle)),
+                //                    (float)(currentVelocityMagnitude * Math.sin(angle)));
 
                 }
                 //FIXME have to run some sort of Null point exception.
@@ -105,8 +105,8 @@ public class ObjectFactory {
                 return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY, 
                         rand.nextInt(zone1.yDiff()) + zone1.minY,
                         screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
-                        (float)(currentVelocityMagnitutde * Math.cos(angle)),
-                        (float)(currentVelocityMagnitutde * Math.sin(angle)));
+                        (float)(currentVelocityMagnitude * Math.cos(angle)),
+                        (float)(currentVelocityMagnitude * Math.sin(angle)));
         }
 
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
@@ -118,11 +118,11 @@ public class ObjectFactory {
 
         // ------------------- Begins Variable Controls ------------------------
         public void addSpeed(float speecIncrement) {
-        currentVelocityMagnitutde += speecIncrement;
+        currentVelocityMagnitude += speecIncrement;
 }
 
         public void reset() {
-                currentVelocityMagnitutde = defaultVelocity;
+                currentVelocityMagnitude = defaultVelocity;
                 opponentHealth = defaultOpponentHealth;
         }
 

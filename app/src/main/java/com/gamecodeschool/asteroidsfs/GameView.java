@@ -142,7 +142,7 @@ public class GameView {
                         myPaint.setTextSize(screenRes.x / 40);
 
 //                       Draw the HUD
-                        myCanvas.drawText("Score: " + 50000 + "Lives: " + 3, screenRes.x / 75 ,
+                        myCanvas.drawText("Score: " + 50000 + " Lives: " + 3, screenRes.x / 75 ,
                                 screenRes.x / 50, myPaint);
 
 //                         if(DEBUGGING){
