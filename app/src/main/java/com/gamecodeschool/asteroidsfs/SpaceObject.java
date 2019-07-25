@@ -54,7 +54,7 @@ public class SpaceObject {
         return position.x - hitRadius;
     }
     public float getBitmapY() {
-        return position.y - hitRadius;
+        return position.y + hitRadius;
     }
 
     // Default position update based on time.

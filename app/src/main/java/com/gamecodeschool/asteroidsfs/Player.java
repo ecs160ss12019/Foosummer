@@ -74,18 +74,19 @@ public class Player extends SpaceObject{
 	public void update(long timeElapsed, Display display ) {
 		if(moveState == true) {
 			computePlayerVelocity();
+		} else {
+			velMagnitude = 0; // reset speed when not moving.
 		}
 		super.update(timeElapsed, display);
 		rotatePlayer();
-//		movePlayer(timeElapsed);
 		this.mRect.offsetTo(position.x, position.y);
 	}
 
 	public Matrix configMatrix(Point bitmapDim, int blockSize){
-		this.playerMatrix.setRotate((float)super.angle,
+		this.playerMatrix.setRotate((float)(angle * 180/Math.PI),
 				bitmapDim.x / 2, bitmapDim.y / 2);
 
-		this.playerMatrix.postTranslate((super.position.x) - blockSize,
+		this.playerMatrix.postTranslate((position.x) - blockSize,
 				(position.y) - blockSize);
 		return this.playerMatrix;
 	}
@@ -93,7 +94,7 @@ public class Player extends SpaceObject{
 
 	public RectF getHitbox() {return mRect;}
 
-	public Matrix getMatrix() {return this.playerMatrix;}
+	public Matrix getMatrix() {return playerMatrix;}
 
 	void setMoveState(boolean playerMove) {moveState = playerMove;}
 
@@ -110,100 +111,18 @@ public class Player extends SpaceObject{
 			if (angle > MAX_DEG) {
 				angle = MIN_DEG;
 			}
-			angle += 5;
-		} else {
-			this.angle = angle;
+			angle += ROTATE_RATE;
 		}
+//		else {
+//			this.angle = angle;
+//		}
 	}
-
-// 	void movePlayer(long timeElapsed) {
-
-// 		if (moveState == true) {
-// 			computePlayerVelocity();
-// 			mRect.offset(newPos.x, newPos.y);
-
-// 			// remove this to reincorporate drag.... this is a bit clunky
-// 			if(newPos.x > 0 && currVelocity.x < 0){newPos.x = -VELOCITY_RATE;}
-// 			if(newPos.x < 0 && currVelocity.x > 0){newPos.x = VELOCITY_RATE;}
-// 			if(newPos.y > 0 && currVelocity.y < 0){newPos.y = -VELOCITY_RATE;}
-// 			if(newPos.y < 0 && currVelocity.y > 0){newPos.y = VELOCITY_RATE;}
-
-// 			// adds velocity to offset to the new position of the Player (hitbox)
-// 			newPos.x += currVelocity.x/timeElapsed;
-// 			newPos.y += currVelocity.y/timeElapsed;
-// //			mRect.offsetTo();
-
-// 			// setPlayerCenter();
-// 			wrapAroundPlayer();
-// //			Log.e("boundary: ","max_X: " + maxCoords.x);
-// //			Log.e("boundary: ", "max_Y: " + maxCoords.y);
-
-// //			Log.e("player: ", "movementMagnitude: " + movementMagnitude);
-// //			Log.d("player: ", "angle: " + angle);
-// //			Log.d("player: ", "value of currVelocity.x: " + currVelocity.x);
-// //			Log.d("player: ", "value of currVelocity.y: " + currVelocity.y);
-// //			Log.d("player: ", "value of newPos.x: " + newPos.x);
-// //			Log.d("player: ", "value of newPos.y: " + newPos.y);
-
-// //			Log.d("player: ", "value of mRect.left: " + mRect.left);
-// //			Log.d("player: ", "value of mRect.right: " + mRect.right);
-// //			Log.d("player: ", "value of mRect.LRdiff: " + (mRect.right-mRect.left));
-// //			Log.d("player: ", "value of mRect.top: " + mRect.top);
-// //			Log.d("player: ", "value of mRect.bottom: " + mRect.bottom);
-// //			Log.d("player: ", "value of mRect.BTdiff: " + (mRect.bottom-mRect.top));
-// //			Log.d("player: ", "value of shipCenter.x: " + centerCoords.x);
-// //			Log.d("player: ", "value of shipCenter.y: " + centerCoords.y);
-// 		}
-// 		else{
-// 			this.currVelocity.x = 0;
-// 			this.currVelocity.y = 0;
-// 			this.newPos.x = 0;
-// 			this.newPos.y = 0;
-// 			movementMagnitude = 0;
-// 		}
-// 	}
-
-//	void wrapAroundPlayer(){
-//		// wrap around for the Player ship
-//		if (mRect.right < 0)
-//			mRect.left = maxCoords.x-WRAP_AROUND_OFFSET;
-//		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
-//		if (mRect.left > maxCoords.x)
-//			mRect.left =  0;
-//		mRect.right = mRect.left + WRAP_AROUND_OFFSET;
-//		if (mRect.bottom < 0)
-//			mRect.top = maxCoords.y-WRAP_AROUND_OFFSET;
-//		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
-//		if (mRect.top > maxCoords.y)
-//			mRect.top = 0;
-//		mRect.bottom = mRect.top + WRAP_AROUND_OFFSET;
-//	}
 
 	void computePlayerVelocity(){
-		if(super.velMagnitude < VELOCITY_RATE) {
-
-			super.velMagnitude += VELOCITY_RATE;
+		if(velMagnitude < VELOCITY_RATE) {
+			velMagnitude += VELOCITY_RATE;
 		}
-//		if(movementMagnitude > MAX_VELOCITY){
-//			this.currVelocity.x = MAX_VELOCITY * (float) Math.cos(angle * RAD_TO_DEG);
-//			this.currVelocity.y = MAX_VELOCITY * (float) Math.sin(angle * RAD_TO_DEG);
-//		}
-//		else{
-//			this.currVelocity.x = movementMagnitude * (float) Math.cos(angle * RAD_TO_DEG);
-//			this.currVelocity.y = movementMagnitude * (float) Math.sin(angle * RAD_TO_DEG);
-//		}
 	}
-
-	// void setPlayerCenter(){
-	// 	centerCoords = new PointF((int)(mRect.left+0.5*(mRect.right-mRect.left)),
-	// 			(int)(mRect.top+0.5*(mRect.bottom-mRect.top)));
-	// }
-
-
-
-
-
-
 
 	// commented out until implementation.
 	//FIXME TODO: Instantiate a new SpaceObject with a laser magnitude, and copy over current position and angle! We should have laser radius stored somewhere..
@@ -212,7 +131,7 @@ public class Player extends SpaceObject{
 		if (laserTimer > SHOOT_INTERVAL) {
 			laserTimer = 0;
 			//FIXME TODO: The last int, 1, is a temporary place in for laser damage variable stored in player. This should be able to go up w/ upgrade (maybe)
-			return fac.getPlayerLaser(new PointF(super.position.x, super.position.y),(angle * Math.PI / 180), 1);
+			return fac.getPlayerLaser(new PointF(position.x, position.y), angle, 1);
 		}
 
 		return null;

@@ -1,9 +1,9 @@
 package com.gamecodeschool.asteroidsfs;
 
 public class GameConfig {
-    static final float MAX_DEG = 360;
-    static final float MIN_DEG = 0;
-    static final float ROTATE_RATE = 3;
+    static final double MAX_DEG = 6.28318530718; // RADIAN VALUE FOR 360
+    static final double MIN_DEG = 0;
+    static final double ROTATE_RATE = 3d * Math.PI / 180; //Degree to radian;
     static final float VELOCITY_RATE = 0.2f;
     static final float WRAP_AROUND_OFFSET = 96;
     static final float MAX_VELOCITY = 1;
