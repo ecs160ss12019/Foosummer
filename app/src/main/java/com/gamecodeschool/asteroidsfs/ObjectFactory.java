@@ -29,14 +29,14 @@ public class ObjectFactory {
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
 
-        private float currentVelocityMagnitutde;
+        private float currentVelocityMagnitude;
         private Random rand = new Random();
         private int opponentHealth = 3;
         private float opponentVelocity;
         SpaceObjectType objType;
 
         private PointF defaultShipSize;
-        final private float shipScaleFactor = 25;
+        static final public int shipScaleFactor = 25;
 
 
         // When this object is first made for the game engine. The screen 
@@ -51,12 +51,14 @@ public class ObjectFactory {
                                 display.width, display.height);
                 
 
-                currentVelocityMagnitutde = defaultVelocity;
+                currentVelocityMagnitude = defaultVelocity;
                 defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
                 opponentVelocity = ((float)display.width) / OPPONENT_TIME / MS_PER_S;
 
                 defaultShipSize = new PointF(screen.width / shipScaleFactor,
                         screen.height / shipScaleFactor);
+
+//                defaultPowerUpSize =
         }
 
 
@@ -67,7 +69,7 @@ public class ObjectFactory {
                 switch(type) {
                         case PLAYER:
                                 return new Player(new PointF(screen.width/2, screen.height/2),
-                                        defaultShipSize.x);
+                                                defaultShipSize.x/2);
                         case ASTEROID:
                                 PointF point = new PointF(
                                         (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
@@ -75,54 +77,53 @@ public class ObjectFactory {
                                 int sizeMultiplier = rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) + 1;
 
                                 return new Asteroid(angle,
-                                        point,
-                                        currentVelocityMagnitutde,
-                                        sizeMultiplier * asteroidSizeFactor, sizeMultiplier);
+                                                point,
+                                                currentVelocityMagnitude,
+                                                sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
                         // case LASER:
                         case OPPONENT:
 
                                 return new Opponent(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
-                                        rand.nextInt(maxAngle) * Math.PI/180,
-                                        opponentVelocity, 100,
-                                        opponentHealth);
+                                                rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                                rand.nextInt(maxAngle) * Math.PI/180,
+                                                opponentVelocity, 100,
+                                                opponentHealth);
 
-                //        case POWERUP:
-                //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
-                //                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-                //                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
-                //                    (float)(currentVelocityMagnitutde * Math.cos(angle)),
-                //                    (float)(currentVelocityMagnitutde * Math.sin(angle)));
+                        case POWERUP:
+                            return new PowerUps(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
+                                    rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                    50);
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
         }
 
-        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
-                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
-
-                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY, 
-                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
-                        (float)(currentVelocityMagnitutde * Math.cos(angle)),
-                        (float)(currentVelocityMagnitutde * Math.sin(angle)));
-        }
+//        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
+//                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+//
+//                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
+//                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+//                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
+//                        (float)(currentVelocityMagnitude * Math.cos(angle)),
+//                        (float)(currentVelocityMagnitude * Math.sin(angle)));
+//        }
 
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
-                                                screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
+                                                screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR / 2);
                 return new Laser(temp, dmg);
         }
 
 
         // ------------------- Begins Variable Controls ------------------------
         public void addSpeed(float speecIncrement) {
-        currentVelocityMagnitutde += speecIncrement;
+        currentVelocityMagnitude += speecIncrement;
 }
 
         public void reset() {
-                currentVelocityMagnitutde = defaultVelocity;
+                currentVelocityMagnitude = defaultVelocity;
+                opponentHealth = defaultOpponentHealth;
         }
 
         // ------------------- Ends Variable Controls --------------------------

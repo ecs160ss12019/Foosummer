@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.content.Context;
+import android.graphics.PointF;
 
 // make this an interface
 
@@ -20,6 +21,7 @@ public class GameView {
         private Canvas myCanvas;
         private Paint myPaint;
         private Context ourContext;
+        private PointF screenRes;
         //Matrix shipMatrix = new Matrix();
 
         // Bitmaps that is contained within the gameview.
@@ -30,34 +32,42 @@ public class GameView {
         Bitmap mBackGround;
         Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
+        Bitmap yellowPowerUpBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
+                int shipSize = screen.width / ObjectFactory.shipScaleFactor;
                 ourContext = context;
                 myHolder = surfHolder;
                 myPaint = new Paint();
+                screenRes = new PointF(screen.width, screen.height);
                 // Preload bitmaps for asteroids and make 3 different scale ones.
                 Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
                 mAsteroid1 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 1,
-                        asteroidSizeFactor * 1, false);
+                                asteroidSizeFactor , false);
                 mAsteroid2 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 2,
-                        asteroidSizeFactor * 2, false);
+                                asteroidSizeFactor * 2, false);
                 mAsteroid3 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 3,
-                        asteroidSizeFactor * 3, false);
+                                asteroidSizeFactor * 3, false);
 
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.sqspaceship);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
-                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
+                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING, 
+                                                                shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                                                true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
                 // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
                 mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
                 mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
-                                                asteroidSizeFactor / LaserSizeFactor, false);
+                        asteroidSizeFactor / LaserSizeFactor, false);
                 shipBitmap.setHasAlpha(true);
 
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
-                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, 100, 100, false);
+                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize, shipSize, false);
+
+                yellowPowerUpBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.yellowpowerup);
+                yellowPowerUpBM = Bitmap.createScaledBitmap(yellowPowerUpBM, asteroidSizeFactor, asteroidSizeFactor, false);
         }
 
         public Point getBitmapDim(){
@@ -85,8 +95,8 @@ public class GameView {
                                 Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
                                 Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
                                 Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
-                                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getCenterCoords().x);
-                                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getCenterCoords().y);
+                                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getPosition().x);
+                                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getPosition().y);
 //                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
                                 Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
                                 Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
@@ -99,53 +109,51 @@ public class GameView {
                         // LASERS
                         for(int i = 0; i < render.mPlayerLasers.size(); i++) {
                                 myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
-                                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
+                                        render.mPlayerLasers.get(i).getBitmapY(), myPaint);
                         }
                         //
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
                                 switch(render.mAsteroids.get(i).getSize()) {
-                                case 1:
-                                        myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
-                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        break;
-                                case 2:
-                                        myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
-                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        break;
-                                case 3:
-                                        myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
-                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        break;
+                                        case 1:
+                                                myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
+                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                break;
+                                        case 2:
+                                                myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
+                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                break;
+                                        case 3:
+                                                myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
+                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                break;
                                 }
                         }
                         //
                         // // POWER UPS
                         for(int i = 0; i < render.mMineralPowerUps.size(); i++){
-                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+//                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
                         }
 
                         // // OPPONENT
-                       // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
+                        // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
                         for (int i = 0; i < render.mOpponents.size(); i++) {
                                 myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
                                         render.mOpponents.get(i).getBitmapY(), myPaint);
                         }
                         // Choose the font size
-                        // myPaint.setTextSize(fontSize);
+                        myPaint.setTextSize(screenRes.x / 40);
 
+//                       Draw the HUD
+                        myCanvas.drawText("Score: " + 50000 + " Lives: " + 3, screenRes.x / 75 ,
+                                screenRes.x / 50, myPaint);
 
-//                         Choose the font size
-//                         myPaint.setTextSize(fontSize);
-
-//                         Draw the HUD
-//                         myCanvas.drawText("Score: " + score + " Lives: " + lives, fontMargin ,
-//                         fontSize, myPaint);
-
-                        // if(DEBUGGING){
-                        // printDebuggingText();
-                        // }
+//                         if(DEBUGGING){
+//                         printDebuggingText();
+//                         }
                         // Display the drawing on screen
                         // unlockCanvasAndPost is a method of SurfaceView
                         myHolder.unlockCanvasAndPost(myCanvas);
