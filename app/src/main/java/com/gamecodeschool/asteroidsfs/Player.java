@@ -5,7 +5,8 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.MIN_DEG;
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_VELOCITY;
 import static com.gamecodeschool.asteroidsfs.GameConfig.RAD_TO_DEG;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ROTATE_RATE;
-import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_TO_CENTER;
+import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_BM_CENTER;
+import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_RECT_CENTER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
 import static com.gamecodeschool.asteroidsfs.GameConfig.WRAP_AROUND_OFFSET;
 
@@ -38,8 +39,8 @@ public class Player extends SpaceObject{
 
 		// Intialize mRect (hitbox) based on the size and position
 		mRect = new RectF(pos.x, pos.y,
-				pos.x + playerLength - SCALE_TO_CENTER,
-				pos.y + playerLength - SCALE_TO_CENTER);
+				pos.x + playerLength - SCALE_RECT_CENTER,
+				pos.y + playerLength - SCALE_RECT_CENTER);
 
 	}
 
@@ -62,8 +63,8 @@ public class Player extends SpaceObject{
 		this.playerMatrix.setRotate((float)(angle * 180/Math.PI),
 				bitmapDim.x / 2, bitmapDim.y / 2);
 
-		this.playerMatrix.postTranslate((position.x) - blockSize,
-				(position.y) - blockSize);
+		this.playerMatrix.postTranslate((position.x) - SCALE_BM_CENTER ,
+				(position.y) - SCALE_BM_CENTER);
 		return this.playerMatrix;
 	}
 

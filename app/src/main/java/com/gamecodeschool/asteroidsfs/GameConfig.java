@@ -8,5 +8,6 @@ public class GameConfig {
     static final float WRAP_AROUND_OFFSET = 96;
     static final float MAX_VELOCITY = 1;
     static final double RAD_TO_DEG = 0.0174533;
-    static final int SCALE_TO_CENTER = 15;
+    static final int SCALE_RECT_CENTER = 15;
+    static final int SCALE_BM_CENTER = 20;
 }
