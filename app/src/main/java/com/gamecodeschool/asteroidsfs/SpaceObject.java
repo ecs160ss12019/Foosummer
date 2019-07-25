@@ -25,7 +25,7 @@ public class SpaceObject {
     protected float hitRadius;
     protected double angle; // in radians!
 
-    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
+    SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
         // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         position = pos;
         velMagnitude = velocityMagnitude;
@@ -33,8 +33,8 @@ public class SpaceObject {
         this.angle = angle;
     }
 
-    public SpaceObject(SpaceObject cpy) {
-        position = cpy.position;
+    SpaceObject(SpaceObject cpy) {
+        position = new PointF(cpy.position.x, cpy.position.y);
         velMagnitude = cpy.velMagnitude;
         hitRadius = cpy.hitRadius;
         angle = cpy.angle;

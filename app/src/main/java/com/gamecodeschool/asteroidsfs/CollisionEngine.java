@@ -29,11 +29,14 @@ public class CollisionEngine {
         These should cover the basic cases of collision within the game.
         FIXME: Using n2 algorithm for now unless this gives us a sig performance hit.
     */
-    public void checkCollision(SObjectsCollection collection) {
+    public void checkCollision(SObjectsCollection collection, GameProgress gProg) {
         for(int i = 0; i < collection.mPlayerLasers.size(); i++) {
             for(int k = 0; k < collection.mAsteroids.size(); k++) {
-                if(SpaceObject.collisionCheck(collection.mPlayerLasers.get(i), collection.mAsteroids.get(k))) {
-                    collection.mAsteroids.addAll(collection.mAsteroids.get(k).collisionAction());
+                Asteroid temp = collection.mAsteroids.get(k);
+                if(SpaceObject.collisionCheck(collection.mPlayerLasers.get(i), temp)) {
+                    Log.d("Collision", "asteroid size " + temp.getSize());
+                    collection.mAsteroids.addAll(temp.collisionAction());
+                    collection.mAsteroids.remove(k);
                     collection.mPlayerLasers.remove(i);
                     i--;
                     break;
