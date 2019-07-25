@@ -33,22 +33,25 @@ public class GameView {
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
+                int shipSize = screen.width / ObjectFactory.shipScaleFactor;
                 ourContext = context;
                 myHolder = surfHolder;
                 myPaint = new Paint();
                 // Preload bitmaps for asteroids and make 3 different scale ones.
                 Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
                 mAsteroid1 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 1,
-                        asteroidSizeFactor * 1, false);
+                                asteroidSizeFactor , false);
                 mAsteroid2 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 2,
-                        asteroidSizeFactor * 2, false);
+                                asteroidSizeFactor * 2, false);
                 mAsteroid3 = Bitmap.createScaledBitmap(asteroidBMP, asteroidSizeFactor * 3,
-                        asteroidSizeFactor * 3, false);
+                                asteroidSizeFactor * 3, false);
 
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.sqspaceship);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
-                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
+                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING, 
+                                                                shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                                                true);
                 mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
                 // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
                 mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
@@ -57,7 +60,7 @@ public class GameView {
                 shipBitmap.setHasAlpha(true);
 
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
-                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, 100, 100, false);
+                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize, shipSize, false);
         }
 
         public Point getBitmapDim(){
