@@ -2,22 +2,14 @@ package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_DEG;
 import static com.gamecodeschool.asteroidsfs.GameConfig.MIN_DEG;
-import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_VELOCITY;
-import static com.gamecodeschool.asteroidsfs.GameConfig.RAD_TO_DEG;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ROTATE_RATE;
-import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_BM_CENTER;
-import static com.gamecodeschool.asteroidsfs.GameConfig.SCALE_RECT_CENTER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
-import static com.gamecodeschool.asteroidsfs.GameConfig.WRAP_AROUND_OFFSET;
-
 
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.graphics.Point;
-import java.util.Timer;
-import java.util.ArrayList;
 
 //extends SpaceObject
 public class Player extends SpaceObject{
@@ -32,15 +24,18 @@ public class Player extends SpaceObject{
 	// Vars required for timed shooting.
 	private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
 	private final long SHOOT_INTERVAL = 500;
+	private final int boxLength;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
 		super(pos, 0, 0, playerLength);
+		boxLength = (int) playerLength;
 
 		// Intialize mRect (hitbox) based on the size and position
-		mRect = new RectF(pos.x, pos.y,
-				pos.x + playerLength - SCALE_RECT_CENTER,
-				pos.y + playerLength - SCALE_RECT_CENTER);
+		mRect = new RectF(pos.x - playerLength,
+				pos.y - playerLength,
+				pos.x + playerLength,
+				pos.y + playerLength);
 
 	}
 
@@ -56,15 +51,15 @@ public class Player extends SpaceObject{
 		}
 		super.update(timeElapsed, display);
 		rotatePlayer();
-		this.mRect.offsetTo(position.x, position.y);
+		this.mRect.offsetTo(position.x - boxLength, position.y - boxLength);
 	}
 
 	public Matrix configMatrix(Point bitmapDim, int blockSize){
 		this.playerMatrix.setRotate((float)(angle * 180/Math.PI),
 				bitmapDim.x / 2, bitmapDim.y / 2);
 
-		this.playerMatrix.postTranslate((position.x) - SCALE_BM_CENTER ,
-				(position.y) - SCALE_BM_CENTER);
+		this.playerMatrix.postTranslate((position.x) - hitRadius - GameConfig.PLAYER_SHIP_PADDING / 2,
+				(position.y) - hitRadius - GameConfig.PLAYER_SHIP_PADDING / 2);
 		return this.playerMatrix;
 	}
 
@@ -93,7 +88,7 @@ public class Player extends SpaceObject{
 	}
 
 	void computePlayerVelocity(){
-		if(velMagnitude < VELOCITY_RATE) {
+		if(velMagnitude < VELOCITY_RATE * 20) {
 			velMagnitude += VELOCITY_RATE;
 		}
 	}

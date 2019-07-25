@@ -36,7 +36,7 @@ public class ObjectFactory {
         SpaceObjectType objType;
 
         private PointF defaultShipSize;
-        final private float shipScaleFactor = 25;
+        static final public int shipScaleFactor = 25;
 
 
         // When this object is first made for the game engine. The screen 
@@ -67,7 +67,7 @@ public class ObjectFactory {
                 switch(type) {
                         case PLAYER:
                                 return new Player(new PointF(screen.width/2, screen.height/2),
-                                        defaultShipSize.x);
+                                                defaultShipSize.x/2);
                         case ASTEROID:
                                 PointF point = new PointF(
                                         (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
@@ -75,17 +75,17 @@ public class ObjectFactory {
                                 int sizeMultiplier = rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) + 1;
 
                                 return new Asteroid(angle,
-                                        point,
-                                        currentVelocityMagnitutde,
-                                        sizeMultiplier * asteroidSizeFactor, sizeMultiplier);
+                                                point,
+                                                currentVelocityMagnitutde,
+                                                sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
                         // case LASER:
                         case OPPONENT:
 
                                 return new Opponent(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
-                                        rand.nextInt(maxAngle) * Math.PI/180,
-                                        opponentVelocity, 100,
-                                        opponentHealth);
+                                                rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                                rand.nextInt(maxAngle) * Math.PI/180,
+                                                opponentVelocity, 100,
+                                                opponentHealth);
 
                 //        case POWERUP:
                 //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
@@ -111,7 +111,7 @@ public class ObjectFactory {
 
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
-                                                screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
+                                                screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR / 2);
                 return new Laser(temp, dmg);
         }
 
@@ -123,6 +123,7 @@ public class ObjectFactory {
 
         public void reset() {
                 currentVelocityMagnitutde = defaultVelocity;
+                opponentHealth = defaultOpponentHealth;
         }
 
         // ------------------- Ends Variable Controls --------------------------
