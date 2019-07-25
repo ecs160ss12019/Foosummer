@@ -36,37 +36,13 @@ public class Player extends SpaceObject{
 	Player(PointF pos, float playerLength) {
 		super(pos, 0, 0, playerLength);
 
-
-//		configHitboxSize();
-//		configHitboxLocation();
-		//currCoords.x = pos.x
-		//currCoords.y = pos.y
-		//hitboxDim.x = playerLength
-
 		// Intialize mRect (hitbox) based on the size and position
 		mRect = new RectF(pos.x, pos.y,
 				pos.x + playerLength - SCALE_TO_CENTER,
 				pos.y + playerLength - SCALE_TO_CENTER);
-//			Log.e("player: ", "value of hitboxDim.x: " + hitboxDim.x);
-//		    Log.e("player: ", "value of mRect.left: " + mRect.left);
-//			Log.e("player: ", "value of mRect.right: " + mRect.right);
-//			Log.e("player: ", "value of mRect.top: " + mRect.top);
-//			Log.e("player: ", "value of mRect.bottom: " + mRect.bottom);
 
-//		setPlayerCenter();
 	}
 
-//	void configHitboxLocation(){
-//		// start player ship location at center
-//		// of the screen
-//		this.currCoords = new PointF(maxCoords.x / 2, maxCoords.y / 2);
-//	}
-
-//	void configHitboxSize(){
-//		// Configure the size of the player's
-//		// hitbox based on the screen resolution
-//		this.hitboxDim = new PointF(maxCoords.x / 25, maxCoords.y / 25);
-//	}
 
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
@@ -113,9 +89,6 @@ public class Player extends SpaceObject{
 			}
 			angle += ROTATE_RATE;
 		}
-//		else {
-//			this.angle = angle;
-//		}
 	}
 
 	void computePlayerVelocity(){
