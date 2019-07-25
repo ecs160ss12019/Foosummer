@@ -98,7 +98,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
         }
         for(int i = 0; i < 3; i++) {
-            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP, 3));
+            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP));
         }
     }
 
@@ -171,7 +171,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //POWER UPS
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
-            gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display.width, display.height);
+            gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display);
         }
 
                 // OPPONENT

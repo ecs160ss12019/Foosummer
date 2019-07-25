@@ -32,6 +32,7 @@ public class GameView {
         Bitmap mBackGround;
         Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
+        Bitmap yellowPowerUpBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -64,6 +65,9 @@ public class GameView {
 
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize, shipSize, false);
+
+                yellowPowerUpBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.yellowpowerup);
+                yellowPowerUpBM = Bitmap.createScaledBitmap(yellowPowerUpBM, asteroidSizeFactor, asteroidSizeFactor, false);
         }
 
         public Point getBitmapDim(){
@@ -129,7 +133,9 @@ public class GameView {
                         //
                         // // POWER UPS
                         for(int i = 0; i < render.mMineralPowerUps.size(); i++){
-                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+//                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
                         }
 
                         // // OPPONENT

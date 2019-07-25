@@ -57,6 +57,8 @@ public class ObjectFactory {
 
                 defaultShipSize = new PointF(screen.width / shipScaleFactor,
                         screen.height / shipScaleFactor);
+
+//                defaultPowerUpSize =
         }
 
 
@@ -87,27 +89,25 @@ public class ObjectFactory {
                                                 opponentVelocity, 100,
                                                 opponentHealth);
 
-                //        case POWERUP:
-                //            return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
-                //                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-                //                    screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, 3,
-                //                    (float)(currentVelocityMagnitude * Math.cos(angle)),
-                //                    (float)(currentVelocityMagnitude * Math.sin(angle)));
+                        case POWERUP:
+                            return new PowerUps(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
+                                    rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                    50);
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
         }
 
-        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
-                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
-
-                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY, 
-                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
-                        (float)(currentVelocityMagnitude * Math.cos(angle)),
-                        (float)(currentVelocityMagnitude * Math.sin(angle)));
-        }
+//        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
+//                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
+//
+//                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
+//                        rand.nextInt(zone1.yDiff()) + zone1.minY,
+//                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
+//                        (float)(currentVelocityMagnitude * Math.cos(angle)),
+//                        (float)(currentVelocityMagnitude * Math.sin(angle)));
+//        }
 
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
