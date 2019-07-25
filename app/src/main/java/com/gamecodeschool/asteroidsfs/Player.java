@@ -129,7 +129,7 @@ public class Player {
 			if (degree > MAX_DEG) {
 				degree = MIN_DEG;
 			}
-			degree += 5;
+			degree += ROTATE_RATE;
 		} else {
 			this.degree = degree;
 		}
