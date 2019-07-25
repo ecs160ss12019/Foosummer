@@ -90,6 +90,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
         gameProgress.reset();
         factory.reset();
+        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
         for(int i = 0; i < 5; i++) {
             gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
@@ -137,8 +138,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     private void update() {
-        // PLAYER
-        gamePcs.mPlayer.update(timeElapsed);
+
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
 
@@ -150,7 +150,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mPlayerLasers.add(shootResult);
         }
 
-        gamePcs.mPlayer.update(timeElapsed);
+        // PLAYER
+        gamePcs.mPlayer.update(timeElapsed, display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
 

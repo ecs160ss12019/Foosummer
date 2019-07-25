@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.PointF;
+import android.util.Log;
 
 /* 
  * The SpaceObject is a moving object in space. We need position to track this object on screen.
@@ -28,7 +29,7 @@ public class SpaceObject {
         // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         position = pos;
         velMagnitude = velocityMagnitude;
-        hitRadius = hitRadius;
+        this.hitRadius = hitRadius;
         this.angle = angle;
     }
 
