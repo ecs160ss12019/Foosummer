@@ -95,7 +95,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0; i < 5; i++) {
             gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 1; i++) {
             gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
         }
         for(int i = 0; i < 3; i++) {
@@ -141,6 +141,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
 
+        // OPPONENT
+        //Laser oppShootResult = gamePcs.mOpponents.get(0).shoot(timeElapsed, factory);
+        Laser oppShootResult;
+        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer);
+
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
+            }
+        }
+
         if(DEBUGGING) {
             Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
         }
@@ -176,6 +187,14 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 // OPPONENT
         for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
             gamePcs.mOpponents.get(i).update(timeElapsed, display);
+        }
+
+        // OPPONENT LASER
+        for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {
+            if(gamePcs.mOpponentLasers.get(i).updateL(timeElapsed, display)) {
+                gamePcs.mOpponentLasers.remove(i);
+                i--;
+            }
         }
     }
 

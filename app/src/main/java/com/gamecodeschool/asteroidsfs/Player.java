@@ -106,6 +106,9 @@ public class Player extends SpaceObject{
 		laserTimer += timeIncrement;
 		if (laserTimer > SHOOT_INTERVAL) {
 			laserTimer = 0;
+
+			//Log.d("PlayerDebug ", "centerCoords.x: " + centerCoords.x);
+
 			//FIXME TODO: The last int, 1, is a temporary place in for laser damage variable stored in player. This should be able to go up w/ upgrade (maybe)
 			return fac.getPlayerLaser(new PointF(position.x, position.y), angle, 1);
 		}

@@ -33,6 +33,7 @@ public class GameView {
         Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
         Bitmap yellowPowerUpBM;
+        Bitmap mOpponentLaserBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -111,6 +112,12 @@ public class GameView {
                                 myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
                                         render.mPlayerLasers.get(i).getBitmapY(), myPaint);
                         }
+
+                        for(int i = 0; i < render.mOpponentLasers.size(); i++) {
+                                myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
+                                        render.mOpponentLasers.get(i).getBitmapY(), myPaint);
+                        }
+
                         //
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));
