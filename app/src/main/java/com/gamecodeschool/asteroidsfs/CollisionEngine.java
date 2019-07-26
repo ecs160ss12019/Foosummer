@@ -68,7 +68,6 @@ public class CollisionEngine {
                     oList.remove(k);
                     i--;
                     k--;
-                    Log.e("ELIM ENEMY: ", "OPPS LEFT: " + oList.size());
                     if(oList.size() == 0){
                         oppsEliminated = true;
                     }
@@ -89,7 +88,6 @@ public class CollisionEngine {
                     aList.remove(k);
                     pList.remove(i);
                     i--;
-                    Log.e("ELIM ENEMY: ", "ASTEROIDS LEFT: " + aList.size());
                     if(aList.size() == 0){
                         asteroidsEliminated = true;
                     }

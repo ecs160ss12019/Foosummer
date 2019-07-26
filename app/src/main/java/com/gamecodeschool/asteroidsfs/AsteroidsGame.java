@@ -207,6 +207,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         int index = motionEvent.getActionIndex();
         int pointerId = motionEvent.getPointerId(index);
         int action = motionEvent.getActionMasked();
+        PointF pauseRadius = new PointF(2497, 116);
 
         int oldX, oldY;
         // This switch block replaces the
@@ -221,15 +222,18 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                Log.e("Controlls", "Action DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 // If the game was paused unpause
-                nowPaused = false;
+                if(nowPaused == true){
+                    nowPaused = false;
+                }
 
 
 
+                Log.e("LOCATION: ", "THIS POINT IS AT: "
+                        + motionEvent.getX() + ", " + motionEvent.getY());
 
-//                Log.e("LOCATION: ", "THIS POINT IS AT: "
-//                        + motionEvent.getX() + ", " + motionEvent.getY());
-
-
+                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y){
+                    nowPaused = true;
+                }
 
 
                 // If finger pressed on right side of screen
