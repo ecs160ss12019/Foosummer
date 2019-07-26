@@ -109,7 +109,7 @@ We removed the plan to change background setting at each new level and divided t
   <tr>
     <td> Sprint 1 </td>
     <td> I have a spaceship and I can rotate 360 degrees </td>
-    <td> Black screen with score and other statistics displayed, and power ups (minerals) are available </td>
+    <td> Black screen with power ups (minerals) available </td>
     <td> Asteroids float through space with different directions and speeds </td>
     <td> Space police show up</td>
   </tr>
@@ -117,7 +117,7 @@ We removed the plan to change background setting at each new level and divided t
   <tr>
     <td> Sprint 2 </td>
     <td> My spaceship has a laser and mobile functionality </td>
-    <td> Statistics update accordingly after each event </td>
+    <td> HUD displayed</td>
     <td> Asteroids of varying sizes only collide with player's ship or its laser</td>
     <td> Space police has a laser</td>
   </tr>
@@ -125,7 +125,7 @@ We removed the plan to change background setting at each new level and divided t
   <tr> 
     <td> Sprint 3 </td>
     <td> My spaceship is the Black Pearl </td>
-    <td> Visual and sound features are implemented </td>
+    <td> HUD updates accordingly after each event. Visual and sound features are implemented </td>
     <td> Bigger asteroids break into smaller size units</td>
     <td> Space police shoots at the pirate on sight & shoots faster on higher difficulty</td>
   </tr>
