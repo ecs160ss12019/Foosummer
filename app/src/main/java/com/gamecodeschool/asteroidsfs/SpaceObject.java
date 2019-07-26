@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.PointF;
+import android.util.Log;
 
 /* 
  * The SpaceObject is a moving object in space. We need position to track this object on screen.
@@ -24,16 +25,16 @@ public class SpaceObject {
     protected float hitRadius;
     protected double angle; // in radians!
 
-    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
+    SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
         // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         position = pos;
         velMagnitude = velocityMagnitude;
-        hitRadius = hitRadius;
+        this.hitRadius = hitRadius;
         this.angle = angle;
     }
 
-    public SpaceObject(SpaceObject cpy) {
-        position = cpy.position;
+    SpaceObject(SpaceObject cpy) {
+        position = new PointF(cpy.position.x, cpy.position.y);
         velMagnitude = cpy.velMagnitude;
         hitRadius = cpy.hitRadius;
         angle = cpy.angle;
@@ -75,5 +76,13 @@ public class SpaceObject {
         else if(position.y > screen.height) {
             position.y = 0;
         }
+    }
+
+    // two circles if the sum of radius is greater/equal distance between two center coordinates.
+    static boolean collisionCheck(SpaceObject A, SpaceObject B) {
+        double radialSum = A.hitRadius + B.hitRadius;
+        double distance = Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x),2)
+                                + Math.pow((A.getPosition().y - B.getPosition().y),2));
+        return radialSum >= distance;
     }
 }

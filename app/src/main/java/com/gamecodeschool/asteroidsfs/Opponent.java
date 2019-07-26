@@ -14,7 +14,7 @@ public class Opponent extends SpaceObject{
     private int health;
     private float getX;
     private float getY;
-    private double shootAngle;
+    private float shootAngle;
 
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private final long SHOOT_INTERVAL = 2900;
@@ -31,11 +31,11 @@ public class Opponent extends SpaceObject{
     }
 
 
-    public Laser shoot(long timeIncrement, ObjectFactory fac, Point playerPos) {
-
+    public Laser shoot(long timeIncrement, ObjectFactory fac, PointF playerPos) {
+        //PointF playerPos = player.getPosition();
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
-        shootAngle = Math.atan2(getY, getX);
+        shootAngle = (float)Math.atan2(getY, getX);
 
         laserTimer += timeIncrement;
         if (laserTimer > SHOOT_INTERVAL) {

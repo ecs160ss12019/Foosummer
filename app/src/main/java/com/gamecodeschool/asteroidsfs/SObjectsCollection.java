@@ -16,7 +16,6 @@ public class SObjectsCollection {
         ArrayList<Laser> mOpponentLasers;
 
         SObjectsCollection(Display display) {
-                mPlayer          = new Player(display.width, display.height);
                 mAsteroids       = new ArrayList<Asteroid>();
                 mPlayerLasers    = new ArrayList<Laser>();
                 mMineralPowerUps = new ArrayList<PowerUps>();
