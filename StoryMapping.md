@@ -163,8 +163,7 @@ We removed the plan to change background setting at each new level and divided t
          Player can direct where to shoot.</td>
     <td> Statistics update properly with each new event.<br>
          When hit by player, adds lives OR temporarily increases shooting speed OR creates temporary shield</td>
-    <td> Asteroids do not collide with each other or police.<br>
-         Points increment properly when asteroids are hit</td>
+    <td> Asteroids do not collide with each other or police.</td>
     <td> Space police do not collide with each other or asteroids.<br>
          If hit points = 0, object is destroyed.</td>
   </tr>
@@ -172,7 +171,8 @@ We removed the plan to change background setting at each new level and divided t
   <tr> 
     <td> Sprint 3 </td>
     <td> Player's spaceship is the Black Pearl</td>
-    <td> Sound effects are working.</td>
+    <td> Sound effects are working. <br>
+         Points increment properly when asteroids are hit</td>
     <td> Points increment on new events according to new level <br>
          Bigger asteroids break into smaller size units.<br> 
          Broken asteroids scatter at equal angle from its initial direction.</td>
