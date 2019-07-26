@@ -89,18 +89,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     private void startNewGame() {
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
-        gameProgress.reset();
+        gameProgress.reset(gamePcs, factory, objType);
         factory.reset();
         gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
-        for(int i = 0; i < 5; i++) {
-            gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
-        }
-        for(int i = 0; i < 1; i++) {
-            gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
-        }
-        for(int i = 0; i < 3; i++) {
-            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP));
-        }
+
     }
 
 
@@ -120,6 +112,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     gameView.draw(gamePcs, gameProgress);
                 }
                 mCollision.checkCollision(gamePcs, gameProgress);
+                if(gameProgress.getGameStatus()){
+                    gameOver();
+//                    gameProgress.reset(gamePcs, factory, objType);
+
+                }
+                if(mCollision.checkEnemiesRemaining()){
+                    gameProgress.startNextLevel(gamePcs, factory, objType);
+                    mCollision.resetEnemies();
+                }
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
@@ -221,6 +222,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 // If the game was paused unpause
                 nowPaused = false;
+
+
+
+
+//                Log.e("LOCATION: ", "THIS POINT IS AT: "
+//                        + motionEvent.getX() + ", " + motionEvent.getY());
+
+
+
 
                 // If finger pressed on right side of screen
                 // then the ship will accelerate
