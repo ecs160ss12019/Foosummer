@@ -47,7 +47,9 @@ public class CollisionEngine {
         }
 
         // player vs asteroid.
-        playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);;
+        playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
+        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg);
+        oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
     }
 
     // See if player collided with any of the asteroids.
@@ -59,6 +61,35 @@ public class CollisionEngine {
                 // add subtract life logic here and possible start grace period count down.
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
+                i--;
+                break;
+            }
+        }
+    }
+
+    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp) {
+        for(int i = 0; i < pList.size(); i++) {
+            for(int k = 0; k < oList.size(); k++) {
+
+                if(SpaceObject.collisionCheck(pList.get(i), oList.get(k))) {
+                    pList.remove(i);
+                    //FIXME: Need to add score logic here!
+                    // For now enemy dies in 1 hit.
+                    oList.remove(k);
+                    i--;
+                    k--;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void oLaserPlayerCollision(ArrayList<Laser>oLaserList, Player P, GameProgress gp) {
+        for(int i = 0; i < oLaserList.size(); i++) {
+            if(SpaceObject.collisionCheck(oLaserList.get(i), P)) {
+                P.resetPos();
+                // add subtract life logic here and possible grace period count down.
+                oLaserList.remove(i);
                 i--;
                 break;
             }
