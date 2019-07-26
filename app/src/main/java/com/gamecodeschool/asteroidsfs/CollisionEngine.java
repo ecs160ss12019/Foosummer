@@ -27,7 +27,7 @@ public class CollisionEngine {
         asteroid - player
         powerup - player 
         These should cover the basic cases of collision within the game.
-        FIXME: Using n2 algorithm for now unless this gives us a sig performance hit.
+        FIXME: Separate these into separate private methods for readability!!!
     */
     public void checkCollision(SObjectsCollection collection, GameProgress gProg) {
         for(int i = 0; i < collection.mPlayerLasers.size(); i++) {
@@ -43,9 +43,29 @@ public class CollisionEngine {
                 }
             }
         }
+
+        // player vs asteroid.
+        playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);;
+    }
+
+    // See if player collided with any of the asteroids.
+    private void playerAsteroidCollision(Player P, ArrayList<Asteroid> aList, GameProgress gp) {
+        for(int i = 0; i < aList.size(); i++) {
+            Asteroid temp = aList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                P.resetPos();
+                // add subtract life logic here and possible start grace period count down.
+                aList.addAll(temp.collisionAction());
+                aList.remove(i);
+                i--;
+                break;
+            }
+        }
     }
 
 
+    // FIXME for now these code will not be used, but left in there as a possible future usage if we need some sort of timer function 
+    // FIXME for the collision endgine.
     // Sources: https://stackoverflow.com/questions/10032003/how-to-make-a-countdown-timer-in-android
     // https://stackoverflow.com/questions/3134683/android-toast-in-a-thread
 
