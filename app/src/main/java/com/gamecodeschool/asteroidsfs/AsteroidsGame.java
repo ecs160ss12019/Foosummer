@@ -97,7 +97,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         myHolder = getHolder();
 //        myPaint = new Paint();
 
-        gameView = new GameView(context, myHolder);
+        gameView = new GameView(context, myHolder, display);
 
         // Initialize the objects
         myShip = new Player(display.width, display.height);
