@@ -89,9 +89,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     private void startNewGame() {
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
+        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
         gameProgress.reset(gamePcs, factory, objType);
         factory.reset();
-        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
+
 
     }
 

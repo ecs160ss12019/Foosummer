@@ -1,6 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -28,6 +29,9 @@ public class ObjectFactory {
         final private float LASER_VEL_FACTOR = 3;
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
+
+        private float oppX;
+        private float oppY;
 
         private float currentVelocityMagnitude;
         private Random rand = new Random();
@@ -84,7 +88,7 @@ public class ObjectFactory {
                         case OPPONENT:
 
                                 return new Opponent(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                                rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
                                                 rand.nextInt(maxAngle) * Math.PI/180,
                                                 opponentVelocity, 100,
                                                 opponentHealth);
