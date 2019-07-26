@@ -1,6 +1,8 @@
 package com.gamecodeschool.asteroidsfs;
 
     import android.graphics.PointF;
+    import android.widget.Space;
+
     import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,15 +11,16 @@ public class Asteroid extends SpaceObject {
     private final int DEFAULT_SPLIT_ANGLE = 30; // DEFAULT MAX SPLIT POSSIBLE ANGLE
 
     // Using this constructor does not generate a RectF in the SpaceObject.
-    public Asteroid(double angle, PointF pos, float velocityMagnitude, float asteroidSize, int size) {
+    Asteroid(double angle, PointF pos, float velocityMagnitude, float asteroidSize, int size) {
         super(pos, angle, velocityMagnitude, asteroidSize);
         this.size = size;
     }
 
-    public Asteroid(SpaceObject copy, int newSize, int theta) {
+    Asteroid(SpaceObject copy, int newSize, int theta) {
         super(copy);
         size = newSize;
-        super.angle += theta * Math.PI / 180;
+        angle += theta * Math.PI / 180;
+        hitRadius = hitRadius * newSize / (newSize + 1);
     }
 
     public ArrayList<Asteroid> collisionAction() {
@@ -26,8 +29,8 @@ public class Asteroid extends SpaceObject {
             Random r = new Random();
             // Creates asteroid of smaller size that splits 
             //at randomized angle of at max 30 different from original.
-            temp.add(new Asteroid((SpaceObject)this, size - 1, r.nextInt(DEFAULT_SPLIT_ANGLE)));
-            temp.add(new Asteroid((SpaceObject)this, size - 1, -(r.nextInt(DEFAULT_SPLIT_ANGLE))));
+            temp.add(new Asteroid(this, size - 1, r.nextInt(DEFAULT_SPLIT_ANGLE)));
+            temp.add(new Asteroid(this, size - 1, -(r.nextInt(DEFAULT_SPLIT_ANGLE))));
         }
         
         return temp;
