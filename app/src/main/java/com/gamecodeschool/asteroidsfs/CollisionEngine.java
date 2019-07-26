@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class CollisionEngine {
     int totalHits = 0;
+//    GameProgress playerStatus = new GameProgress();
 
     /*
         We go through run through all object pairs that can be collided.
@@ -34,7 +35,8 @@ public class CollisionEngine {
             for(int k = 0; k < collection.mAsteroids.size(); k++) {
                 Asteroid temp = collection.mAsteroids.get(k);
                 if(SpaceObject.collisionCheck(collection.mPlayerLasers.get(i), temp)) {
-                    Log.d("Collision", "asteroid size " + temp.getSize());
+                    Log.e("Collision", "asteroid size " + temp.getSize());
+                    gProg.updateScore(temp.getSize());
                     collection.mAsteroids.addAll(temp.collisionAction());
                     collection.mAsteroids.remove(k);
                     collection.mPlayerLasers.remove(i);
