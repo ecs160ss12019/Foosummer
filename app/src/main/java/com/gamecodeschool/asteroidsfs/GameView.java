@@ -77,7 +77,7 @@ public class GameView {
 
         // Draw the game objects and the HUD.
         // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
-        void draw(SObjectsCollection render) {
+        void draw(SObjectsCollection render, GameProgress gProg) {
                 // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
@@ -148,7 +148,7 @@ public class GameView {
                         myPaint.setTextSize(screenRes.x / 40);
 
 //                       Draw the HUD
-                        myCanvas.drawText("Score: " + 50000 + " Lives: " + 3, screenRes.x / 75 ,
+                        myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
                                 screenRes.x / 50, myPaint);
 
 //                         if(DEBUGGING){
