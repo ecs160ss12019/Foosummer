@@ -142,10 +142,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
 
         // OPPONENT
-        //Laser oppShootResult = gamePcs.mOpponents.get(0).shoot(timeElapsed, factory);
         Laser oppShootResult;
         for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer);
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer.getPosition());
 
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
