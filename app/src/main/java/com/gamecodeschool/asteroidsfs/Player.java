@@ -25,10 +25,12 @@ public class Player extends SpaceObject{
 	private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
 	private final long SHOOT_INTERVAL = 500;
 	private final int boxLength;
+	private final PointF resetPos;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
 		super(pos, 0, 0, playerLength);
+		resetPos = new PointF(pos.x, pos.y);
 		boxLength = (int) playerLength;
 
 		// Intialize mRect (hitbox) based on the size and position
@@ -91,6 +93,11 @@ public class Player extends SpaceObject{
 		if(velMagnitude < VELOCITY_RATE * 20) {
 			velMagnitude += VELOCITY_RATE;
 		}
+	}
+
+	public void resetPos() {
+		position.x = resetPos.x;
+		position.y = resetPos.y;
 	}
 
 	// commented out until implementation.
