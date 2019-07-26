@@ -8,17 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class Opponent extends SpaceObject{
     private int health;
 
-    private Point centerCoords;
-    private float degree;
-    private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
-    private final long SHOOT_INTERVAL = 10;
-
-    public float getDegree() {return this.degree;} // do I need this?
-    public Point getCenterCoords() {return this.centerCoords;}
+    private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
+    private final long SHOOT_INTERVAL = 2900;
 
 
     public Opponent(PointF position, double angle, float velocityMag, float hitRadius, int health) {
@@ -30,25 +26,42 @@ public class Opponent extends SpaceObject{
     public void update(long time, Display display){
         super.update(time, display);
 
-        position.x += velMagnitude * Math.cos(angle) * time/2;
-        position.y += velMagnitude * Math.sin(angle) * time/2;
-
-
-
         // do something to deal with player's position?
 
     }
 
-    public Laser shoot(long timeIncrement, ObjectFactory fac) {
+
+    public Laser shoot(long timeIncrement, ObjectFactory fac, Player player) {
+        Point playerCoords = player.getCenterCoords();
+/*
+        PointF firingLocation = new PointF() ;
+
+        if(playerCoords.x > position.x) { // player is to the right of opponent
+            firingLocation.x = position.x+; // shoot in direction of player
+        }else if(playerCoords.x < position.x){// player is to the left of opponent
+            firingLocation.x =
+        }else { // player is on the same x-axis as opponent
+            firingLocation.x = mLocation.x
+                    + (mObjectWidth / 8f) - (laserLength);
+        }
+        // Move the height down a bit of ship height from origin
+        firingLocation.y = mLocation.y + (mObjectHeight / 1.28f);
+        return firingLocation;
+    }
+*/
+        //Log.d("OpponentDebug","playerCoords.x: " + playerCoords.x);
+
         laserTimer += timeIncrement;
         if (laserTimer > SHOOT_INTERVAL) {
             laserTimer = 0;
-            //FIXME TODO: The last int, 1, is a temporary place in for laser damage variable stored in player. This should be able to go up w/ upgrade (maybe)
-            return fac.getPlayerLaser(new PointF(position.x, position.y),(degree * Math.PI / 180), 1);
+
+            //return fac.getOpponentLaser(new PointF(playerCoords.x, playerCoords.y),(360 * Math.PI / 180), 1);
+            return fac.getOpponentLaser(new PointF(position.x, position.y),(360 * Math.PI / 180), 1);
+
         }
 
         return null;
     }
 
-    public long getTimer() {return laserTimer; }
+    //public long getTimer() {return laserTimer; }
 }

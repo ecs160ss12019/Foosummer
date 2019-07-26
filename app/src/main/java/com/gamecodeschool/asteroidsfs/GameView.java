@@ -60,7 +60,7 @@ public class GameView {
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, 100, 100, false);
 
-                mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
+                mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
                         asteroidSizeFactor / LaserSizeFactor, false);
         }
