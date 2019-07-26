@@ -222,18 +222,21 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                Log.e("Controlls", "Action DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 // If the game was paused unpause
-                if(nowPaused == true){
-                    nowPaused = false;
-                }
+//                if(nowPaused == true){
+//                    nowPaused = false;
+//                }
 
+//                Log.e("LOCATION: ", "THIS POINT IS AT: "
+//                        + motionEvent.getX() + ", " + motionEvent.getY());
+//                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
 
-
-                Log.e("LOCATION: ", "THIS POINT IS AT: "
-                        + motionEvent.getX() + ", " + motionEvent.getY());
-
-                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y){
+                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
                     nowPaused = true;
                 }
+                else { nowPaused = false; }
+
+
+
 
 
                 // If finger pressed on right side of screen
