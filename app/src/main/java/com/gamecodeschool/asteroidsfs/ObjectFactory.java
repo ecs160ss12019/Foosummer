@@ -20,7 +20,7 @@ public class ObjectFactory {
 
         final private float TIME = 20; // time it should take to cross screen in seconds
         final private float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
-        final private float OPPONENT_TIME = 7;
+        final private float OPPONENT_TIME = 30;
         final private float MS_PER_S = 1000; // 1000 milliseconds per 1 second
         final private int MAX_ASTEROID_SIZE_LEVEL = 3;
         static final public int DIVISION_FACTOR = 25;
@@ -103,6 +103,12 @@ public class ObjectFactory {
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
                                                 screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
+                return new Laser(temp, dmg);
+        }
+
+        public Laser getOpponentLaser(PointF oppPos, double oppAngle, int dmg) {
+                SpaceObject temp = new SpaceObject(oppPos, oppAngle, defaultLaserVelocity,
+                        screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
                 return new Laser(temp, dmg);
         }
 

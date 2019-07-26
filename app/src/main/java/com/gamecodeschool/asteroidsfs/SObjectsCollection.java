@@ -13,6 +13,7 @@ public class SObjectsCollection {
         ArrayList<Laser> mPlayerLasers; // to be implemented once we have enemy ship.
         ArrayList<PowerUps> mMineralPowerUps;
         ArrayList<Opponent> mOpponents;
+        ArrayList<Laser> mOpponentLasers;
 
         SObjectsCollection(Display display) {
                 mPlayer          = new Player(display.width, display.height);
@@ -20,5 +21,6 @@ public class SObjectsCollection {
                 mPlayerLasers    = new ArrayList<Laser>();
                 mMineralPowerUps = new ArrayList<PowerUps>();
                 mOpponents       = new ArrayList<Opponent>();
+                mOpponentLasers = new ArrayList<Laser>();
         }
 }
