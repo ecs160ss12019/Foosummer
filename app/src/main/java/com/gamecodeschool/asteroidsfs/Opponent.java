@@ -12,6 +12,9 @@ import android.util.Log;
 
 public class Opponent extends SpaceObject{
     private int health;
+    private float getX;
+    private float getY;
+    private float shootAngle;
 
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private final long SHOOT_INTERVAL = 2900;
@@ -33,35 +36,19 @@ public class Opponent extends SpaceObject{
 
     public Laser shoot(long timeIncrement, ObjectFactory fac, Player player) {
         Point playerCoords = player.getCenterCoords();
-/*
-        PointF firingLocation = new PointF() ;
 
-        if(playerCoords.x > position.x) { // player is to the right of opponent
-            firingLocation.x = position.x+; // shoot in direction of player
-        }else if(playerCoords.x < position.x){// player is to the left of opponent
-            firingLocation.x =
-        }else { // player is on the same x-axis as opponent
-            firingLocation.x = mLocation.x
-                    + (mObjectWidth / 8f) - (laserLength);
-        }
-        // Move the height down a bit of ship height from origin
-        firingLocation.y = mLocation.y + (mObjectHeight / 1.28f);
-        return firingLocation;
-    }
-*/
-        //Log.d("OpponentDebug","playerCoords.x: " + playerCoords.x);
+        getX = playerCoords.x - position.x;
+        getY = playerCoords.y - position.y;
+        shootAngle = (float)Math.atan2(getY, getX);
 
         laserTimer += timeIncrement;
         if (laserTimer > SHOOT_INTERVAL) {
             laserTimer = 0;
 
-            //return fac.getOpponentLaser(new PointF(playerCoords.x, playerCoords.y),(360 * Math.PI / 180), 1);
-            return fac.getOpponentLaser(new PointF(position.x, position.y),(360 * Math.PI / 180), 1);
-
+            return fac.getOpponentLaser(new PointF(position.x, position.y), shootAngle, 1);
         }
 
         return null;
     }
 
-    //public long getTimer() {return laserTimer; }
 }
