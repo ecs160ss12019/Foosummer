@@ -60,7 +60,7 @@ As a space pirate, I want to pilot my spaceship to avoid the GFSPF and collect r
 </table>
 
 
-### Updated Storyboard
+### Updated Storyboard for Sprint 2
 We removed the plan to change background setting at each new level and divided the statistics display into two sprints.  We also moved varying asteroids size into sprint 2 and refined the asteroids sprint.
 <table width="75%" border="1">
   <tr>
@@ -96,6 +96,41 @@ We removed the plan to change background setting at each new level and divided t
   </tr>
 </table>
 
+### Updated Storyboard for Sprint 3
+<table width="75%" border="1">
+  <tr>
+    <td> User Story</td>
+    <td> As a space pirate, I want to navigate my spacecraft </td>
+    <td> through outer space  </td>
+    <td> while gathering rare materials from asteroids </td>
+    <td> and being chased by space police. </td>
+  </tr>
+
+  <tr>
+    <td> Sprint 1 </td>
+    <td> I have a spaceship and I can rotate 360 degrees </td>
+    <td> Black screen with power ups (minerals) available </td>
+    <td> Asteroids float through space with different directions and speeds </td>
+    <td> Space police show up</td>
+  </tr>
+
+  <tr>
+    <td> Sprint 2 </td>
+    <td> My spaceship has a laser and mobile functionality </td>
+    <td> HUD displayed</td>
+    <td> Asteroids of varying sizes only collide with player's ship or its laser</td>
+    <td> Space police has a laser</td>
+  </tr>
+
+  <tr> 
+    <td> Sprint 3 </td>
+    <td> My spaceship is the Black Pearl </td>
+    <td> HUD updates accordingly after each event. Visual and sound features are implemented </td>
+    <td> Bigger asteroids break into smaller size units</td>
+    <td> Space police shoots at the pirate on sight & shoots faster on higher difficulty</td>
+  </tr>
+</table>
+
 
 ### Acceptance Tests
 <table width="75%" border="1">
@@ -116,36 +151,35 @@ We removed the plan to change background setting at each new level and divided t
          Asteroids vary in sizes. <br>
          Asteroids move at varying speeds</td>
     <td> Space police are spawned.<br>
-         Police ships fly in expected paths.<br>
          Police lasers do not interact with powerups.</td>
   </tr>
 
   <tr>
     <td> Sprint 2 </td>
     <td> Player's ship drives in the correct direction based on onTouchEvent.<br>
-         Laser is visible on player's ship.<br>
-         Laser is constantly shooting.<br>
-         Laser does damage on objects that it hits.<br>
+         Lasers are spawned.<br>
+         Lasers are constantly shooting.<br>
+         Lasers do damage on destined objects that it hits.<br>
          Player can direct where to shoot.</td>
-    <td> Higher level: asteroids move faster.<br>
-         Statistics update properly with each new event.<br>
+    <td> Statistics update properly with each new event.<br>
          When hit by player, adds lives OR temporarily increases shooting speed OR creates temporary shield</td>
-    <td> Bigger asteroids break into smaller size until.<br>
-         Broken asteroids scatter at equal angle from its initial direction.<br>
-         Asteroids do not collide with each other or police.<br>
-         Points increment properly when asteroids are hit</td>
-    <td> Police always shoots at the pirate on sight.<br>
-         Police lasers shoot in the direction of the player’s ship (not in random directions).<br>
-         Space police do not collide with each other or asteroids.<br>
+    <td> Asteroids do not collide with each other or police.</td>
+    <td> Space police do not collide with each other or asteroids.<br>
          If hit points = 0, object is destroyed.</td>
   </tr>
 
   <tr> 
     <td> Sprint 3 </td>
     <td> Player's spaceship is the Black Pearl</td>
-    <td> Sound effects are working.</td>
-    <td> Points increment on new events according to new level</td>
-    <td> Higher level: More police ships are spawned.<br>
+    <td> Sound effects are working. <br>
+         Points increment properly when asteroids are hit</td>
+    <td> Points increment on new events according to new level <br>
+         Bigger asteroids break into smaller size units.<br> 
+         Broken asteroids scatter at equal angle from its initial direction.</td>
+    <td> Police ships fly in expected paths.<br> 
+         Police always shoots at the pirate on sight.<br>
+         Police lasers shoot in the direction of the player’s ship (not in random directions).<br>
+         Higher level: More police ships are spawned.<br>
          Higher level: Police lasers shoot faster.</td>
   </tr>
 </table>
