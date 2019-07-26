@@ -119,7 +119,7 @@ We removed the plan to change background setting at each new level and divided t
     <td> My spaceship has a laser and mobile functionality </td>
     <td> HUD displayed</td>
     <td> Asteroids of varying sizes only collide with player's ship or its laser</td>
-    <td> Space police has a laser</td>
+    <td> Space police shoots at the pirate on sight</td>
   </tr>
 
   <tr> 
@@ -127,7 +127,7 @@ We removed the plan to change background setting at each new level and divided t
     <td> My spaceship is the Black Pearl </td>
     <td> HUD updates accordingly after each event. Visual and sound features are implemented </td>
     <td> Bigger asteroids break into smaller size units</td>
-    <td> Space police shoots at the pirate on sight & shoots faster on higher difficulty</td>
+    <td> Police shoot faster and spawn additional ships on higher difficulty</td>
   </tr>
 </table>
 
@@ -164,8 +164,10 @@ We removed the plan to change background setting at each new level and divided t
     <td> Statistics update properly with each new event.<br>
          When hit by player, adds lives OR temporarily increases shooting speed OR creates temporary shield</td>
     <td> Asteroids do not collide with each other or police.</td>
-    <td> Space police do not collide with each other or asteroids.<br>
-         If hit points = 0, object is destroyed.</td>
+    <td> Police ships fly in expected paths.<br> 
+         Police always shoots at the pirate on sight.<br>
+         Police lasers shoot in the direction of the player’s ship (not in random directions).<br>
+         Space police do not collide with each other or asteroids.</td>
   </tr>
 
   <tr> 
@@ -176,9 +178,7 @@ We removed the plan to change background setting at each new level and divided t
     <td> Points increment on new events according to new level <br>
          Bigger asteroids break into smaller size units.<br> 
          Broken asteroids scatter at equal angle from its initial direction.</td>
-    <td> Police ships fly in expected paths.<br> 
-         Police always shoots at the pirate on sight.<br>
-         Police lasers shoot in the direction of the player’s ship (not in random directions).<br>
+    <td> If hit points = 0, police ship is destroyed.<br>
          Higher level: More police ships are spawned.<br>
          Higher level: Police lasers shoot faster.</td>
   </tr>
