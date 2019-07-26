@@ -4,20 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.content.Context;
-import android.graphics.RectF;
 import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
-import android.widget.ImageView;
-import android.view.View;
-import android.app.Activity;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 // make this an interface
 
@@ -32,7 +23,7 @@ public class GameView {
         // Bitmaps that is contained within the gameview.
         Bitmap mAsteroids;
         public Bitmap shipBitmap;
-        int[] drawables = {
+        int[] backgroundDrawables = {
                 R.drawable.outerspace_0,
                 R.drawable.outerspace_1,
                 R.drawable.outerspace_2,
@@ -107,11 +98,41 @@ public class GameView {
                 R.drawable.outerspace_71,
                 R.drawable.outerspace_72,
                 R.drawable.outerspace_73,
-                R.drawable.outerspace_74
-        };
-        Bitmap[] mBackGround = new Bitmap[drawables.length];
-        int k = 0;
-
+                R.drawable.outerspace_74};
+        Bitmap[] mBackGround = new Bitmap[backgroundDrawables.length];
+        int k,m,n = 0;
+        int[] asteroidDrawables = {
+                R.drawable.asteroid_0,
+                R.drawable.asteroid_1,
+                R.drawable.asteroid_2,
+                R.drawable.asteroid_3,
+                R.drawable.asteroid_4,
+                R.drawable.asteroid_5,
+                R.drawable.asteroid_6,
+                R.drawable.asteroid_7,
+                R.drawable.asteroid_8,
+                R.drawable.asteroid_9,
+                R.drawable.asteroid_10,
+                R.drawable.asteroid_11,
+                R.drawable.asteroid_12,
+                R.drawable.asteroid_13,
+                R.drawable.asteroid_14,
+                R.drawable.asteroid_15,
+                R.drawable.asteroid_16,
+                R.drawable.asteroid_17,
+                R.drawable.asteroid_18,
+                R.drawable.asteroid_19,
+                R.drawable.asteroid_20,
+                R.drawable.asteroid_21,
+                R.drawable.asteroid_22,
+                R.drawable.asteroid_23,
+                R.drawable.asteroid_24,
+                R.drawable.asteroid_25,
+                R.drawable.asteroid_26,
+                R.drawable.asteroid_27,
+                R.drawable.asteroid_28,
+                R.drawable.asteroid_29};
+        Bitmap[] mAsteroid = new Bitmap[asteroidDrawables.length];
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 ourContext = context;
@@ -124,8 +145,8 @@ public class GameView {
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, 128, 128, true);
-                for(int i= 0 ; i < drawables.length ; i++) {
-                        mBackGround[i] = BitmapFactory.decodeResource(ourContext.getResources(), drawables[i]);
+                for(int i = 0; i < backgroundDrawables.length ; i++) {
+                        mBackGround[i] = BitmapFactory.decodeResource(ourContext.getResources(), backgroundDrawables[i]);
                         mBackGround[i] = Bitmap.createScaledBitmap(mBackGround[i], screen.width, screen.height, true);
                 }
                 shipBitmap.setHasAlpha(true);
@@ -149,7 +170,7 @@ public class GameView {
                         // Fills the screen with background "space" image
 
                         myCanvas.drawBitmap(mBackGround[k++], 0, 0, myPaint);
-                        if(k == drawables.length)
+                        if(k == backgroundDrawables.length)
                                 k =0;
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
@@ -182,14 +203,11 @@ public class GameView {
                         // // ASTEROIDS
 //                        myPaint.setColor(Color.red(250));
                         for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                myCanvas.drawBitmap(mAsteroids, render.mAsteroids.get(i).getBitmapX(),
+                                myCanvas.drawBitmap(mAsteroid[m++], render.mAsteroids.get(i).getBitmapX(),
                                                 render.mAsteroids.get(i).getBitmapY(), myPaint);
-
-//                                myCanvas.drawCircle(render.mAsteroids.get(i).getPosition().x,
-//                                        render.mAsteroids.get(i).getPosition().y,
-//                                        20.0f, myPaint);
-
                         }
+                        if(m == asteroidDrawables.length)
+                                m =0;
                         //
                         // // POWER UPS
                         for(int i = 0; i < render.mMineralPowerUps.size(); i++){
