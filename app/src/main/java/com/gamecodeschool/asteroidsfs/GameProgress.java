@@ -2,6 +2,8 @@ package com.gamecodeschool.asteroidsfs;
 
 
 import android.util.Log;
+import android.widget.Space;
+import android.graphics.PointF;
 
 /* *
  * GameProgress's responsibilities
@@ -107,7 +109,17 @@ public class GameProgress {
             gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
         for(int i = 0; i < numOpps; i++) {
-            gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
+
+            // modify the opponent coordinates to spawn away from player
+            SpaceObject temp = factory.getSpaceObject(objType.OPPONENT);
+            PointF playerPos = gamePcs.mPlayer.getPosition();
+
+            // try to randomize this more!!
+            temp.position.x += gamePcs.mPlayer.getPosition().x;
+            temp.position.y += gamePcs.mPlayer.getPosition().y;
+
+
+            gamePcs.mOpponents.add((Opponent)temp);
         }
 
         // this will be abstracted away such that they spawn on asteroid collision
