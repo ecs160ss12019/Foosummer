@@ -33,7 +33,11 @@ public class GameView {
         Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
         Bitmap yellowPowerUpBM;
+        Bitmap redPowerUpBM;
+        Bitmap bluePowerUpBM;
+        Bitmap greenPowerUpBM;
         Bitmap mOpponentLaserBM;
+        Bitmap pauseButtonBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -73,6 +77,9 @@ public class GameView {
                 mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
                 asteroidSizeFactor / LaserSizeFactor, false);
+
+                pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
+                pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
         }
 
         public Point getBitmapDim(){
@@ -106,6 +113,9 @@ public class GameView {
                                 Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
                                 Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
                         }
+
+                        // draw the pause button
+                        myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint);
 
                         // draw the ship and its hitbox
                         myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);

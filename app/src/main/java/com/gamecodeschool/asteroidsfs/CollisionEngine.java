@@ -18,6 +18,8 @@ import java.util.ArrayList;
  */
 public class CollisionEngine {
     int totalHits = 0;
+    boolean asteroidsEliminated = false;
+    boolean oppsEliminated = false;
 //    GameProgress playerStatus = new GameProgress();
 
     /*
@@ -31,25 +33,13 @@ public class CollisionEngine {
         FIXME: Separate these into separate private methods for readability!!!
     */
     public void checkCollision(SObjectsCollection collection, GameProgress gProg) {
-        for(int i = 0; i < collection.mPlayerLasers.size(); i++) {
-            for(int k = 0; k < collection.mAsteroids.size(); k++) {
-                Asteroid temp = collection.mAsteroids.get(k);
-                if(SpaceObject.collisionCheck(collection.mPlayerLasers.get(i), temp)) {
-                    Log.e("Collision", "asteroid size " + temp.getSize());
-                    gProg.updateScore(temp.getSize());
-                    collection.mAsteroids.addAll(temp.collisionAction());
-                    collection.mAsteroids.remove(k);
-                    collection.mPlayerLasers.remove(i);
-                    i--;
-                    break;
-                }
-            }
-        }
 
         // player vs asteroid.
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
         PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg);
+        PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
+
     }
 
     // See if player collided with any of the asteroids.
@@ -78,6 +68,31 @@ public class CollisionEngine {
                     oList.remove(k);
                     i--;
                     k--;
+                    Log.e("ELIM ENEMY: ", "OPPS LEFT: " + oList.size());
+                    if(oList.size() == 0){
+                        oppsEliminated = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList, GameProgress gp){
+        for(int i = 0; i < pList.size(); i++) {
+            for(int k = 0; k < aList.size(); k++) {
+                Asteroid temp = aList.get(k);
+                if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+//                    Log.e("Collision", "asteroid size " + temp.getSize());
+                    gp.updateScore(temp.getSize());
+                    aList.addAll(temp.collisionAction());
+                    aList.remove(k);
+                    pList.remove(i);
+                    i--;
+                    Log.e("ELIM ENEMY: ", "ASTEROIDS LEFT: " + aList.size());
+                    if(aList.size() == 0){
+                        asteroidsEliminated = true;
+                    }
                     break;
                 }
             }
@@ -95,6 +110,17 @@ public class CollisionEngine {
             }
         }
     }
+
+    public boolean checkEnemiesRemaining(){
+        if(oppsEliminated == true && asteroidsEliminated == true) { return true; }
+        else{ return false; }
+    }
+
+    public void resetEnemies(){
+        oppsEliminated = false;
+        asteroidsEliminated = false;
+    }
+
 
 
     // FIXME for now these code will not be used, but left in there as a possible future usage if we need some sort of timer function 
