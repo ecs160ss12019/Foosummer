@@ -38,6 +38,7 @@ public class GameView {
         Bitmap greenPowerUpBM;
         Bitmap mOpponentLaserBM;
         Bitmap pauseButtonBM;
+        Bitmap pauseMenuBM;
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -84,6 +85,10 @@ public class GameView {
 
                 pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
                 pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
+
+                pauseMenuBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausemenu);
+//                pauseMenuBM = Bitmap.createScaledBitmap(pauseMenuBM, )
+
         }
 
         public Point getBitmapDim(){
@@ -184,6 +189,24 @@ public class GameView {
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
 
+        }
+
+        void drawPauseMenu(){
+                if (myHolder.getSurface().isValid()) {
+                        // Lock the canvas (graphics memory) ready to draw
+                        myCanvas = myHolder.lockCanvas();
+                        // Choose a color to paint with
+                        myPaint.setColor(Color.argb(255, 75, 180, 250));
+                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
+                        // Choose the font size
+                        myPaint.setTextSize(screenRes.x / 20);
+
+                        // Draw the HUD
+                        myCanvas.drawText("PAUSED", (screenRes.x / 2) - 200, screenRes.y / 2, myPaint);
+                        myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
+                        // unlockCanvasAndPost is a method of SurfaceView
+                        myHolder.unlockCanvasAndPost(myCanvas);
+                }
         }
 
 }

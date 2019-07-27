@@ -57,6 +57,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     private CollisionEngine mCollision;
 
+    // distinguishes user pause vs "pause" when initializing the game
+    boolean userPause = false;
+
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
         super(context);
@@ -128,12 +131,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 // check for collision between player's laser and asteroids
                 //detectCollisions();
             }
+            // on pause..
+            else if(userPause){
+                gameView.drawPauseMenu();
+            }
 
             // How long did this frame/loop take?
             // Store the answer in timeThisFrame
             long timeThisFrame = System.currentTimeMillis() - frameStartTime;
             timeElapsed = timeThisFrame;
         }
+        Log.e("run:", "userPause: " + userPause);
     }
 
 
@@ -231,12 +239,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                        + motionEvent.getX() + ", " + motionEvent.getY());
 //                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
 
+                //
+                // need to consider pause for multi-touch also... need to test on Android
                 if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
                     nowPaused = true;
                 }
                 else { nowPaused = false; }
 
-
+                userPause = nowPaused;
+                Log.e("onTouchEvent:", "userPause: " + userPause);
+                //
+                //
 
 
 
@@ -269,7 +282,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 pointerId = motionEvent.getPointerId(index);
 //                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-                nowPaused = false;
+
+                //
+                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
+                // nowPaused = false;
+                //
+                //
 
                 if(motionEvent.getX(0) < display.width / 2){
                     if(motionEvent.getY(0) < display.height / 2){
