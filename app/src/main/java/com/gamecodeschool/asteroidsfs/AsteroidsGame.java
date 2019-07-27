@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.graphics.Canvas;
@@ -52,6 +53,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private ObjectFactory factory;
     private GameView gameView;
     private SObjectsCollection gamePcs;
+    private Audio audio;
 
     SpaceObjectType objType; // Enum used for object creation.
 
@@ -75,7 +77,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
-
+        audio = new Audio(context);
         startNewGame();
     }
 
@@ -355,6 +357,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Start the thread
         myGameThread.start();
+        audio.playClick();
     }
 
 
@@ -372,6 +375,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
+        audio.pause();
     }
 
 
