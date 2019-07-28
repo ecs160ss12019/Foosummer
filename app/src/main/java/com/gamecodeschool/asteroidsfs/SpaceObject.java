@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.PointF;
+import android.util.Log;
 
 /* 
  * The SpaceObject is a moving object in space. We need position to track this object on screen.
@@ -24,33 +25,30 @@ public class SpaceObject {
     protected float hitRadius;
     protected double angle; // in radians!
 
-    public SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitCircleSize) {
+    SpaceObject(PointF pos, double angle, float velocityMagnitude, float hitRadius) {
         // BEGIN LEGACY CODE. Needs to be phased out for later stage.
         position = pos;
         velMagnitude = velocityMagnitude;
-        hitRadius = hitCircleSize;
+        this.hitRadius = hitRadius;
         this.angle = angle;
     }
 
-    public PointF getPosition() {
-        return position;
+    SpaceObject(SpaceObject cpy) {
+        position = new PointF(cpy.position.x, cpy.position.y);
+        velMagnitude = cpy.velMagnitude;
+        hitRadius = cpy.hitRadius;
+        angle = cpy.angle;
     }
+
     public float getVelocityX() {
         return (float)(velMagnitude * Math.cos(angle));
     }
     public float getVelocityY() {
         return (float)(velMagnitude * Math.sin(angle));
     }
-    // Commented out since this might not be
-//    public void setVelocityX(float velocityX) {
-//        this.velocityX = velocityX;
-//    }
-//    public void setVelocityY(float velocityY) {
-//        this.velocityY = velocityY;
-//    }
-    public float getHitRadius() {
-        return hitRadius;
-    }
+    
+    public PointF getPosition() {return position;}
+    public float getHitRadius() {return hitRadius;}
 
     // Following two getters returns coordinate for top left corner for bitmap. When used together.
     public float getBitmapX() {
@@ -80,14 +78,11 @@ public class SpaceObject {
         }
     }
 
-    /* An example of how a collision detection for this base object would work.
-     * This is done through radial sum of two objects and comparing that to the distance of two objects.
-     */
-    // static public boolean detectCollision(SpaceObject A, SpaceObject B) {
-    //     int distance = (int)Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x), 2) 
-    //                     + Math.pow((A.getPosition().y - B.getPosition().y), 2));
-
-    //     // The objects overlap if their distance apart is less than sum of their radius.
-    //     return distance <= (int)(A.getHitRadius() + B.getHitRadius());
-    // }
+    // two circles if the sum of radius is greater/equal distance between two center coordinates.
+    static boolean collisionCheck(SpaceObject A, SpaceObject B) {
+        double radialSum = A.hitRadius + B.hitRadius;
+        double distance = Math.sqrt(Math.pow((A.getPosition().x - B.getPosition().x),2)
+                                + Math.pow((A.getPosition().y - B.getPosition().y),2));
+        return radialSum >= distance;
+    }
 }

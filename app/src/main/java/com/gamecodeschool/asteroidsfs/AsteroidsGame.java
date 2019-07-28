@@ -1,36 +1,33 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.ArrayList;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.Bitmap;
 // these imports deal with ArrayList class in java
-import java.util.ArrayList;
-import java.util.*;
-import java.util.Random;
+
 
 class AsteroidsGame extends SurfaceView implements Runnable{
-    private final int NUM_BLOCKS_WIDE = 40;
-    int blockSize;
 
+    Canvas canvas;
+    Paint paint;
+
+
+    private final int NUM_BLOCKS_WIDE = 40;
+    int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
 
     // Toggle for debugging
     static final boolean DEBUGGING = false;
 
     // Drawing objects
     private SurfaceHolder myHolder;
-//    private Canvas myCanvas;
-//    private Paint myPaint;
-
-    // Frames per second
-    private long myFPS;
     private long timeElapsed;
     // Number of milliseconds in a second
     private final int MILLIS_IN_SECOND = 1000;
@@ -39,19 +36,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         with this object variable (that contains the screen x y size)
     */
     private Display display; 
-
-    // Text size
-    private int fontSize = blockSize*10;
-    private int fontMargin;
-
-    // track user score and lives
-    private int score = 0;
-    private int lives = 3; // abstract this to UserShip class?
-
-    private int i = 0;
-
-    private int degree;
-
     // Number of hits to destroy PowerUps
     private int hitsLeft= 3;
 
@@ -65,23 +49,13 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // GAME OBJECTS
     private GameProgress gameProgress;
-
     private ObjectFactory factory;
-    SpaceObjectType objType;
-
-//    private Space mySpace;
-
-    public Player myShip;
-//    private OpponentShip npcShip; 
-    private ArrayList<Asteroid> asteroids;
-//    private Laser npcLaser; // vector of lasers associated per npc ship?
-    private ArrayList<PowerUps> mineralPowerUps; // vector of mineral powerups
-//    private Drawable mCustomImage;
-
     private GameView gameView;
-    private Render mRender = new Render();
-    // temp Context
+    private SObjectsCollection gamePcs;
 
+    SpaceObjectType objType; // Enum used for object creation.
+
+    private CollisionEngine mCollision;
 
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
@@ -95,29 +69,31 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // ready for drawing with
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
-//        myPaint = new Paint();
-
+//<<<<<<< HEAD
+////        myPaint = new Paint();
+//
+//        gameView = new GameView(context, myHolder, display);
+//
+//        // Initialize the objects
+//        myShip = new Player(display.width, display.height);
+//
+//        // Initialize asteroids
+//        asteroids = new ArrayList<Asteroid>();
+//
+//        mineralPowerUps = new ArrayList<PowerUps>();
+//
+//        gameProgress = new GameProgress();
+//=======
         gameView = new GameView(context, myHolder, display);
-
-        // Initialize the objects
-        myShip = new Player(display.width, display.height);
-
-        // Initialize asteroids
-        asteroids = new ArrayList<Asteroid>();
-
-        mineralPowerUps = new ArrayList<PowerUps>();
-
-        gameProgress = new GameProgress();
+//>>>>>>> 3ad9a4df8a2306925e1257657687363e41724af9
         factory = new ObjectFactory(display);
-        
-        bundleRender();
-
+        gameProgress = new GameProgress();
+        gamePcs = new SObjectsCollection(display);
+        mCollision = new CollisionEngine();
+        gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
         startNewGame();
-
     }
-
-
 
 
 
@@ -131,12 +107,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
         gameProgress.reset();
         factory.reset();
-        for(int i = 0; i < 10; i++) {
-            asteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
+        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
+        for(int i = 0; i < 5; i++) {
+            gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
         }
-
+        for(int i = 0; i < 1; i++) {
+            gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.OPPONENT));
+        }
         for(int i = 0; i < 3; i++) {
-            mineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP, 3));
+            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP));
         }
     }
 
@@ -154,28 +133,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-
-                    gameView.draw(mRender);
+                    gameView.draw(gamePcs, gameProgress);
                 }
-                    
-
-                // check for collision between player and asteroids
-                // Asteroid myAsteroid = asteroids.get(i);
-                // boolean asteroidPlayerHit = detectCollision(myShip.getRect(), myAsteroid.getHitbox());
-                // i++;
-                // if(i > 4){
-                //     i = 0;
-                // }
-
-
-                /*
-                Log.d("ADebugTag", "collision detected: " + hit);
-                Log.d("ADebugTag", "value of i: " + i);
-                */
-
-                //sprint 2
-                // asteroid hit player's ship - decrement player's hitpoints
-                //if(asteroidPlayerHit){}
+                mCollision.checkCollision(gamePcs, gameProgress);
 
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
@@ -187,30 +147,73 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // Store the answer in timeThisFrame
             long timeThisFrame = System.currentTimeMillis() - frameStartTime;
             timeElapsed = timeThisFrame;
-
         }
     }
 
 
 
     private void update() {
-        // PLAYER
 
-        myShip.update(timeElapsed);
-        myShip.configMatrix(gameView.getBitmapDim(), blockSize);
+        // shooting action each update.
+        Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
+
+        // OPPONENT
+        Laser oppShootResult;
+        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer.getPosition());
+
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
+            }
+        }
+
+        if(DEBUGGING) {
+            Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
+        }
+
+        if(shootResult != null) {
+            gamePcs.mPlayerLasers.add(shootResult);
+        }
+
+        // PLAYER
+        gamePcs.mPlayer.update(timeElapsed, display);
+        gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
 
         // ASTEROIDS
-        for(int i = 0 ; i < asteroids.size() ; i++) {
-            asteroids.get(i).update(timeElapsed, display);
+        for(int i = 0 ; i < gamePcs.mAsteroids.size() ; i++) {
+            gamePcs.mAsteroids.get(i).update(timeElapsed, display);
+        }
+
+        // PLAYER LASER we call different update since this has a boolean attached to it.
+        for(int i = 0; i < gamePcs.mPlayerLasers.size(); i++) {
+            if(gamePcs.mPlayerLasers.get(i).updateL(timeElapsed, display)) {
+                gamePcs.mPlayerLasers.remove(i);
+                i--;
+            }
         }
 
         //POWER UPS
         // PowerUp position - currently stationary
-        for(int i = 0; i < mineralPowerUps.size(); i++) {
-            mineralPowerUps.get(i).update(timeElapsed, display.width, display.height);
+        for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
+            gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display);
+        }
+
+                // OPPONENT
+        for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
+            gamePcs.mOpponents.get(i).update(timeElapsed, display);
+        }
+
+        // OPPONENT LASER
+        for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {
+            if(gamePcs.mOpponentLasers.get(i).updateL(timeElapsed, display)) {
+                gamePcs.mOpponentLasers.remove(i);
+                i--;
+            }
         }
     }
+
 
 
     // Handle all the screen touches
@@ -239,7 +242,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 // then the ship will accelerate
                 if(motionEvent.getX() > display.width / 2){
                     // call method that will accelerate ship
-                    myShip.setMoveState(true);
+                    gamePcs.mPlayer.setMoveState(true);
                 }
                 // If finger pressed on left side of screen...
 
@@ -249,11 +252,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     // then the ship will rotate counter-clockwise
                     if(motionEvent.getY() < display.height / 2){
                         // rotate ship counter-clockwise
-                        myShip.setRotationState(1);
+                        gamePcs.mPlayer.setRotationState(1);
                     }
                     else{
                         // rotate ship clockwise
-                        myShip.setRotationState(2);
+                        gamePcs.mPlayer.setRotationState(2);
                     }
                 }
 
@@ -269,17 +272,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 if(motionEvent.getX(0) < display.width / 2){
                     if(motionEvent.getY(0) < display.height / 2){
                         // rotate ship counter-clockwise
-                        myShip.setRotationState(1);
+                        gamePcs.mPlayer.setRotationState(1);
 //                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
                     }
                     else if (motionEvent.getY(0) > display.height / 2){
                         // rotate ship clockwise
-                        myShip.setRotationState(2);
+                        gamePcs.mPlayer.setRotationState(2);
 //                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
                     }
                 }
                 else if(motionEvent.getX(0) > display.width ){
-                    myShip.setMoveState(true);
+                    gamePcs.mPlayer.setMoveState(true);
                 }
 
                 if( motionEvent.getX(1) < display.width / 2){
@@ -287,17 +290,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     // then the ship will rotate counter-clockwise
                     if(motionEvent.getY(1) < display.height / 2){
                         // rotate ship counter-clockwise
-                        myShip.setRotationState(1);
+                        gamePcs.mPlayer.setRotationState(1);
 //                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
                     }
                     else if (motionEvent.getY(1) > display.height / 2){
                         // rotate ship clockwise
-                        myShip.setRotationState(2);
+                        gamePcs.mPlayer.setRotationState(2);
 //                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
                     }
                 }
                 else if(motionEvent.getX(1) > display.width / 2){
-                    myShip.setMoveState(true);
+                    gamePcs.mPlayer.setMoveState(true);
                 }
 
                 break;
@@ -315,12 +318,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
                 if(motionEvent.getX() > display.width / 2){
                     // stop position
-                    myShip.setMoveState(false);
+                    gamePcs.mPlayer.setMoveState(false);
                 }
                 if(motionEvent.getX() < display.width / 2){
 
                     // stop rotation / fix orientation
-                    myShip.setRotationState(0);
+                    gamePcs.mPlayer.setRotationState(0);
                 }
 
                 break;
@@ -335,20 +338,20 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                         ((motionEvent.getX(0) < display.width / 2) ||
                         ((motionEvent.getX(1) < display.width / 2))))
                 {
-                   myShip.setRotationState(0);
+                   gamePcs.mPlayer.setRotationState(0);
                 }
 
                 if(pointerId == 1 && motionEvent.getX(1) < display.width / 2){
-                    myShip.setRotationState(0);
+                    gamePcs.mPlayer.setRotationState(0);
                 }
                 if(pointerId == 1 && motionEvent.getX(1) > display.width / 2){
-                    myShip.setMoveState(false);
+                    gamePcs.mPlayer.setMoveState(false);
                 }
                 if(pointerId == 0 && motionEvent.getX(0) < display.width / 2){
-                    myShip.setRotationState(0);
+                    gamePcs.mPlayer.setRotationState(0);
                 }
                 if(pointerId == 0 && motionEvent.getX(0) > display.width / 2){
-                    myShip.setMoveState(false);
+                    gamePcs.mPlayer.setMoveState(false);
                 }
 
                 break;
@@ -389,9 +392,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
 
-
-
-
     /* 
         We go through run through all object pairs that can be collided.
         meteor - player's laser.
@@ -406,12 +406,22 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             return RectF.intersects(objectA, objectB);
     }
 
-    private void bundleRender(){
-        mRender.mPlayer = myShip;
-//        mRender.mPlayerLaser = myLasers;
-        mRender.mAsteroids = asteroids;
-        mRender.mMineralPowerUps = mineralPowerUps;
-        mRender.mBlockSize = blockSize;
+    private void gameOver(){
+        // Draw some huge white text
+        paint.setColor(Color.argb(255, 255, 255, 255));
+        paint.setTextSize(blockSize * 10);
+
+        canvas.drawText("Game over!", blockSize * 4,
+                blockSize * 14, paint);
+
+        // Draw some text to prompt restarting
+        paint.setTextSize(blockSize * 2);
+        canvas.drawText("Tap screen to start again",
+                blockSize * 8,
+                blockSize * 18, paint);
+
+        startNewGame();
     }
 
 }
+
