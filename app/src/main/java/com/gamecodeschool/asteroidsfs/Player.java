@@ -100,6 +100,10 @@ public class Player extends SpaceObject{
 		position.y = resetPos.y;
 	}
 
+	public PointF getPosition(){
+		return new PointF(position.x, position.y);
+	}
+
 	// commented out until implementation.
 	//FIXME TODO: Instantiate a new SpaceObject with a laser magnitude, and copy over current position and angle! We should have laser radius stored somewhere..
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {

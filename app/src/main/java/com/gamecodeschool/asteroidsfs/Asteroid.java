@@ -32,7 +32,7 @@ public class Asteroid extends SpaceObject {
             temp.add(new Asteroid(this, size - 1, r.nextInt(DEFAULT_SPLIT_ANGLE)));
             temp.add(new Asteroid(this, size - 1, -(r.nextInt(DEFAULT_SPLIT_ANGLE))));
         }
-        
+
         return temp;
     }
 
