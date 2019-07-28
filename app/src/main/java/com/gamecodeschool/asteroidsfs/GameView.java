@@ -98,92 +98,96 @@ public class GameView {
 
         // Draw the game objects and the HUD.
         // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
-        void draw(SObjectsCollection render, GameProgress gProg) {
+        void draw(SObjectsCollection render, GameProgress gProg, boolean userPause) {
                 // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
                         myCanvas = myHolder.lockCanvas();
+                        if(!userPause){
 
-                        // Fills the screen with background "space" image
-                        myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
+                                // Fills the screen with background "space" image
+                                myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
 
-                        // Choose a color to paint with
-                        myPaint.setColor(Color.argb(255, 75, 180, 250));
+                                // Choose a color to paint with
+                                myPaint.setColor(Color.argb(255, 75, 180, 250));
 
 
-                        if(AsteroidsGame.DEBUGGING == true) {
-                                Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
-                                Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
-                                Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
-                                Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
-                                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getPosition().x);
-                                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getPosition().y);
+                                if(AsteroidsGame.DEBUGGING == true) {
+                                        Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
+                                        Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
+                                        Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
+                                        Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
+                                        Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getPosition().x);
+                                        Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getPosition().y);
 //                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
-                                Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
-                                Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
-                        }
-
-                        // draw the pause button
-                        myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint);
-
-                        // draw the ship and its hitbox
-                        myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
-                        myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
-
-                        // LASERS
-                        for(int i = 0; i < render.mPlayerLasers.size(); i++) {
-                                myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
-                                        render.mPlayerLasers.get(i).getBitmapY(), myPaint);
-                        }
-
-                        for(int i = 0; i < render.mOpponentLasers.size(); i++) {
-                                myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
-                                        render.mOpponentLasers.get(i).getBitmapY(), myPaint);
-                        }
-
-                        //
-                        // // ASTEROIDS
-//                        myPaint.setColor(Color.red(250));
-                        for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                switch(render.mAsteroids.get(i).getSize()) {
-                                        case 1:
-                                                myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
-                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                break;
-                                        case 2:
-                                                myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
-                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                break;
-                                        case 3:
-                                                myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
-                                                        render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                break;
+                                        Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
+                                        Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
                                 }
-                        }
-                        //
-                        // // POWER UPS
-                        for(int i = 0; i < render.mMineralPowerUps.size(); i++){
-//                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
-                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
-                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
-                        }
 
-                        // // OPPONENT
-                        // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
-                        for (int i = 0; i < render.mOpponents.size(); i++) {
-                                myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
-                                        render.mOpponents.get(i).getBitmapY(), myPaint);
-                        }
-                        // Choose the font size
-                        myPaint.setTextSize(screenRes.x / 40);
+                                // draw the pause button
+                                myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint);
+
+                                // draw the ship and its hitbox
+                                myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
+                                myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
+
+                                // LASERS
+                                for(int i = 0; i < render.mPlayerLasers.size(); i++) {
+                                        myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
+                                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
+                                }
+
+                                for(int i = 0; i < render.mOpponentLasers.size(); i++) {
+                                        myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
+                                                render.mOpponentLasers.get(i).getBitmapY(), myPaint);
+                                }
+
+                                //
+                                // // ASTEROIDS
+//                        myPaint.setColor(Color.red(250));
+                                for (int i = 0; i < render.mAsteroids.size(); i++) {
+                                        switch(render.mAsteroids.get(i).getSize()) {
+                                                case 1:
+                                                        myCanvas.drawBitmap(mAsteroid1, render.mAsteroids.get(i).getBitmapX(),
+                                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                        break;
+                                                case 2:
+                                                        myCanvas.drawBitmap(mAsteroid2, render.mAsteroids.get(i).getBitmapX(),
+                                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                        break;
+                                                case 3:
+                                                        myCanvas.drawBitmap(mAsteroid3, render.mAsteroids.get(i).getBitmapX(),
+                                                                render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                                        break;
+                                        }
+                                }
+                                //
+                                // // POWER UPS
+                                for(int i = 0; i < render.mMineralPowerUps.size(); i++){
+//                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+                                        myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                                render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                                }
+
+                                // // OPPONENT
+                                // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
+                                for (int i = 0; i < render.mOpponents.size(); i++) {
+                                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                }
+                                // Choose the font size
+                                myPaint.setTextSize(screenRes.x / 40);
 
 //                       Draw the HUD
-                        myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
-                                screenRes.x / 50, myPaint);
+                                myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
+                                        screenRes.x / 50, myPaint);
+                        }
+                        else{ drawPauseMenu(); }
 
-//                         if(DEBUGGING){
-//                         printDebuggingText();
-//                         }
+
+
+
+
                         // Display the drawing on screen
                         // unlockCanvasAndPost is a method of SurfaceView
                         myHolder.unlockCanvasAndPost(myCanvas);
@@ -192,21 +196,23 @@ public class GameView {
         }
 
         void drawPauseMenu(){
-                if (myHolder.getSurface().isValid()) {
-                        // Lock the canvas (graphics memory) ready to draw
-                        myCanvas = myHolder.lockCanvas();
+//                if (myHolder.getSurface().isValid()) {
+//                        // Lock the canvas (graphics memory) ready to draw
+//                        myCanvas = myHolder.lockCanvas();
+//                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
+                        myCanvas.drawARGB(1, 0, 0, 0);
+
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
-                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
                         // Choose the font size
                         myPaint.setTextSize(screenRes.x / 20);
 
                         // Draw the HUD
-                        myCanvas.drawText("PAUSED", (screenRes.x / 2) - 200, screenRes.y / 2, myPaint);
+                        myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
                         myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
-                        // unlockCanvasAndPost is a method of SurfaceView
-                        myHolder.unlockCanvasAndPost(myCanvas);
-                }
+//                        // unlockCanvasAndPost is a method of SurfaceView
+//                        myHolder.unlockCanvasAndPost(myCanvas);
+//                }
         }
 
 }

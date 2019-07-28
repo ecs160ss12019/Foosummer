@@ -113,7 +113,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-                    gameView.draw(gamePcs, gameProgress);
+                    gameView.draw(gamePcs, gameProgress, userPause);
                 }
                 mCollision.checkCollision(gamePcs, gameProgress);
                 if(gameProgress.getGameStatus()){
@@ -133,7 +133,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
-                gameView.drawPauseMenu();
+                gameView.draw(gamePcs, gameProgress, userPause);
             }
 
             // How long did this frame/loop take?
@@ -244,7 +244,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
                     nowPaused = true;
                 }
-                else { nowPaused = false; }
+                else {
+                    nowPaused = false;
+                }
 
                 userPause = nowPaused;
                 Log.e("onTouchEvent:", "userPause: " + userPause);
