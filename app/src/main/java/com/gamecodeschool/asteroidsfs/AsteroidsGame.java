@@ -106,6 +106,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     @Override
     public void run() {
+        long timeThisFrame;
         while(nowPlaying) {
             //What time is it now at the start of the loop?
             long frameStartTime = System.currentTimeMillis();
@@ -134,14 +135,27 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // on pause..
             else if(userPause){
                 gameView.draw(gamePcs, gameProgress, userPause);
+//                nowPlaying = false;
+                timeThisFrame = System.currentTimeMillis() - frameStartTime;
+                timeElapsed = timeThisFrame;
+                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+                while(userPause){
+                    frameStartTime = System.currentTimeMillis();
+                    if(!userPause){
+                        break;
+                    }
+                    timeThisFrame = System.currentTimeMillis() - frameStartTime;
+                    timeElapsed = timeThisFrame;
+                }
+
             }
 
             // How long did this frame/loop take?
             // Store the answer in timeThisFrame
-            long timeThisFrame = System.currentTimeMillis() - frameStartTime;
+            timeThisFrame = System.currentTimeMillis() - frameStartTime;
             timeElapsed = timeThisFrame;
         }
-        Log.e("run:", "userPause: " + userPause);
+//        Log.e("run:", "userPause: " + userPause);
     }
 
 
@@ -246,10 +260,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 }
                 else {
                     nowPaused = false;
+
                 }
 
                 userPause = nowPaused;
+//                if(userPause == false && nowPlaying == false){
+//                    nowPlaying = true;
+//                }
                 Log.e("onTouchEvent:", "userPause: " + userPause);
+                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
                 //
                 //
 
