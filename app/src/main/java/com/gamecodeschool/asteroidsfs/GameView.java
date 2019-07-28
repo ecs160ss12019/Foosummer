@@ -23,6 +23,66 @@ public class GameView {
         private Context ourContext;
         private PointF screenRes;
         //Matrix shipMatrix = new Matrix();
+        int[] backgroundDrawables = {
+                R.drawable.outerspace_0,
+                R.drawable.outerspace_1,
+                R.drawable.outerspace_2,
+                R.drawable.outerspace_3,
+                R.drawable.outerspace_4,
+                R.drawable.outerspace_5,
+                R.drawable.outerspace_6,
+                R.drawable.outerspace_7,
+                R.drawable.outerspace_8,
+                R.drawable.outerspace_9,
+                R.drawable.outerspace_10,
+                R.drawable.outerspace_11,
+                R.drawable.outerspace_12,
+                R.drawable.outerspace_13,
+                R.drawable.outerspace_14,
+                R.drawable.outerspace_15,
+                R.drawable.outerspace_16,
+                R.drawable.outerspace_17,
+                R.drawable.outerspace_18,
+                R.drawable.outerspace_19,
+                R.drawable.outerspace_20,
+                R.drawable.outerspace_21,
+                R.drawable.outerspace_22,
+                R.drawable.outerspace_23,
+                R.drawable.outerspace_24,
+                R.drawable.outerspace_25,
+                R.drawable.outerspace_26,
+                R.drawable.outerspace_27,
+                R.drawable.outerspace_28,
+                R.drawable.outerspace_29,
+                R.drawable.outerspace_30,
+                R.drawable.outerspace_31,
+                R.drawable.outerspace_32,
+                R.drawable.outerspace_33,
+                R.drawable.outerspace_34,
+                R.drawable.outerspace_35,
+                R.drawable.outerspace_36,
+                R.drawable.outerspace_37,
+                R.drawable.outerspace_38,
+                R.drawable.outerspace_39,
+                R.drawable.outerspace_40,
+                R.drawable.outerspace_41,
+                R.drawable.outerspace_42,
+                R.drawable.outerspace_43,
+                R.drawable.outerspace_44,
+                R.drawable.outerspace_45,
+                R.drawable.outerspace_46,
+                R.drawable.outerspace_47,
+                R.drawable.outerspace_48,
+                R.drawable.outerspace_49,
+                R.drawable.outerspace_50};
+
+
+
+
+
+
+
+
 
         // Bitmaps that is contained within the gameview.
         Bitmap mAsteroid1;
@@ -39,6 +99,9 @@ public class GameView {
         Bitmap mOpponentLaserBM;
         Bitmap pauseButtonBM;
         Bitmap pauseMenuBM;
+        Bitmap[] mBackGroundGif = new Bitmap[backgroundDrawables.length];
+        int k,m,n = 0;
+
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
                 int asteroidSizeFactor = screen.width / ObjectFactory.DIVISION_FACTOR;
@@ -62,7 +125,16 @@ public class GameView {
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING, 
                                                                 shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                                                 true);
-                mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
+
+
+                // CREATE BACKGROUND GIF
+                for(int i = 0; i < backgroundDrawables.length ; i++) {
+                        mBackGroundGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), backgroundDrawables[i]);
+                        mBackGroundGif[i] = Bitmap.createScaledBitmap(mBackGroundGif[i], screen.width, screen.height, true);
+                }
+                //mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
+
+
                 // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
                 mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
                 mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
@@ -106,7 +178,10 @@ public class GameView {
                         if(!userPause){
 
                                 // Fills the screen with background "space" image
-                                myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
+                                myCanvas.drawBitmap(mBackGroundGif[k++], 0, 0, myPaint);
+                                //myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
+                                if(k == mBackGroundGif.length)
+                                        k = 0;
 
                                 // Choose a color to paint with
                                 myPaint.setColor(Color.argb(255, 75, 180, 250));
