@@ -200,7 +200,7 @@ public class GameView {
 //                        // Lock the canvas (graphics memory) ready to draw
 //                        myCanvas = myHolder.lockCanvas();
 //                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
-                        myCanvas.drawARGB(1, 0, 0, 0);
+                        myCanvas.drawARGB(150, 0, 0, 0);
 
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
