@@ -1,4 +1,11 @@
 package com.gamecodeschool.asteroidsfs;
+/*
+    Manages the "System Clock" for our game
+    by handling all related variables and
+    computations for computing time elapsed
+    per frame
+ */
+
 
 public class GameClock {
     // variables
