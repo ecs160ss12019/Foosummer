@@ -54,6 +54,9 @@ public class CollisionEngine {
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
                 i--;
+                if(aList.size() == 0){
+                    asteroidsEliminated = true;
+                }
                 break;
             }
         }
@@ -68,6 +71,9 @@ public class CollisionEngine {
                 // should the enemy ship be destroyed on collision with Player ship?
                 oList.remove(i);
                 i--;
+                if(oList.size() == 0){
+                    oppsEliminated = true;
+                }
                 break;
             }
         }
