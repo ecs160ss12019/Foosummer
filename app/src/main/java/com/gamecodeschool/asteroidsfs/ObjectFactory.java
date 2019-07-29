@@ -40,7 +40,7 @@ public class ObjectFactory {
         SpaceObjectType objType;
 
         private PointF defaultShipSize;
-        static final public int shipScaleFactor = 25;
+        static final public int shipScaleFactor = 20;
 
 
         // When this object is first made for the game engine. The screen 

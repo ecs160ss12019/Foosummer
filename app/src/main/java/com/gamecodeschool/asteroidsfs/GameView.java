@@ -75,6 +75,10 @@ public class GameView {
 //                R.drawable.outerspace_49,
 //                R.drawable.outerspace_50
         };
+        int[] spaceshipDrawables = {
+                R.drawable.spaceship_0,
+                R.drawable.spaceship_1,
+        };
         int[] asteroidSmallDrawables = {
                 R.drawable.asteroidsmall_0,
                 R.drawable.asteroidsmall_1,
@@ -142,34 +146,34 @@ public class GameView {
         int[] asteroidLargeDrawables = {
                 R.drawable.asteroidlarge_0,
                 R.drawable.asteroidlarge_1,
-                R.drawable.asteroidlarge_2,
-//                R.drawable.asteroidsmall_3,
-//                R.drawable.asteroidsmall_4,
+//                R.drawable.asteroidlarge_2,
+//                R.drawable.asteroidlarge_3,
+//                R.drawable.asteroidlarge_4,
                 R.drawable.asteroidlarge_5,
                 R.drawable.asteroidlarge_6,
-                R.drawable.asteroidlarge_7,
-//                R.drawable.asteroidsmall_8,
-//                R.drawable.asteroidsmall_9,
+//                R.drawable.asteroidlarge_7,
+//                R.drawable.asteroidlarge_8,
+//                R.drawable.asteroidlarge_9,
                 R.drawable.asteroidlarge_10,
                 R.drawable.asteroidlarge_11,
                 R.drawable.asteroidlarge_12,
-//                R.drawable.asteroidsmall_13
-//                R.drawable.asteroidsmall_14,
+//                R.drawable.asteroidlarge_13
+//                R.drawable.asteroidlarge_14,
                 R.drawable.asteroidlarge_15,
                 R.drawable.asteroidlarge_16,
-                R.drawable.asteroidlarge_17,
-//                R.drawable.asteroidsmall_18,
-//                R.drawable.asteroidsmall_19,
+//                R.drawable.asteroidlarge_17,
+//                R.drawable.asteroidlarge_18,
+//                R.drawable.asteroidlarge_19,
                 R.drawable.asteroidlarge_20,
                 R.drawable.asteroidlarge_21,
                 R.drawable.asteroidlarge_22,
-//                R.drawable.asteroidsmall_23
-//                R.drawable.asteroidsmall_24,
+//                R.drawable.asteroidlarge_23
+//                R.drawable.asteroidlarge_24,
                 R.drawable.asteroidlarge_25,
                 R.drawable.asteroidlarge_26,
                 R.drawable.asteroidlarge_27,
-//                R.drawable.asteroidsmall_28,
-//                R.drawable.asteroidsmall_29,
+//                R.drawable.asteroidlarge_28,
+//                R.drawable.asteroidlarge_29,
         };
 
 
@@ -191,7 +195,8 @@ public class GameView {
         Bitmap[] mAsteroidSmallGif = new Bitmap[asteroidSmallDrawables.length];
         Bitmap[] mAsteroidMediumGif = new Bitmap[asteroidMediumDrawables.length];
         Bitmap[] mAsteroidLargeGif = new Bitmap[asteroidLargeDrawables.length];
-        int b,s,m,l = 0;
+        Bitmap[] spaceshipGif = new Bitmap[spaceshipDrawables.length];
+        int b, ss, s, m, l = 0;
 
 
 
@@ -216,7 +221,7 @@ public class GameView {
 
 
 
-                shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.sqspaceship);
+                shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.spaceship_0);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
                 shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING, 
@@ -224,7 +229,7 @@ public class GameView {
                                                                 true);
 
 
-                // CREATE BACKGROUND GIF
+                // BACKGROUND BITMAP
                 for(int i = 0; i < backgroundDrawables.length ; i++) {
                         mBackGroundGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), backgroundDrawables[i]);
                         mBackGroundGif[i] = Bitmap.createScaledBitmap(mBackGroundGif[i], screen.width, screen.height, true);
@@ -232,17 +237,25 @@ public class GameView {
                 //mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
 
 
-                // SMALL ASTEROID BITMAP
+                // SPACESHIP BITMAP
+                for(int i = 0; i < spaceshipDrawables.length ; i++) {
+                        spaceshipGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), spaceshipDrawables[i]);
+                        spaceshipGif[i] = Bitmap.createScaledBitmap(spaceshipGif[i], shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                                                        shipSize + GameConfig.PLAYER_SHIP_PADDING, true);
+                }
+
+
+                // ASTEROID SMALL BITMAP
                 for(int i = 0; i < asteroidSmallDrawables.length ; i++) {
                         mAsteroidSmallGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidSmallDrawables[i]);
                         mAsteroidSmallGif[i] = Bitmap.createScaledBitmap(mAsteroidSmallGif[i], asteroidSizeFactor*1, asteroidSizeFactor*1, false);
                 }
-                // MEDIUM ASTEROID BITMAP
+                // ASTEROID MEDIUM BITMAP
                 for(int i = 0; i < asteroidMediumDrawables.length ; i++) {
                         mAsteroidMediumGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidMediumDrawables[i]);
                         mAsteroidMediumGif[i] = Bitmap.createScaledBitmap(mAsteroidMediumGif[i], asteroidSizeFactor*2, asteroidSizeFactor*2, false);
                 }
-                // LARGE ASTEROID BITMAP
+                // ASTEROID LARGE BITMAP
                 for(int i = 0; i < asteroidLargeDrawables.length ; i++) {
                         mAsteroidLargeGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidLargeDrawables[i]);
                         mAsteroidLargeGif[i] = Bitmap.createScaledBitmap(mAsteroidLargeGif[i], asteroidSizeFactor*3, asteroidSizeFactor*3, false);
@@ -255,8 +268,8 @@ public class GameView {
 
                 shipBitmap.setHasAlpha(true);
 
-                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
-                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize, shipSize, false);
+                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo_1);
+                mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
 
                 mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
@@ -319,9 +332,15 @@ public class GameView {
                                 // draw the pause button
                                 myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint);
 
-                                // draw the ship and its hitbox
-                                myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
+
+
+                                // PLAYER SHIP
+                                //myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
                                 myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
+//                                myCanvas.drawBitmap(mBackGroundGif[ss++], render.mPlayer.getMatrix(), myPaint);
+//                                if(ss == spaceshipGif.length)
+//                                        ss = 0;
+
 
                                 // LASERS
                                 for(int i = 0; i < render.mPlayerLasers.size(); i++) {
@@ -334,9 +353,8 @@ public class GameView {
                                                 render.mOpponentLasers.get(i).getBitmapY(), myPaint);
                                 }
 
-                                //
-                                // // ASTEROIDS
-//                        myPaint.setColor(Color.red(250));
+
+                                // ASTEROIDS
                                 for (int i = 0; i < render.mAsteroids.size(); i++) {
                                         switch(render.mAsteroids.get(i).getSize()) {
                                                 case 1:
