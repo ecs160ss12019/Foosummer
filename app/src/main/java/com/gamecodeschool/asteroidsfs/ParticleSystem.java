@@ -15,7 +15,7 @@ public class ParticleSystem {
     ArrayList<Particle> mParticles;
     Random random = new Random();
     boolean mIsRunning = false;
-    private final long EXPLOSION_INTERVAL = 500;
+    private final long EXPLOSION_INTERVAL = 1000;
 
     //Maybe replace with a call to getObject() in ObjectFactory
     public void init(int numParticles, Display display){
@@ -28,7 +28,7 @@ public class ParticleSystem {
                                         (float)(random.nextInt(display.height)));
             float angle = (random.nextInt(360)) ;
             angle = angle * 3.14f / 180.f;
-            float speed = (random.nextInt(3)+1);
+            float speed = (float) (random.nextFloat()*0.25);
             mParticles.add(new Particle(position, angle, speed, 0));
         }
     }
@@ -49,13 +49,11 @@ public class ParticleSystem {
         mIsRunning = true;
         mDuration = 0;
 
-        for(Particle p : mParticles){
+        for(Particle p : mParticles)
             p.setPosition(startPosition);
-        }
     }
 
     public void draw(Canvas canvas, Paint paint) {
-
         for (Particle p : mParticles) {
             paint.setColor(Color.argb(255,255,255,255));
             canvas.drawRect(p.getPosition().x, p.getPosition().y,
