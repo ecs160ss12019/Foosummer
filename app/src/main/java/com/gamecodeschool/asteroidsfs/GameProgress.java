@@ -4,6 +4,7 @@ package com.gamecodeschool.asteroidsfs;
 import android.util.Log;
 import android.widget.Space;
 import android.graphics.PointF;
+import java.util.Random;
 
 /* *
  * GameProgress's responsibilities
@@ -21,6 +22,7 @@ public class GameProgress {
 
 
 
+
     // track user score and lives
     private int myScore = initialScore;
     private int myLives = initialLife; // abstract this to UserShip class?
@@ -29,6 +31,7 @@ public class GameProgress {
     private int numOpps = initialNumOpps;
     private int numAsteroids = initialNumAsteroids;
     private int numPowerUps = initialNumPowerUps;
+
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
 
@@ -48,6 +51,9 @@ public class GameProgress {
 
     // resets by setting our game progress variable to initial lvl.
     public void reset(SObjectsCollection gamePcs, ObjectFactory factory, SpaceObjectType objType) {
+        gPcs = gamePcs;
+        fact = factory;
+        obj = objType;
         myScore = initialScore;
         myLives = initialLife;
         level = initialLevel;
@@ -123,6 +129,7 @@ public class GameProgress {
 
             gamePcs.mOpponents.add((Opponent)temp);
         }
+
 
     }
 

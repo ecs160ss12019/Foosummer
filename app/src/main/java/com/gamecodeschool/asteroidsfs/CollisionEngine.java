@@ -10,7 +10,11 @@ import android.util.Log;
 import android.graphics.PointF;
 
 import java.util.ArrayList;
+
 import java.util.Random;
+
+import android.graphics.PointF;
+
 
 /* 
  * The CollisionEngine's main role is detecting the collision between objects.
@@ -145,6 +149,12 @@ public class CollisionEngine {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    if(gp.hasPowerUp(k)){
+                        gp.dropPowerUp(new PointF(temp.getBitmapX(),
+                                temp.getBitmapY()));
+                    }
+
+
                     gp.updateScore(temp.getSize());
 
                     didPowerUpDrop(asteroidDropProbability,
