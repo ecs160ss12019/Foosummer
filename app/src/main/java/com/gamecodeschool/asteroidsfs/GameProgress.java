@@ -5,6 +5,8 @@ import android.util.Log;
 import android.widget.Space;
 import android.graphics.PointF;
 
+import java.util.Random;
+
 /* *
  * GameProgress's responsibilities
  * - Track user score, life, level, and any other progress related data.
@@ -17,6 +19,7 @@ public class GameProgress {
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
+    private Random rand = new Random();
 
 
 
@@ -112,14 +115,12 @@ public class GameProgress {
 
             // modify the opponent coordinates to spawn away from player
             SpaceObject temp = factory.getSpaceObject(objType.OPPONENT);
-            PointF playerPos = gamePcs.mPlayer.getPosition();
 
-            // try to randomize this more!!
-            temp.position.x += gamePcs.mPlayer.getPosition().x;
-            temp.position.y += gamePcs.mPlayer.getPosition().y;
-
+            temp.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(2000);
+            temp.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(5000);
 
             gamePcs.mOpponents.add((Opponent)temp);
+            //gamePcs.mOpponents.add((Opponent)factory.getSpaceObject(objType.OPPONENT));
         }
 
         // this will be abstracted away such that they spawn on asteroid collision
