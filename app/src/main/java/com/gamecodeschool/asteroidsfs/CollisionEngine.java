@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import android.graphics.PointF;
 
 /* 
  * The CollisionEngine's main role is detecting the collision between objects.
@@ -123,6 +124,12 @@ public class CollisionEngine {
                     //     get position of temp and assign to power up spawn position
                     // }
 //                    Log.e("Collision", "asteroid size " + temp.getSize());
+
+                    if(gp.hasPowerUp(k)){
+                        gp.dropPowerUp(new PointF(aList.get(k).getBitmapX(),
+                                aList.get(k).getBitmapY()));
+                    }
+
                     gp.updateScore(temp.getSize());
                     aList.addAll(temp.collisionAction());
                     aList.remove(k);

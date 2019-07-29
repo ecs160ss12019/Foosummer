@@ -367,10 +367,12 @@ public class GameView {
 
                                 //
                                 // // POWER UPS
-                                for(int i = 0; i < render.mMineralPowerUps.size(); i++){
-//                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
-                                        myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
-                                                render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                                if(render.mMineralPowerUps.size() > 0) {
+                                        for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
+                                                //                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
+                                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                                        }
                                 }
 
                                 // // OPPONENT
