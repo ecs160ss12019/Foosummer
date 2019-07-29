@@ -74,23 +74,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // ready for drawing with
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
-//<<<<<<< HEAD
-////        myPaint = new Paint();
-//
-//        gameView = new GameView(context, myHolder, display);
-//
-//        // Initialize the objects
-//        myShip = new Player(display.width, display.height);
-//
-//        // Initialize asteroids
-//        asteroids = new ArrayList<Asteroid>();
-//
-//        mineralPowerUps = new ArrayList<PowerUps>();
-//
-//        gameProgress = new GameProgress();
-//=======
         gameView = new GameView(context, myHolder, display);
-//>>>>>>> 3ad9a4df8a2306925e1257657687363e41724af9
         factory = new ObjectFactory(display);
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
@@ -444,22 +428,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
-    }
-
-
-
-    /* 
-        We go through run through all object pairs that can be collided.
-        meteor - player's laser.
-        meteor - player
-        enemy - player
-        enemy laser - player
-        enemy - player's laser
-
-        These should cover the basic cases of collision within the game.
-    */
-    public boolean detectCollision(RectF objectA, RectF objectB) {
-            return RectF.intersects(objectA, objectB);
     }
 
     private void gameOver(){
