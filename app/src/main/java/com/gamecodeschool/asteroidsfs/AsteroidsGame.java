@@ -231,7 +231,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
             // update opponent's angle after each shot
             if(updatePosition){
-                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = updateWithThisAngle+90;
+                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = updateWithThisAngle+240;
                 updatePosition = false;
 
             }

@@ -395,7 +395,7 @@ public class GameView {
                                 }
 
                         // // OPPONENT
-                       // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
+
                         for (int i = 0; i < render.mOpponents.size(); i++) {
                                 // LOWER LEVEL OPPONENT
                                 if(gProg.getLevel() < 5){

@@ -114,19 +114,19 @@ public class GameProgress {
         for(int i = 0; i < numOpps; i++) {
 
             // modify the opponent coordinates to spawn away from player
-            SpaceObject temp = factory.getSpaceObject(objType.OPPONENT);
+            SpaceObject opp1 = factory.getSpaceObject(objType.OPPONENT);
 
-            temp.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(2000);
-            temp.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(5000);
+            opp1.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
+            opp1.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
 
-            gamePcs.mOpponents.add((Opponent)temp);
+            gamePcs.mOpponents.add((Opponent)opp1);
             if(level > 5){
-                SpaceObject temp2 = factory.getSpaceObject(objType.OPPONENT2);
+                SpaceObject opp2 = factory.getSpaceObject(objType.OPPONENT2);
 
-                temp2.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(2000);
-                temp2.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(5000);
+                opp2.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
+                opp2.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
 
-                gamePcs.mOpponents.add((Opponent)temp2);
+                gamePcs.mOpponents.add((Opponent)opp2);
             }
         }
 
