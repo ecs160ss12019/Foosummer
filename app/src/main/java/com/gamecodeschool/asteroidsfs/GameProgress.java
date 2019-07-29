@@ -17,6 +17,7 @@ public class GameProgress {
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
+    final private int initialNumPowerUps = 1;
 
 
 
@@ -27,6 +28,7 @@ public class GameProgress {
     private boolean gameOver = false;
     private int numOpps = initialNumOpps;
     private int numAsteroids = initialNumAsteroids;
+    private int numPowerUps = initialNumPowerUps;
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
 
@@ -122,11 +124,8 @@ public class GameProgress {
             gamePcs.mOpponents.add((Opponent)temp);
         }
 
-        // this will be abstracted away such that they spawn on asteroid collision
-        for(int i = 0; i < 3; i++) {
-            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP));
-        }
     }
+
 
 //    public int getNumAsteroids(){
 //        return numAsteroids;

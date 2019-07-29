@@ -146,7 +146,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
-                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+//                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
                 while(userPause){
                     gameClock.frameStart();
                     if(!userPause){
@@ -212,6 +212,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         //POWER UPS
+
+        if(mCollision.dropPowerUp){
+            gamePcs.mMineralPowerUps.add(factory.getPowerUp(mCollision.getDropPos()));
+        }
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
@@ -229,6 +233,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 i--;
             }
         }
+
+
     }
 
 
@@ -276,8 +282,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                if(userPause == false && nowPlaying == false){
 //                    nowPlaying = true;
 //                }
-                Log.e("onTouchEvent:", "userPause: " + userPause);
-                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+//                Log.e("onTouchEvent:", "userPause: " + userPause);
+//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
                 //
                 //
 
