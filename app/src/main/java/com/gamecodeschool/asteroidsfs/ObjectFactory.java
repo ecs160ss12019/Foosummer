@@ -27,8 +27,8 @@ public class ObjectFactory {
         static final public int DIVISION_FACTOR = 25;
         final private int LASER_SIZE_FACTOR = 2;
         final private float LASER_VEL_FACTOR = 3;
-        final private double zone1MinMultiplier = 0.25;
-        final private double zone2MinMultiplier = 0.50;
+        final private float zone1MinMultiplier = 0.25f;
+        final private float zone2MinMultiplier = 0.50f;
 
         private float oppX;
         private float oppY;
@@ -49,10 +49,9 @@ public class ObjectFactory {
                 screen = display;
                 defaultVelocity = ((float)display.width) / TIME / MS_PER_S; // speed factor calculation
 
-                zone1 = new Zone((int)(display.width * zone1MinMultiplier), (int)(display.height * zone1MinMultiplier),
-                                display.width, display.height);
-                zone2 = new Zone((int)(display.width * zone2MinMultiplier), (int)(display.height * zone2MinMultiplier),
-                                display.width, display.height);
+                // Spawnable zones for non-player classes.
+                zone1 = new Zone(display, zone1MinMultiplier);
+                zone2 = new Zone(display, zone2MinMultiplier);
                 
 
                 currentVelocityMagnitude = defaultVelocity;
@@ -148,6 +147,13 @@ class Zone {
             minY = minHeight;
             maxX = maxWidth;
             maxY = maxHeight;
+        }
+
+        Zone(Display display, float multiplier) {
+                minX = (int)(display.width * multiplier);
+                minY = (int)(display.height *multiplier);
+                maxX = display.width;
+                maxY = display.height;
         }
 
         public int xDiff() {
