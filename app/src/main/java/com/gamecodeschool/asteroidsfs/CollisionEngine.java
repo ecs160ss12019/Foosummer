@@ -1,6 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -39,13 +40,13 @@ public class CollisionEngine {
         These should cover the basic cases of collision within the game.
         FIXME: Separate these into separate private methods for readability!!!
     */
-    public void checkCollision(SObjectsCollection collection, GameProgress gProg) {
+    public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps) {
 
         // player vs asteroid.
         dropPowerUp = false;
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
         playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
-        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg);
+        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
         playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
@@ -106,11 +107,20 @@ public class CollisionEngine {
         }
     }
 
-    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp) {
+    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
+
                 Opponent temp = oList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    ps.emitParticles(
+                            new PointF(
+                                    temp.getPosition().x,
+                                    temp.getPosition().y
+
+                            )
+                    );
+
                     pList.remove(i);
                     //FIXME: Need to add score logic here!
                     // For now enemy dies in 1 hit.

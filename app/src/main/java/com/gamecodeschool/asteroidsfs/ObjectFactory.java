@@ -40,7 +40,7 @@ public class ObjectFactory {
         SpaceObjectType objType;
 
         private PointF defaultShipSize;
-        static final public int shipScaleFactor = 25;
+        static final public int shipScaleFactor = 20;
 
 
         // When this object is first made for the game engine. The screen 
@@ -75,9 +75,7 @@ public class ObjectFactory {
                                 return new Player(new PointF(screen.width/2, screen.height/2),
                                                 defaultShipSize.x/2);
                         case ASTEROID:
-                                PointF point = new PointF(
-                                        (float)(rand.nextInt(zone2.xDiff()) + zone2.minX),
-                                        (float)(rand.nextInt(zone2.yDiff()) + zone2.minY));
+                                PointF point = new PointF(zone2.randomX(), zone2.randomY());
                                 int sizeMultiplier = rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) + 1;
 
                                 return new Asteroid(angle,
@@ -87,16 +85,17 @@ public class ObjectFactory {
                         // case LASER:
                         case OPPONENT:
 
-                                return new Opponent(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                        rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
                                                 rand.nextInt(maxAngle) * Math.PI/180,
                                                 opponentVelocity, 100,
                                                 opponentHealth);
+
 
 //                        case POWERUP:
 //                            return new PowerUps(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
 //                                    rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
 //                                    50);
+
 
                 }
                 //FIXME have to run some sort of Null point exception.
@@ -132,8 +131,8 @@ public class ObjectFactory {
 
 
         // ------------------- Begins Variable Controls ------------------------
-        public void addSpeed(float speecIncrement) {
-        currentVelocityMagnitude += speecIncrement;
+        public void addSpeed(float speedIncrement) {
+        currentVelocityMagnitude += speedIncrement;
 }
 
         public void reset() {
@@ -163,7 +162,23 @@ class Zone {
                 return maxX - minX;
         }
 
+        // returns randomized x values related to the zone.
+        public int randomX() {
+                Random r = new Random();
+                int result = r.nextInt(xDiff());
+
+                return result <= xDiff() / 2 ? result : result + minX;
+        }
+        
         public int yDiff() {
                 return maxY - minY;
+        }
+
+        // returns random Y value within defined Y zone.
+        public int randomY() {
+                Random r = new Random();
+                int result = r.nextInt(yDiff());
+
+                return result <= yDiff() / 2 ? result : result + minY;
         }
 }
