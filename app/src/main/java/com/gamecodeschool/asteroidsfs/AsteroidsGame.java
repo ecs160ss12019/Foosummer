@@ -438,22 +438,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
     }
 
-
-
-    /* 
-        We go through run through all object pairs that can be collided.
-        meteor - player's laser.
-        meteor - player
-        enemy - player
-        enemy laser - player
-        enemy - player's laser
-
-        These should cover the basic cases of collision within the game.
-    */
-    public boolean detectCollision(RectF objectA, RectF objectB) {
-            return RectF.intersects(objectA, objectB);
-    }
-
     private void gameOver(){
         // Draw some huge white text
         paint.setColor(Color.argb(255, 255, 255, 255));
