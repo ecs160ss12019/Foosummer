@@ -179,22 +179,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
-        // OPPONENT
-        Laser oppShootResult;
-        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
-
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
-
-            if(oppShootResult != null) {
-                gamePcs.mOpponentLasers.add(oppShootResult);
-
-                // update the position of opponent at this index
-                updateThisOpponentAngle = i;
-                updateWithThisAngle = gamePcs.mOpponents.get(i).getShootAngle();
-                updatePosition = true;
-            }
-        }
-
         if(DEBUGGING) {
             Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
         }
@@ -228,12 +212,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // OPPONENT
-        for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
-            // update opponent's angle after each shot
-            if(updatePosition){
-                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = updateWithThisAngle+240;
-                updatePosition = false;
+        Laser oppShootResult;
 
+        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
+
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
+
+                // update the position of opponent at this index
+                gamePcs.mOpponents.get(i).updateOppPosition(true);
             }
 
             gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);

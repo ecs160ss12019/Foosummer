@@ -14,6 +14,9 @@ public class Opponent extends SpaceObject{
     private float getX;
     private float getY;
     private float shootAngle;
+    private boolean updatePosition = false;
+
+    public void updateOppPosition(boolean status){ updatePosition = status;}
 
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private final long SHOOT_INTERVAL = 2900;
@@ -27,6 +30,11 @@ public class Opponent extends SpaceObject{
     @Override
     public void update(long time, Display display){
         super.update(time, display);
+
+        if(updatePosition){
+            angle = shootAngle+200;
+            updatePosition = false;
+        }
     }
 
 
@@ -45,6 +53,4 @@ public class Opponent extends SpaceObject{
 
         return null;
     }
-
-    public float getShootAngle() {return shootAngle;}
 }
