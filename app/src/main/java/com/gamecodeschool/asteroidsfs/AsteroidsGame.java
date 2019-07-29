@@ -17,6 +17,15 @@ import java.util.ArrayList;
 
 class AsteroidsGame extends SurfaceView implements Runnable{
 
+    // TESTING THE SCROLLING CONTROLS
+    //
+    float downX;
+    float lastMoveX;
+    float moveX;
+    //
+    //
+
+
     Canvas canvas;
     Paint paint;
 
@@ -241,182 +250,182 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
 
-    // Handle all the screen touches
-    @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        int index = motionEvent.getActionIndex();
-        int pointerId = motionEvent.getPointerId(index);
-        int action = motionEvent.getActionMasked();
-        PointF pauseRadius = new PointF(2497, 116);
-
-        int oldX, oldY;
-        // This switch block replaces the
-        // if statement from the Sub Hunter game
-        switch (motionEvent.getAction() &
-                MotionEvent.ACTION_MASK) {
-
-            // The player has put their finger on the screen
-            case MotionEvent.ACTION_DOWN:
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.e("Controlls", "Action DOWN "+ pointerId);
-//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-                // If the game was paused unpause
-//                if(nowPaused == true){
+//    // Handle all the screen touches
+//    @Override
+//    public boolean onTouchEvent(MotionEvent motionEvent) {
+//        int index = motionEvent.getActionIndex();
+//        int pointerId = motionEvent.getPointerId(index);
+//        int action = motionEvent.getActionMasked();
+//        PointF pauseRadius = new PointF(2497, 116);
+//
+//        int oldX, oldY;
+//        // This switch block replaces the
+//        // if statement from the Sub Hunter game
+//        switch (motionEvent.getAction() &
+//                MotionEvent.ACTION_MASK) {
+//
+//            // The player has put their finger on the screen
+//            case MotionEvent.ACTION_DOWN:
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.e("Controlls", "Action DOWN "+ pointerId);
+////                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//                // If the game was paused unpause
+////                if(nowPaused == true){
+////                    nowPaused = false;
+////                }
+//
+////                Log.e("LOCATION: ", "THIS POINT IS AT: "
+////                        + motionEvent.getX() + ", " + motionEvent.getY());
+////                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
+//
+//                //
+//                // need to consider pause for multi-touch also... need to test on Android
+//                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
+//                    nowPaused = true;
+//                }
+//                else {
 //                    nowPaused = false;
+//
 //                }
-
-//                Log.e("LOCATION: ", "THIS POINT IS AT: "
-//                        + motionEvent.getX() + ", " + motionEvent.getY());
-//                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
-
-                //
-                // need to consider pause for multi-touch also... need to test on Android
-                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
-                    nowPaused = true;
-                }
-                else {
-                    nowPaused = false;
-
-                }
-
-                userPause = nowPaused;
-//                if(userPause == false && nowPlaying == false){
-//                    nowPlaying = true;
+//
+//                userPause = nowPaused;
+////                if(userPause == false && nowPlaying == false){
+////                    nowPlaying = true;
+////                }
+////                Log.e("onTouchEvent:", "userPause: " + userPause);
+////                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+//                //
+//                //
+//
+//
+//
+//                // If finger pressed on right side of screen
+//                // then the ship will accelerate
+//                if(motionEvent.getX() > display.width / 2){
+//                    // call method that will accelerate ship
+//                    gamePcs.mPlayer.setMoveState(true);
 //                }
-//                Log.e("onTouchEvent:", "userPause: " + userPause);
-//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
-                //
-                //
-
-
-
-                // If finger pressed on right side of screen
-                // then the ship will accelerate
-                if(motionEvent.getX() > display.width / 2){
-                    // call method that will accelerate ship
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-                // If finger pressed on left side of screen...
-
-                else if(motionEvent.getX() < display.width / 2){
-
-                    // If finger pressed on upper left of screen
-                    // then the ship will rotate counter-clockwise
-                    if(motionEvent.getY() < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-                    }
-                    else{
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-                    }
-                }
-
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
-//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                //
-                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
-                // nowPaused = false;
-                //
-                //
-
-                if(motionEvent.getX(0) < display.width / 2){
-                    if(motionEvent.getY(0) < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
-                    }
-                    else if (motionEvent.getY(0) > display.height / 2){
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
-                    }
-                }
-                else if(motionEvent.getX(0) > display.width ){
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-
-                if( motionEvent.getX(1) < display.width / 2){
-                    // If finger pressed on upper left of screen
-                    // then the ship will rotate counter-clockwise
-                    if(motionEvent.getY(1) < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
-                    }
-                    else if (motionEvent.getY(1) > display.height / 2){
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
-                    }
-                }
-                else if(motionEvent.getX(1) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-
-                break;
-
-
-
-            // The player lifted their finger
-            // from anywhere on screen.
-            case MotionEvent.ACTION_UP:
-
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.d("Controlls", "Action UP "+ pointerId);
-//                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                if(motionEvent.getX() > display.width / 2){
-                    // stop position
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-                if(motionEvent.getX() < display.width / 2){
-
-                    // stop rotation / fix orientation
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP: // when order of touch and release is the same
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.d("Controlls", "Action Pointer UP "+ pointerId);
-//                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                if((pointerId == 0 || pointerId == 1) &&
-                        ((motionEvent.getX(0) < display.width / 2) ||
-                        ((motionEvent.getX(1) < display.width / 2))))
-                {
-                   gamePcs.mPlayer.setRotationState(0);
-                }
-
-                if(pointerId == 1 && motionEvent.getX(1) < display.width / 2){
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-                if(pointerId == 1 && motionEvent.getX(1) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-                if(pointerId == 0 && motionEvent.getX(0) < display.width / 2){
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-                if(pointerId == 0 && motionEvent.getX(0) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-
-                break;
-
-        }
-        return true;
-    }
+//                // If finger pressed on left side of screen...
+//
+//                else if(motionEvent.getX() < display.width / 2){
+//
+//                    // If finger pressed on upper left of screen
+//                    // then the ship will rotate counter-clockwise
+//                    if(motionEvent.getY() < display.height / 2){
+//                        // rotate ship counter-clockwise
+//                        gamePcs.mPlayer.setRotationState(1);
+//                    }
+//                    else{
+//                        // rotate ship clockwise
+//                        gamePcs.mPlayer.setRotationState(2);
+//                    }
+//                }
+//
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
+////                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                //
+//                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
+//                // nowPaused = false;
+//                //
+//                //
+//
+//                if(motionEvent.getX(0) < display.width / 2){
+//                    if(motionEvent.getY(0) < display.height / 2){
+//                        // rotate ship counter-clockwise
+//                        gamePcs.mPlayer.setRotationState(1);
+////                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+//                    }
+//                    else if (motionEvent.getY(0) > display.height / 2){
+//                        // rotate ship clockwise
+//                        gamePcs.mPlayer.setRotationState(2);
+////                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+//                    }
+//                }
+//                else if(motionEvent.getX(0) > display.width ){
+//                    gamePcs.mPlayer.setMoveState(true);
+//                }
+//
+//                if( motionEvent.getX(1) < display.width / 2){
+//                    // If finger pressed on upper left of screen
+//                    // then the ship will rotate counter-clockwise
+//                    if(motionEvent.getY(1) < display.height / 2){
+//                        // rotate ship counter-clockwise
+//                        gamePcs.mPlayer.setRotationState(1);
+////                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+//                    }
+//                    else if (motionEvent.getY(1) > display.height / 2){
+//                        // rotate ship clockwise
+//                        gamePcs.mPlayer.setRotationState(2);
+////                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+//                    }
+//                }
+//                else if(motionEvent.getX(1) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(true);
+//                }
+//
+//                break;
+//
+//
+//
+//            // The player lifted their finger
+//            // from anywhere on screen.
+//            case MotionEvent.ACTION_UP:
+//
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.d("Controlls", "Action UP "+ pointerId);
+////                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                if(motionEvent.getX() > display.width / 2){
+//                    // stop position
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//                if(motionEvent.getX() < display.width / 2){
+//
+//                    // stop rotation / fix orientation
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_UP: // when order of touch and release is the same
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.d("Controlls", "Action Pointer UP "+ pointerId);
+////                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                if((pointerId == 0 || pointerId == 1) &&
+//                        ((motionEvent.getX(0) < display.width / 2) ||
+//                        ((motionEvent.getX(1) < display.width / 2))))
+//                {
+//                   gamePcs.mPlayer.setRotationState(0);
+//                }
+//
+//                if(pointerId == 1 && motionEvent.getX(1) < display.width / 2){
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//                if(pointerId == 1 && motionEvent.getX(1) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//                if(pointerId == 0 && motionEvent.getX(0) < display.width / 2){
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//                if(pointerId == 0 && motionEvent.getX(0) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//
+//                break;
+//
+//        }
+//        return true;
+//    }
 
 
 
@@ -461,6 +470,203 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 blockSize * 18, paint);
 
         startNewGame();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Handle all the screen touches
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        int index = motionEvent.getActionIndex();
+        int pointerId = motionEvent.getPointerId(index);
+        int action = motionEvent.getActionMasked();
+        PointF pauseRadius = new PointF(2497, 116);
+
+        int oldX, oldY;
+        // This switch block replaces the
+        // if statement from the Sub Hunter game
+
+        switch (motionEvent.getAction() &
+                MotionEvent.ACTION_MASK) {
+
+            // The player has put their finger on the screen
+            case MotionEvent.ACTION_DOWN:
+                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                pointerId = motionEvent.getPointerId(index);
+//                Log.e("Controlls", "Action DOWN "+ pointerId);
+//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+
+                // need to consider pause for multi-touch also... need to test on Android
+                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
+                    nowPaused = true;
+                }
+                else {
+                    nowPaused = false;
+
+                }
+
+                userPause = nowPaused;
+
+
+                // If finger pressed on right side of screen
+                // then the ship will accelerate
+                if(motionEvent.getX() > display.width / 2){
+                    // call method that will accelerate ship
+                    gamePcs.mPlayer.setMoveState(true);
+                }
+                else if(motionEvent.getX() < display.width / 2){
+                    downX = motionEvent.getRawX();
+                    lastMoveX = downX;
+                }
+
+
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                moveX = motionEvent.getRawX();
+                float xDiff = Math.abs(moveX - downX);
+                lastMoveX = moveX;
+                Log.e("ACTION_MOVE:" , "moveX:"+moveX+", xDiff:"+xDiff+
+                        ", downX: " + downX);
+                if(downX > moveX){
+                    gamePcs.mPlayer.setRotationState(1);
+                }
+                else if(downX < moveX){
+                    gamePcs.mPlayer.setRotationState(2);
+                }
+//                if (xDiff > mTouchSlop){
+//                    return true;
+//                }
+
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if(motionEvent.getX() < display.width / 2){
+                    gamePcs.mPlayer.setRotationState(0);
+                }
+                else if( motionEvent.getX() > display.width / 2){
+                    gamePcs.mPlayer.setMoveState(false);
+                }
+                break;
+
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
+////                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                //
+//                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
+//                // nowPaused = false;
+//                //
+//                //
+//
+//                if(motionEvent.getX(0) < display.width / 2){
+//                    if(motionEvent.getY(0) < display.height / 2){
+//                        // rotate ship counter-clockwise
+//                        gamePcs.mPlayer.setRotationState(1);
+////                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+//                    }
+//                    else if (motionEvent.getY(0) > display.height / 2){
+//                        // rotate ship clockwise
+//                        gamePcs.mPlayer.setRotationState(2);
+////                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+//                    }
+//                }
+//                else if(motionEvent.getX(0) > display.width ){
+//                    gamePcs.mPlayer.setMoveState(true);
+//                }
+//
+//                if( motionEvent.getX(1) < display.width / 2){
+//                    // If finger pressed on upper left of screen
+//                    // then the ship will rotate counter-clockwise
+//                    if(motionEvent.getY(1) < display.height / 2){
+//                        // rotate ship counter-clockwise
+//                        gamePcs.mPlayer.setRotationState(1);
+////                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
+//                    }
+//                    else if (motionEvent.getY(1) > display.height / 2){
+//                        // rotate ship clockwise
+//                        gamePcs.mPlayer.setRotationState(2);
+////                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
+//                    }
+//                }
+//                else if(motionEvent.getX(1) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(true);
+//                }
+//
+//                break;
+
+
+
+//            // The player lifted their finger
+//            // from anywhere on screen.
+//            case MotionEvent.ACTION_UP:
+//
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.d("Controlls", "Action UP "+ pointerId);
+////                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                if(motionEvent.getX() > display.width / 2){
+//                    // stop position
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//                if(motionEvent.getX() < display.width / 2){
+//
+//                    // stop rotation / fix orientation
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//
+//                break;
+
+//            case MotionEvent.ACTION_POINTER_UP: // when order of touch and release is the same
+//                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+//                pointerId = motionEvent.getPointerId(index);
+////                Log.d("Controlls", "Action Pointer UP "+ pointerId);
+////                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
+//
+//                if((pointerId == 0 || pointerId == 1) &&
+//                        ((motionEvent.getX(0) < display.width / 2) ||
+//                                ((motionEvent.getX(1) < display.width / 2))))
+//                {
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//
+//                if(pointerId == 1 && motionEvent.getX(1) < display.width / 2){
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//                if(pointerId == 1 && motionEvent.getX(1) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//                if(pointerId == 0 && motionEvent.getX(0) < display.width / 2){
+//                    gamePcs.mPlayer.setRotationState(0);
+//                }
+//                if(pointerId == 0 && motionEvent.getX(0) > display.width / 2){
+//                    gamePcs.mPlayer.setMoveState(false);
+//                }
+//
+//                break;
+
+        }
+        return true;
     }
 
 }

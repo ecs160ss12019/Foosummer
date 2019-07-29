@@ -412,7 +412,7 @@ public class GameView {
                                                 render.mOpponents.get(i).getBitmapY(), myPaint);
                                 }
                         }
-                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
+//                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
 
                         // Choose the font size
                         myPaint.setTextSize(screenRes.x / 40);
