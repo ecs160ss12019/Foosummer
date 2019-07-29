@@ -52,6 +52,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private ObjectFactory factory;
     private GameView gameView;
     private SObjectsCollection gamePcs;
+    //Temporarily here
+    ParticleSystem mParticleSystem;
 
     SpaceObjectType objType; // Enum used for object creation.
 
@@ -72,27 +74,14 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // ready for drawing with
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
-//<<<<<<< HEAD
-////        myPaint = new Paint();
-//
-//        gameView = new GameView(context, myHolder, display);
-//
-//        // Initialize the objects
-//        myShip = new Player(display.width, display.height);
-//
-//        // Initialize asteroids
-//        asteroids = new ArrayList<Asteroid>();
-//
-//        mineralPowerUps = new ArrayList<PowerUps>();
-//
-//        gameProgress = new GameProgress();
-//=======
         gameView = new GameView(context, myHolder, display);
-//>>>>>>> 3ad9a4df8a2306925e1257657687363e41724af9
         factory = new ObjectFactory(display);
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
+        //Temporarily here
+        mParticleSystem = new ParticleSystem ();
+        mParticleSystem.init(1000, display);
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
         startNewGame();
@@ -130,9 +119,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(timeElapsed > 0) {
                     update();
-                    gameView.draw(gamePcs, gameProgress, userPause);
+                    gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
                 }
-                mCollision.checkCollision(gamePcs, gameProgress);
+                mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
                     gameOver();
 //                    gameProgress.reset(gamePcs, factory, objType);
@@ -150,7 +139,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
-                gameView.draw(gamePcs, gameProgress, userPause);
+                gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 timeThisFrame = System.currentTimeMillis() - frameStartTime;
                 timeElapsed = timeThisFrame;
@@ -177,6 +166,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     private void update() {
+
+        // EXPLOSION
+        mParticleSystem.update(timeElapsed , display);
 
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);

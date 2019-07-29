@@ -192,10 +192,10 @@ public class GameView {
         Bitmap pauseButtonBM;
         Bitmap pauseMenuBM;
         Bitmap[] mBackGroundGif = new Bitmap[backgroundDrawables.length];
+        Bitmap[] spaceshipGIF = new Bitmap[spaceshipDrawables.length];
         Bitmap[] mAsteroidSmallGif = new Bitmap[asteroidSmallDrawables.length];
         Bitmap[] mAsteroidMediumGif = new Bitmap[asteroidMediumDrawables.length];
         Bitmap[] mAsteroidLargeGif = new Bitmap[asteroidLargeDrawables.length];
-        Bitmap[] spaceshipGif = new Bitmap[spaceshipDrawables.length];
         int b, ss, s, m, l = 0;
 
 
@@ -239,8 +239,8 @@ public class GameView {
 
                 // SPACESHIP BITMAP
                 for(int i = 0; i < spaceshipDrawables.length ; i++) {
-                        spaceshipGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), spaceshipDrawables[i]);
-                        spaceshipGif[i] = Bitmap.createScaledBitmap(spaceshipGif[i], shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                        spaceshipGIF[i] = BitmapFactory.decodeResource(ourContext.getResources(), spaceshipDrawables[i]);
+                        spaceshipGIF[i] = Bitmap.createScaledBitmap(spaceshipGIF[i], shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                                                         shipSize + GameConfig.PLAYER_SHIP_PADDING, true);
                 }
 
@@ -290,14 +290,14 @@ public class GameView {
 
         }
 
-        public Point getBitmapDim(){
+        public Point getBitmapDim() {
                 Point bitMapDim = new Point(shipBitmap.getWidth(), shipBitmap.getHeight());
                 return bitMapDim;
         }
 
         // Draw the game objects and the HUD.
         // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
-        void draw(SObjectsCollection render, GameProgress gProg, boolean userPause) {
+        void draw(SObjectsCollection render, GameProgress gProg, boolean userPause, ParticleSystem ps) {
                 // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
@@ -336,10 +336,10 @@ public class GameView {
 
                                 // PLAYER SHIP
                                 //myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
-                                myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
-//                                myCanvas.drawBitmap(mBackGroundGif[ss++], render.mPlayer.getMatrix(), myPaint);
-//                                if(ss == spaceshipGif.length)
-//                                        ss = 0;
+                                //myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
+                                myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                                if(ss == spaceshipGIF.length)
+                                        ss = 0;
 
 
                                 // LASERS
@@ -400,9 +400,21 @@ public class GameView {
                                 // Choose the font size
                                 myPaint.setTextSize(screenRes.x / 40);
 
-//                       Draw the HUD
+//                              Draw the HUD
                                 myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
                                         screenRes.x / 50, myPaint);
+
+
+                                // particle system explosion
+                                // if(ps.mIsRunning == true){
+                                //      ps.draw()
+                                //      ps.mIsRunning = false;
+                                //{
+                                if(ps.mIsRunning == true){
+                                        ps.draw(myCanvas, myPaint);
+                                }
+
+
                         }
                         else{ drawPauseMenu(); }
 
