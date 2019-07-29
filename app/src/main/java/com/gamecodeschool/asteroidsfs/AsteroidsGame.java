@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.graphics.Canvas;
@@ -51,6 +52,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private ObjectFactory factory;
     private GameView gameView;
     private SObjectsCollection gamePcs;
+    private Audio audio;
+    //Temporarily here
+    ParticleSystem mParticleSystem;
 
     // SYSTEM CLOCK
     private GameClock gameClock;
@@ -79,9 +83,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
+        //Temporarily here
+        mParticleSystem = new ParticleSystem ();
+        mParticleSystem.init(1000, display);
         gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
-
+        audio = new Audio(context);
         startNewGame();
     }
 
@@ -116,9 +123,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
-                    gameView.draw(gamePcs, gameProgress, userPause);
+                    gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
                 }
-                mCollision.checkCollision(gamePcs, gameProgress);
+                mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
                     gameOver();
 //                    gameProgress.reset(gamePcs, factory, objType);
@@ -129,6 +136,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     mCollision.resetEnemies();
                 }
 
+
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
                 // check for collision between player's laser and asteroids
@@ -136,10 +144,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
-                gameView.draw(gamePcs, gameProgress, userPause);
+                gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
-                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+//                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
                 while(userPause){
                     gameClock.frameStart();
                     if(!userPause){
@@ -161,19 +169,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     private void update() {
 
+        // EXPLOSION
+        mParticleSystem.update(gameClock.getTimeElapsed() , display);
+
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
-
-        // OPPONENT
-        Laser oppShootResult;
-        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
-
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
-
-            if(oppShootResult != null) {
-                gamePcs.mOpponentLasers.add(oppShootResult);
-            }
-        }
 
         if(DEBUGGING) {
             Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
@@ -202,13 +202,29 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         //POWER UPS
+
+        if(mCollision.dropPowerUp){
+            gamePcs.mMineralPowerUps.add(factory.getPowerUp(mCollision.getDropPos()));
+        }
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
-                // OPPONENT
-        for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
+        // OPPONENT
+        Laser oppShootResult;
+
+        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
+
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
+
+                // update the position of opponent at this index
+                gamePcs.mOpponents.get(i).updateOppPosition(true);
+            }
+
             gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
@@ -219,6 +235,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 i--;
             }
         }
+
+
     }
 
 
@@ -266,8 +284,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                if(userPause == false && nowPlaying == false){
 //                    nowPlaying = true;
 //                }
-                Log.e("onTouchEvent:", "userPause: " + userPause);
-                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+//                Log.e("onTouchEvent:", "userPause: " + userPause);
+//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
                 //
                 //
 
@@ -411,13 +429,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Start the thread
         myGameThread.start();
+        audio.playClick();
     }
 
-
-
-
-
-
+    
     public void pause() {
         // Set nowPlaying to false
         // Stopping the thread isn't
@@ -428,6 +443,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
+        audio.pause();
     }
 
     private void gameOver(){
