@@ -9,24 +9,11 @@ public class Particle extends SpaceObject {
     }
 
 
-    // Default position update based on time.
+    @Override
     public void update(long time, final Display screen) {
         // UPDATING NEW POSITION VARIABLE.
         position.x += velMagnitude * Math.cos(angle) * time;
         position.y += velMagnitude * Math.sin(angle) * time;
-
-        if(position.x < 0) {
-            position.x = screen.width;
-        }
-        else if(position.y < 0) {
-            position.y = screen.height;
-        }
-        else if(position.x > screen.width) {
-            position.x = 0;
-        }
-        else if(position.y > screen.height) {
-            position.y = 0;
-        }
     }
 
 
