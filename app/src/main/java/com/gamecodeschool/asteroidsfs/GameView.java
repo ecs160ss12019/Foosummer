@@ -304,18 +304,14 @@ public class GameView {
                         myCanvas = myHolder.lockCanvas();
                         if(!userPause){
 
-
                                 // Fills the screen with background "space" image
                                 myCanvas.drawBitmap(mBackGroundGif[b++], 0, 0, myPaint);
                                 //myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
                                 if(b == mBackGroundGif.length)
                                         b = 0;
 
-
-
                                 // Choose a color to paint with
                                 myPaint.setColor(Color.argb(255, 75, 180, 250));
-
 
                                 if(AsteroidsGame.DEBUGGING == true) {
                                         Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
@@ -434,7 +430,7 @@ public class GameView {
 //                        // Lock the canvas (graphics memory) ready to draw
 //                        myCanvas = myHolder.lockCanvas();
 //                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
-                        myCanvas.drawARGB(1, 0, 0, 0);
+                        myCanvas.drawARGB(150, 0, 0, 0);
 
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));

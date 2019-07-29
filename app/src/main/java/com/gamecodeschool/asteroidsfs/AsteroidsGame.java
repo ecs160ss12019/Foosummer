@@ -28,7 +28,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // Drawing objects
     private SurfaceHolder myHolder;
-    private long timeElapsed;
     // Number of milliseconds in a second
     private final int MILLIS_IN_SECOND = 1000;
     /* 
@@ -54,6 +53,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private SObjectsCollection gamePcs;
     //Temporarily here
     ParticleSystem mParticleSystem;
+
+    // SYSTEM CLOCK
+    private GameClock gameClock;
 
     SpaceObjectType objType; // Enum used for object creation.
 
@@ -82,6 +84,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //Temporarily here
         mParticleSystem = new ParticleSystem ();
         mParticleSystem.init(1000, display);
+        gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
         startNewGame();
@@ -111,13 +114,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     @Override
     public void run() {
-        long timeThisFrame;
         while(nowPlaying) {
             //What time is it now at the start of the loop?
-            long frameStartTime = System.currentTimeMillis();
+            gameClock.frameStart();
 
             if(!nowPaused){
-                if(timeElapsed > 0) {
+                if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
                 }
@@ -141,24 +143,21 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             else if(userPause){
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
-                timeThisFrame = System.currentTimeMillis() - frameStartTime;
-                timeElapsed = timeThisFrame;
+                gameClock.frameStop();
                 Log.e("run: ", "nowPlaying is false: " + nowPlaying);
                 while(userPause){
-                    frameStartTime = System.currentTimeMillis();
+                    gameClock.frameStart();
                     if(!userPause){
                         break;
                     }
-                    timeThisFrame = System.currentTimeMillis() - frameStartTime;
-                    timeElapsed = timeThisFrame;
+                    gameClock.frameStop();
                 }
 
             }
 
             // How long did this frame/loop take?
             // Store the answer in timeThisFrame
-            timeThisFrame = System.currentTimeMillis() - frameStartTime;
-            timeElapsed = timeThisFrame;
+            gameClock.frameStop();
         }
 //        Log.e("run:", "userPause: " + userPause);
     }
@@ -168,16 +167,16 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void update() {
 
         // EXPLOSION
-        mParticleSystem.update(timeElapsed , display);
+        mParticleSystem.update(gameClock.getTimeElapsed() , display);
 
         // shooting action each update.
-        Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
+        Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         // OPPONENT
         Laser oppShootResult;
         for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
 
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer.getPosition());
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
 
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
@@ -193,18 +192,18 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // PLAYER
-        gamePcs.mPlayer.update(timeElapsed, display);
+        gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
 
         // ASTEROIDS
         for(int i = 0 ; i < gamePcs.mAsteroids.size() ; i++) {
-            gamePcs.mAsteroids.get(i).update(timeElapsed, display);
+            gamePcs.mAsteroids.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
         // PLAYER LASER we call different update since this has a boolean attached to it.
         for(int i = 0; i < gamePcs.mPlayerLasers.size(); i++) {
-            if(gamePcs.mPlayerLasers.get(i).updateL(timeElapsed, display)) {
+            if(gamePcs.mPlayerLasers.get(i).updateL(gameClock.getTimeElapsed(), display)) {
                 gamePcs.mPlayerLasers.remove(i);
                 i--;
             }
@@ -213,17 +212,17 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //POWER UPS
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
-            gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display);
+            gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
                 // OPPONENT
         for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
-            gamePcs.mOpponents.get(i).update(timeElapsed, display);
+            gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
         // OPPONENT LASER
         for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {
-            if(gamePcs.mOpponentLasers.get(i).updateL(timeElapsed, display)) {
+            if(gamePcs.mOpponentLasers.get(i).updateL(gameClock.getTimeElapsed(), display)) {
                 gamePcs.mOpponentLasers.remove(i);
                 i--;
             }

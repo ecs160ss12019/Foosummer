@@ -37,9 +37,11 @@ public class CollisionEngine {
 
         // player vs asteroid.
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
+        playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
         PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
+        playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
 
     }
 
@@ -52,6 +54,38 @@ public class CollisionEngine {
                 // add subtract life logic here and possible start grace period count down.
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
+                i--;
+                if(aList.size() == 0){
+                    asteroidsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+    private void playerEnemyCollision(Player P, ArrayList<Opponent> oList, GameProgress gp){
+        for(int i = 0; i < oList.size(); i++) {
+            Opponent temp = oList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                P.resetPos();
+                // add subtract life logic here and possible start grace period count down.
+                // should the enemy ship be destroyed on collision with Player ship?
+                oList.remove(i);
+                i--;
+                if(oList.size() == 0){
+                    oppsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+    private void playerPowerUpCollision(Player P, ArrayList<PowerUps> puList, GameProgress gp){
+        for(int i = 0; i < puList.size(); i++) {
+            PowerUps temp = puList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                // add power up feature on collision
+                puList.remove(i);
                 i--;
                 break;
             }
