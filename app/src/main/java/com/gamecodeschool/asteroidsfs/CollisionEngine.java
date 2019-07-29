@@ -9,7 +9,11 @@ import android.util.Log;
 import android.graphics.PointF;
 
 import java.util.ArrayList;
+
 import java.util.Random;
+
+import android.graphics.PointF;
+
 
 /* 
  * The CollisionEngine's main role is detecting the collision between objects.
@@ -135,6 +139,14 @@ public class CollisionEngine {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+
+                    // if(temp == randPowerUpDrop){
+                    //     drop power up
+                    //     get position of temp and assign to power up spawn position
+                    // }
+//                    Log.e("Collision", "asteroid size " + temp.getSize());
+
+
                     gp.updateScore(temp.getSize());
 
                     didPowerUpDrop(asteroidDropProbability,

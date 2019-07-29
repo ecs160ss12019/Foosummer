@@ -58,6 +58,9 @@ public class SpaceObject {
         return position.y - hitRadius;
     }
 
+    // implemented temporarily for power ups dropping on asteroid collision
+    public void setBitmapXY(PointF pos) { this.position = pos; }
+
     // Default position update based on time.
     public void update(long time, final Display screen) {
         // UPDATING NEW POSITION VARIABLE.
