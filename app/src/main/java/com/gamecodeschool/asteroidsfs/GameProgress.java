@@ -21,8 +21,6 @@ public class GameProgress {
     final private int initialNumPowerUps = 1;
 
 
-
-
     // track user score and lives
     private int myScore = initialScore;
     private int myLives = initialLife; // abstract this to UserShip class?
@@ -31,6 +29,7 @@ public class GameProgress {
     private int numOpps = initialNumOpps;
     private int numAsteroids = initialNumAsteroids;
     private int numPowerUps = initialNumPowerUps;
+    private Random rand = new Random();
 
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
@@ -47,7 +46,9 @@ public class GameProgress {
         return myLives;
     }
 
-    public boolean getGameStatus() {return gameOver;}
+    public boolean getGameStatus() {
+        return gameOver;
+    }
 
     // resets by setting our game progress variable to initial lvl.
     public void reset(SObjectsCollection gamePcs, ObjectFactory factory, SpaceObjectType objType) {
@@ -66,8 +67,7 @@ public class GameProgress {
         if (myLives <= 0) {
             gameOver = true;
 //            reset();
-        }
-        else {
+        } else {
             gameOver = false;
         }
         Log.d("GameProgress", "myLives after decrementing: " + myLives);
@@ -76,19 +76,19 @@ public class GameProgress {
     }
 
 
-
-
     /*
         We will take an argument regarding score multiplier.
         Then we update by adding the multiplied basescore into our score.
      */
-    public void updateScore(int scoreMultiplier) { myScore += baseScore * scoreMultiplier; }
+    public void updateScore(int scoreMultiplier) {
+        myScore += baseScore * scoreMultiplier;
+    }
 
     public void startNextLevel(SObjectsCollection gamePcs,
-                               ObjectFactory factory, SpaceObjectType objType){
+                               ObjectFactory factory, SpaceObjectType objType) {
         // call this function when all asteroids and opponents are destroyed
         // increment level counter: currLevel ++;
-        level ++;
+        level++;
         generateEnemies(level, gamePcs, factory, objType);
 
 
@@ -97,42 +97,47 @@ public class GameProgress {
     }
 
     public void generateEnemies(int level, SObjectsCollection gamePcs,
-                                ObjectFactory factory, SpaceObjectType objType){
+                                ObjectFactory factory, SpaceObjectType objType) {
         // number of opponents and asteroids
         // for the corresponding level
         // numAsteroids = currLevel * (numAsteroids multiplier)
         // numOpps = currLevel * (numOpps multiplier)
-        if(level > initialLevel) {
+        if (level > initialLevel) {
             numAsteroids += 2;
         }
-        if(level % 3 == 0){
+        if (level % 3 == 0) {
             numOpps += 1;
         }
         // add boosts every 5 levels?
 
-        for(int i = 0; i < numAsteroids; i++) {
-            gamePcs.mAsteroids.add((Asteroid)factory.getSpaceObject(objType.ASTEROID));
+        for (int i = 0; i < numAsteroids; i++) {
+            gamePcs.mAsteroids.add((Asteroid) factory.getSpaceObject(objType.ASTEROID));
         }
-        for(int i = 0; i < numOpps; i++) {
+        for (int i = 0; i < numOpps; i++) {
 
             // modify the opponent coordinates to spawn away from player
-            SpaceObject temp = factory.getSpaceObject(objType.OPPONENT);
-            PointF playerPos = gamePcs.mPlayer.getPosition();
+            SpaceObject opp1 = factory.getSpaceObject(objType.OPPONENT);
 
-            // try to randomize this more!!
-            temp.position.x += gamePcs.mPlayer.getPosition().x;
-            temp.position.y += gamePcs.mPlayer.getPosition().y;
+            opp1.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
+            opp1.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
+
+            gamePcs.mOpponents.add((Opponent) opp1);
+            if (level > 5) {
+                SpaceObject opp2 = factory.getSpaceObject(objType.OPPONENT2);
+
+                opp2.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
+                opp2.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
+
+                gamePcs.mOpponents.add((Opponent) opp2);
+            }
 
 
-            gamePcs.mOpponents.add((Opponent)temp);
         }
-
-
-    }
 
 
 //    public int getNumAsteroids(){
 //        return numAsteroids;
 //    }
 
+    }
 }

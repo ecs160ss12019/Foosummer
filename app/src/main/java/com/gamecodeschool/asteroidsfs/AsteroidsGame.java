@@ -136,6 +136,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     mCollision.resetEnemies();
                 }
 
+
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
                 // check for collision between player's laser and asteroids
@@ -174,17 +175,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
-        // OPPONENT
-        Laser oppShootResult;
-        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
-
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
-
-            if(oppShootResult != null) {
-                gamePcs.mOpponentLasers.add(oppShootResult);
-            }
-        }
-
         if(DEBUGGING) {
             Log.d("update: ", "Shoot time total: " + gamePcs.mPlayer.getTimer());
         }
@@ -221,8 +211,20 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
-                // OPPONENT
-        for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
+        // OPPONENT
+        Laser oppShootResult;
+
+        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
+
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
+
+                // update the position of opponent at this index
+                gamePcs.mOpponents.get(i).updateOppPosition(true);
+            }
+
             gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
 

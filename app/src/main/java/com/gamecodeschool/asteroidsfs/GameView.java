@@ -21,6 +21,7 @@ public class GameView {
         private Paint myPaint;
         private Context ourContext;
         private PointF screenRes;
+
         //Matrix shipMatrix = new Matrix();
         int[] backgroundDrawables = {
                 R.drawable.outerspace_0,
@@ -183,6 +184,7 @@ public class GameView {
         Bitmap mAsteroid3;
         Bitmap shipBitmap;
         Bitmap mOpponentBitmap;
+        Bitmap mOpponent2Bitmap;
         Bitmap mPlayerLaserBM;
         Bitmap yellowPowerUpBM;
         Bitmap redPowerUpBM;
@@ -270,6 +272,9 @@ public class GameView {
 
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo_1);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
+
+                mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent2);
+                mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize, shipSize, false);
 
                 mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
@@ -391,14 +396,26 @@ public class GameView {
                                         }
                                 }
 
-                                // // OPPONENT
-                                // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
-                                for (int i = 0; i < render.mOpponents.size(); i++) {
+                        // // OPPONENT
+
+                        for (int i = 0; i < render.mOpponents.size(); i++) {
+                                // LOWER LEVEL OPPONENT
+                                if(gProg.getLevel() < 5){
                                         myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
                                                 render.mOpponents.get(i).getBitmapY(), myPaint);
                                 }
-                                // Choose the font size
-                                myPaint.setTextSize(screenRes.x / 40);
+
+                                // SPAWN HIGHER LEVEL OPPONENT
+                                // should have both lower and higher level opponents on the board?
+                                if(gProg.getLevel() >= 5){
+                                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                }
+                        }
+                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
+
+                        // Choose the font size
+                        myPaint.setTextSize(screenRes.x / 40);
 
 //                              Draw the HUD
                                 myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
