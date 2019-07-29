@@ -181,11 +181,121 @@ public class GameView {
 
 
         // Bitmaps that is contained within the gameview.
+        int[] backgroundDrawables = {
+                R.drawable.outerspace_0,
+                R.drawable.outerspace_1,
+                R.drawable.outerspace_2,
+                R.drawable.outerspace_3,
+                R.drawable.outerspace_4,
+                R.drawable.outerspace_5,
+                R.drawable.outerspace_6,
+                R.drawable.outerspace_7,
+                R.drawable.outerspace_8,
+                R.drawable.outerspace_9,
+                R.drawable.outerspace_10,
+                R.drawable.outerspace_11,
+                R.drawable.outerspace_12,
+                R.drawable.outerspace_13,
+                R.drawable.outerspace_14,
+                R.drawable.outerspace_15,
+                R.drawable.outerspace_16,
+                R.drawable.outerspace_17,
+                R.drawable.outerspace_18,
+                R.drawable.outerspace_19,
+                R.drawable.outerspace_20,
+                R.drawable.outerspace_21,
+                R.drawable.outerspace_22,
+                R.drawable.outerspace_23,
+                R.drawable.outerspace_24,
+                R.drawable.outerspace_25,
+                R.drawable.outerspace_26,
+                R.drawable.outerspace_27,
+                R.drawable.outerspace_28,
+                R.drawable.outerspace_29,
+                R.drawable.outerspace_30,
+                R.drawable.outerspace_31,
+                R.drawable.outerspace_32,
+                R.drawable.outerspace_33,
+                R.drawable.outerspace_34,
+                R.drawable.outerspace_35,
+                R.drawable.outerspace_36,
+                R.drawable.outerspace_37,
+                R.drawable.outerspace_38,
+                R.drawable.outerspace_39,
+                R.drawable.outerspace_40,
+                R.drawable.outerspace_41,
+                R.drawable.outerspace_42,
+                R.drawable.outerspace_43,
+                R.drawable.outerspace_44,
+                R.drawable.outerspace_45,
+                R.drawable.outerspace_46,
+                R.drawable.outerspace_47,
+                R.drawable.outerspace_48,
+                R.drawable.outerspace_49,
+                R.drawable.outerspace_50,
+                R.drawable.outerspace_51,
+                R.drawable.outerspace_52,
+                R.drawable.outerspace_53,
+                R.drawable.outerspace_54,
+                R.drawable.outerspace_55,
+                R.drawable.outerspace_56,
+                R.drawable.outerspace_57,
+                R.drawable.outerspace_58,
+                R.drawable.outerspace_59,
+                R.drawable.outerspace_60,
+                R.drawable.outerspace_61,
+                R.drawable.outerspace_62,
+                R.drawable.outerspace_63,
+                R.drawable.outerspace_64,
+                R.drawable.outerspace_65,
+                R.drawable.outerspace_66,
+                R.drawable.outerspace_67,
+                R.drawable.outerspace_68,
+                R.drawable.outerspace_69,
+                R.drawable.outerspace_70,
+                R.drawable.outerspace_71,
+                R.drawable.outerspace_72,
+                R.drawable.outerspace_73,
+                R.drawable.outerspace_74};
+
+        int[] asteroidDrawables = {
+                R.drawable.asteroid_0,
+                R.drawable.asteroid_1,
+                R.drawable.asteroid_2,
+                R.drawable.asteroid_3,
+                R.drawable.asteroid_4,
+                R.drawable.asteroid_5,
+                R.drawable.asteroid_6,
+                R.drawable.asteroid_7,
+                R.drawable.asteroid_8,
+                R.drawable.asteroid_9,
+                R.drawable.asteroid_10,
+                R.drawable.asteroid_11,
+                R.drawable.asteroid_12,
+                R.drawable.asteroid_13,
+                R.drawable.asteroid_14,
+                R.drawable.asteroid_15,
+                R.drawable.asteroid_16,
+                R.drawable.asteroid_17,
+                R.drawable.asteroid_18,
+                R.drawable.asteroid_19,
+                R.drawable.asteroid_20,
+                R.drawable.asteroid_21,
+                R.drawable.asteroid_22,
+                R.drawable.asteroid_23,
+                R.drawable.asteroid_24,
+                R.drawable.asteroid_25,
+                R.drawable.asteroid_26,
+                R.drawable.asteroid_27,
+                R.drawable.asteroid_28,
+                R.drawable.asteroid_29};
+        Bitmap[] mBackGround = new Bitmap[backgroundDrawables.length];
+        Bitmap[] mAsteroid = new Bitmap[asteroidDrawables.length];
+        int k,m,n = 0;
         Bitmap mAsteroid1;
         Bitmap mAsteroid2;
         Bitmap mAsteroid3;
         Bitmap shipBitmap;
-        Bitmap mBackGround;
         Bitmap mOpponentBitmap;
         Bitmap mPlayerLaserBM;
         Bitmap yellowPowerUpBM;
@@ -200,6 +310,7 @@ public class GameView {
         Bitmap[] mAsteroidMediumGif = new Bitmap[asteroidMediumDrawables.length];
         Bitmap[] mAsteroidLargeGif = new Bitmap[asteroidLargeDrawables.length];
         int b,s,m,l = 0;
+
 
 
         GameView(Context context, SurfaceHolder surfHolder, Display screen) {
@@ -259,6 +370,7 @@ public class GameView {
                 mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
                 mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
                         asteroidSizeFactor / LaserSizeFactor, false);
+
                 shipBitmap.setHasAlpha(true);
 
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent);
@@ -296,6 +408,7 @@ public class GameView {
                         // Lock the canvas (graphics memory) ready to draw
                         myCanvas = myHolder.lockCanvas();
                         if(!userPause){
+
 
                                 // Fills the screen with background "space" image
                                 myCanvas.drawBitmap(mBackGroundGif[b++], 0, 0, myPaint);
@@ -409,7 +522,7 @@ public class GameView {
 //                        // Lock the canvas (graphics memory) ready to draw
 //                        myCanvas = myHolder.lockCanvas();
 //                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
-                        myCanvas.drawARGB(1, 0, 0, 0);
+                        myCanvas.drawARGB(150, 0, 0, 0);
 
                         // Choose a color to paint with
                         myPaint.setColor(Color.argb(255, 75, 180, 250));
