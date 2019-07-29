@@ -19,7 +19,7 @@ public class GameProgress {
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
     final private int initialNumPowerUps = 1;
-    Random rand = new Random();
+
 
 
 
@@ -32,14 +32,6 @@ public class GameProgress {
     private int numAsteroids = initialNumAsteroids;
     private int numPowerUps = initialNumPowerUps;
 
-    // should be an arraylist...
-//    private int[] AsteroidsWithPUs = new int[numPowerUps];
-    private int asteroidHasPU;
-
-    // will need to abstract.. temporary implementation
-    SObjectsCollection gPcs;
-    ObjectFactory fact;
-    SpaceObjectType obj;
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
 
@@ -138,31 +130,9 @@ public class GameProgress {
             gamePcs.mOpponents.add((Opponent)temp);
         }
 
-        for(int i = 0; i < numPowerUps; i++){
-            // replace with asteroidHasPU[i] = ...
-            asteroidHasPU = rand.nextInt(numAsteroids-1);
-        }
 
     }
 
-
-    public boolean hasPowerUp(int idx){
-//        for(int i = 0; i < numPowerUps; i++){
-//            if(idx == asteroidHasPU[i]){return true;}
-//        }
-        if(idx == asteroidHasPU){ return true; }
-        return false;
-    }
-
-    public void dropPowerUp(PointF dropCoords){
-        // this will be abstracted away such that they spawn on asteroid collision
-//        for(int i = 0; i < 3; i++) {
-//            gamePcs.mMineralPowerUps.add((PowerUps)factory.getSpaceObject(objType.POWERUP));
-//            gamePcs.mMineralPowerUps.get(i).setBitmapXY(dropCoords);
-//        }
-        gPcs.mMineralPowerUps.add((PowerUps)fact.getSpaceObject(obj.POWERUP));
-        gPcs.mMineralPowerUps.get(0).setBitmapXY(dropCoords);
-    }
 
 //    public int getNumAsteroids(){
 //        return numAsteroids;

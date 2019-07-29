@@ -1,14 +1,20 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
+
+import java.util.Random;
+
 import android.graphics.PointF;
+
 
 /* 
  * The CollisionEngine's main role is detecting the collision between objects.
@@ -21,6 +27,11 @@ public class CollisionEngine {
     int totalHits = 0;
     boolean asteroidsEliminated = false;
     boolean oppsEliminated = false;
+//    Random powerUpSeed = new Random();
+    double asteroidDropProbability = 0.10;
+    double oppponentDropProbability = 0.20;
+    boolean dropPowerUp = false;
+    private PointF powerUpPos;
 //    GameProgress playerStatus = new GameProgress();
 
     /*
@@ -33,16 +44,16 @@ public class CollisionEngine {
         These should cover the basic cases of collision within the game.
         FIXME: Separate these into separate private methods for readability!!!
     */
-    public void checkCollision(SObjectsCollection collection, GameProgress gProg) {
+    public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps) {
 
         // player vs asteroid.
+        dropPowerUp = false;
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
         playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
-        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg);
+        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
         playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
-
     }
 
     // See if player collided with any of the asteroids.
@@ -52,6 +63,10 @@ public class CollisionEngine {
             if(SpaceObject.collisionCheck(P, temp)) {
                 P.resetPos();
                 // add subtract life logic here and possible start grace period count down.
+
+                didPowerUpDrop(asteroidDropProbability,
+                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
                 i--;
@@ -70,6 +85,10 @@ public class CollisionEngine {
                 P.resetPos();
                 // add subtract life logic here and possible start grace period count down.
                 // should the enemy ship be destroyed on collision with Player ship?
+
+                didPowerUpDrop(oppponentDropProbability,
+                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
                 oList.remove(i);
                 i--;
                 if(oList.size() == 0){
@@ -92,14 +111,27 @@ public class CollisionEngine {
         }
     }
 
-    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp) {
+    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
 
-                if(SpaceObject.collisionCheck(pList.get(i), oList.get(k))) {
+                Opponent temp = oList.get(k);
+                if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    ps.emitParticles(
+                            new PointF(
+                                    temp.getPosition().x,
+                                    temp.getPosition().y
+
+                            )
+                    );
+
                     pList.remove(i);
                     //FIXME: Need to add score logic here!
                     // For now enemy dies in 1 hit.
+
+                    didPowerUpDrop(oppponentDropProbability,
+                            new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
                     oList.remove(k);
                     i--;
                     k--;
@@ -116,21 +148,18 @@ public class CollisionEngine {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
-                // generate number from 0 to aList.size()-1
-                // randPowerUpDrop = rand.nextInt(aList.size() - 1)
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
-                    // if(temp == randPowerUpDrop){
-                    //     drop power up
-                    //     get position of temp and assign to power up spawn position
-                    // }
-//                    Log.e("Collision", "asteroid size " + temp.getSize());
-
                     if(gp.hasPowerUp(k)){
-                        gp.dropPowerUp(new PointF(aList.get(k).getBitmapX(),
-                                aList.get(k).getBitmapY()));
+                        gp.dropPowerUp(new PointF(temp.getBitmapX(),
+                                temp.getBitmapY()));
                     }
 
+
                     gp.updateScore(temp.getSize());
+
+                    didPowerUpDrop(asteroidDropProbability,
+                            new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
                     aList.addAll(temp.collisionAction());
                     aList.remove(k);
                     pList.remove(i);
@@ -165,6 +194,19 @@ public class CollisionEngine {
         oppsEliminated = false;
         asteroidsEliminated = false;
     }
+
+    private void didPowerUpDrop(double prob, PointF pos){
+        if(prob >= Math.random()){
+            dropPowerUp = true;
+            setDropPos(pos);
+        }
+    }
+
+    private void setDropPos(PointF pos){
+        powerUpPos = pos;
+    }
+
+    public PointF getDropPos() {return this.powerUpPos;}
 
 
 
