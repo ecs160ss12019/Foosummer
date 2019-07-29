@@ -74,7 +74,23 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // ready for drawing with
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
+//<<<<<<< HEAD
+////        myPaint = new Paint();
+//
+//        gameView = new GameView(context, myHolder, display);
+//
+//        // Initialize the objects
+//        myShip = new Player(display.width, display.height);
+//
+//        // Initialize asteroids
+//        asteroids = new ArrayList<Asteroid>();
+//
+//        mineralPowerUps = new ArrayList<PowerUps>();
+//
+//        gameProgress = new GameProgress();
+//=======
         gameView = new GameView(context, myHolder, display);
+//>>>>>>> 3ad9a4df8a2306925e1257657687363e41724af9
         factory = new ObjectFactory(display);
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
