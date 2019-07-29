@@ -74,23 +74,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // ready for drawing with
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
-//<<<<<<< HEAD
-////        myPaint = new Paint();
-//
-//        gameView = new GameView(context, myHolder, display);
-//
-//        // Initialize the objects
-//        myShip = new Player(display.width, display.height);
-//
-//        // Initialize asteroids
-//        asteroids = new ArrayList<Asteroid>();
-//
-//        mineralPowerUps = new ArrayList<PowerUps>();
-//
-//        gameProgress = new GameProgress();
-//=======
         gameView = new GameView(context, myHolder, display);
-//>>>>>>> 3ad9a4df8a2306925e1257657687363e41724af9
         factory = new ObjectFactory(display);
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
@@ -155,7 +139,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 gameView.draw(gamePcs, gameProgress, userPause);
 //                nowPlaying = false;
                 gameClock.frameStop();
-                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+//                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
                 while(userPause){
                     gameClock.frameStart();
                     if(!userPause){
@@ -218,6 +202,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         //POWER UPS
+
+        if(mCollision.dropPowerUp){
+            gamePcs.mMineralPowerUps.add(factory.getPowerUp(mCollision.getDropPos()));
+        }
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
@@ -235,6 +223,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 i--;
             }
         }
+
+
     }
 
 
@@ -282,8 +272,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                if(userPause == false && nowPlaying == false){
 //                    nowPlaying = true;
 //                }
-                Log.e("onTouchEvent:", "userPause: " + userPause);
-                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+//                Log.e("onTouchEvent:", "userPause: " + userPause);
+//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
                 //
                 //
 

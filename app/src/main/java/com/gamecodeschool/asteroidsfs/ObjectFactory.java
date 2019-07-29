@@ -93,14 +93,18 @@ public class ObjectFactory {
                                                 opponentVelocity, 100,
                                                 opponentHealth);
 
-                        case POWERUP:
-                            return new PowerUps(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
-                                    rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
-                                    50);
+//                        case POWERUP:
+//                            return new PowerUps(new PointF(rand.nextInt(zone2.xDiff()) + zone2.minX,
+//                                    rand.nextInt(zone2.yDiff() + zone2.minY) + zone2.minY),
+//                                    50);
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
+        }
+
+        public PowerUps getPowerUp(PointF pos){
+                return new PowerUps(pos, 50);
         }
 
 //        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
