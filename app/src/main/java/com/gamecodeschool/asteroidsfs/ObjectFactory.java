@@ -87,6 +87,13 @@ public class ObjectFactory {
                                                 opponentVelocity, 100,
                                                 opponentHealth);
 
+                        case OPPONENT2:
+
+                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
+                                        rand.nextInt(maxAngle) * Math.PI/180,
+                                        opponentVelocity, 100,
+                                        opponentHealth);
+
                         case POWERUP:
                             return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);
 

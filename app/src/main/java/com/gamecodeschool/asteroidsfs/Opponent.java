@@ -31,7 +31,7 @@ public class Opponent extends SpaceObject{
 
 
     public Laser shoot(long timeIncrement, ObjectFactory fac, PointF playerPos) {
-        //PointF playerPos = player.getPosition();
+
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
         shootAngle = (float)Math.atan2(getY, getX);

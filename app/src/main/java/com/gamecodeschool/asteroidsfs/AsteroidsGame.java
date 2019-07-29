@@ -179,7 +179,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
-                // store this i - update this opponent's position
+
+                // update the position of opponent at this index
                 updateThisOpponentAngle = i;
                 updateWithThisAngle = gamePcs.mOpponents.get(i).getShootAngle();
                 updatePosition = true;
@@ -222,13 +223,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
             // update opponent's angle after each shot
             if(updatePosition){
-                Log.e("AsteroidsGame ", "gamePcs.mOpponents.get(updateThisOpponentAngle).angle before  = " + gamePcs.mOpponents.get(updateThisOpponentAngle).angle );
-
-                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = -updateWithThisAngle+90;
+                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = updateWithThisAngle+90;
                 updatePosition = false;
-
-                Log.e("AsteroidsGame ", "gamePcs.mOpponents.get(updateThisOpponentAngle).angle after  = " + gamePcs.mOpponents.get(updateThisOpponentAngle).angle );
-                //Log.e("AsteroidsGame ", "updatePosition  = " + updatePosition );
 
             }
 

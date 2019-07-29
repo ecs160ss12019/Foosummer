@@ -120,7 +120,14 @@ public class GameProgress {
             temp.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(5000);
 
             gamePcs.mOpponents.add((Opponent)temp);
-            //gamePcs.mOpponents.add((Opponent)factory.getSpaceObject(objType.OPPONENT));
+            if(level > 5){
+                SpaceObject temp2 = factory.getSpaceObject(objType.OPPONENT2);
+
+                temp2.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(2000);
+                temp2.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(5000);
+
+                gamePcs.mOpponents.add((Opponent)temp2);
+            }
         }
 
         // this will be abstracted away such that they spawn on asteroid collision
