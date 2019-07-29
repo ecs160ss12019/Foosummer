@@ -36,9 +36,11 @@ public class CollisionEngine {
 
         // player vs asteroid.
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
+        playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
         PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg);
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
+        playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
 
     }
 
@@ -51,6 +53,38 @@ public class CollisionEngine {
                 // add subtract life logic here and possible start grace period count down.
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
+                i--;
+                if(aList.size() == 0){
+                    asteroidsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+    private void playerEnemyCollision(Player P, ArrayList<Opponent> oList, GameProgress gp){
+        for(int i = 0; i < oList.size(); i++) {
+            Opponent temp = oList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                P.resetPos();
+                // add subtract life logic here and possible start grace period count down.
+                // should the enemy ship be destroyed on collision with Player ship?
+                oList.remove(i);
+                i--;
+                if(oList.size() == 0){
+                    oppsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+    private void playerPowerUpCollision(Player P, ArrayList<PowerUps> puList, GameProgress gp){
+        for(int i = 0; i < puList.size(); i++) {
+            PowerUps temp = puList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                // add power up feature on collision
+                puList.remove(i);
                 i--;
                 break;
             }
@@ -68,7 +102,6 @@ public class CollisionEngine {
                     oList.remove(k);
                     i--;
                     k--;
-                    Log.e("ELIM ENEMY: ", "OPPS LEFT: " + oList.size());
                     if(oList.size() == 0){
                         oppsEliminated = true;
                     }
@@ -82,14 +115,19 @@ public class CollisionEngine {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
+                // generate number from 0 to aList.size()-1
+                // randPowerUpDrop = rand.nextInt(aList.size() - 1)
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    // if(temp == randPowerUpDrop){
+                    //     drop power up
+                    //     get position of temp and assign to power up spawn position
+                    // }
 //                    Log.e("Collision", "asteroid size " + temp.getSize());
                     gp.updateScore(temp.getSize());
                     aList.addAll(temp.collisionAction());
                     aList.remove(k);
                     pList.remove(i);
                     i--;
-                    Log.e("ELIM ENEMY: ", "ASTEROIDS LEFT: " + aList.size());
                     if(aList.size() == 0){
                         asteroidsEliminated = true;
                     }

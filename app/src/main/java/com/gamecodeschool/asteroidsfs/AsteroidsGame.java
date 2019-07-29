@@ -28,7 +28,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // Drawing objects
     private SurfaceHolder myHolder;
-    private long timeElapsed;
     // Number of milliseconds in a second
     private final int MILLIS_IN_SECOND = 1000;
     /* 
@@ -59,9 +58,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private GameView gameView;
     private SObjectsCollection gamePcs;
 
+    // SYSTEM CLOCK
+    private GameClock gameClock;
+
     SpaceObjectType objType; // Enum used for object creation.
 
     private CollisionEngine mCollision;
+
+    // distinguishes user pause vs "pause" when initializing the game
+    boolean userPause = false;
 
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
@@ -80,6 +85,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
+        gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
         startNewGame();
@@ -111,12 +117,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     public void run() {
         while(nowPlaying) {
             //What time is it now at the start of the loop?
-            long frameStartTime = System.currentTimeMillis();
+            gameClock.frameStart();
 
             if(!nowPaused){
-                if(timeElapsed > 0) {
+                if(gameClock.getTimeElapsed() > 0) {
                     update();
-                    gameView.draw(gamePcs, gameProgress);
+                    gameView.draw(gamePcs, gameProgress, userPause);
                 }
                 mCollision.checkCollision(gamePcs, gameProgress);
                 if(gameProgress.getGameStatus()){
@@ -135,12 +141,27 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 // check for collision between player's laser and asteroids
                 //detectCollisions();
             }
+            // on pause..
+            else if(userPause){
+                gameView.draw(gamePcs, gameProgress, userPause);
+//                nowPlaying = false;
+                gameClock.frameStop();
+                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+                while(userPause){
+                    gameClock.frameStart();
+                    if(!userPause){
+                        break;
+                    }
+                    gameClock.frameStop();
+                }
+
+            }
 
             // How long did this frame/loop take?
             // Store the answer in timeThisFrame
-            long timeThisFrame = System.currentTimeMillis() - frameStartTime;
-            timeElapsed = timeThisFrame;
+            gameClock.frameStop();
         }
+//        Log.e("run:", "userPause: " + userPause);
     }
 
 
@@ -148,13 +169,13 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void update() {
 
         // shooting action each update.
-        Laser shootResult = gamePcs.mPlayer.shoot(timeElapsed, factory);
+        Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         // OPPONENT
         Laser oppShootResult;
         for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
 
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(timeElapsed, factory, gamePcs.mPlayer.getPosition());
+            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
 
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
@@ -174,18 +195,18 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // PLAYER
-        gamePcs.mPlayer.update(timeElapsed, display);
+        gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
 
         // ASTEROIDS
         for(int i = 0 ; i < gamePcs.mAsteroids.size() ; i++) {
-            gamePcs.mAsteroids.get(i).update(timeElapsed, display);
+            gamePcs.mAsteroids.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
         // PLAYER LASER we call different update since this has a boolean attached to it.
         for(int i = 0; i < gamePcs.mPlayerLasers.size(); i++) {
-            if(gamePcs.mPlayerLasers.get(i).updateL(timeElapsed, display)) {
+            if(gamePcs.mPlayerLasers.get(i).updateL(gameClock.getTimeElapsed(), display)) {
                 gamePcs.mPlayerLasers.remove(i);
                 i--;
             }
@@ -194,7 +215,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //POWER UPS
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
-            gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display);
+            gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
         // OPPONENT
@@ -211,13 +232,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
             }
 
-
-            gamePcs.mOpponents.get(i).update(timeElapsed, display);
+            gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
 
         // OPPONENT LASER
         for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {
-            if(gamePcs.mOpponentLasers.get(i).updateL(timeElapsed, display)) {
+            if(gamePcs.mOpponentLasers.get(i).updateL(gameClock.getTimeElapsed(), display)) {
                 gamePcs.mOpponentLasers.remove(i);
                 i--;
             }
@@ -232,6 +252,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         int index = motionEvent.getActionIndex();
         int pointerId = motionEvent.getPointerId(index);
         int action = motionEvent.getActionMasked();
+        PointF pauseRadius = new PointF(2497, 116);
 
         int oldX, oldY;
         // This switch block replaces the
@@ -246,14 +267,32 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                Log.e("Controlls", "Action DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
                 // If the game was paused unpause
-                nowPaused = false;
-
-
-
+//                if(nowPaused == true){
+//                    nowPaused = false;
+//                }
 
 //                Log.e("LOCATION: ", "THIS POINT IS AT: "
 //                        + motionEvent.getX() + ", " + motionEvent.getY());
+//                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
 
+                //
+                // need to consider pause for multi-touch also... need to test on Android
+                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
+                    nowPaused = true;
+                }
+                else {
+                    nowPaused = false;
+
+                }
+
+                userPause = nowPaused;
+//                if(userPause == false && nowPlaying == false){
+//                    nowPlaying = true;
+//                }
+                Log.e("onTouchEvent:", "userPause: " + userPause);
+                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+                //
+                //
 
 
 
@@ -286,7 +325,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 pointerId = motionEvent.getPointerId(index);
 //                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
 //                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-                nowPaused = false;
+
+                //
+                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
+                // nowPaused = false;
+                //
+                //
 
                 if(motionEvent.getX(0) < display.width / 2){
                     if(motionEvent.getY(0) < display.height / 2){
@@ -407,22 +451,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
-    }
-
-
-
-    /* 
-        We go through run through all object pairs that can be collided.
-        meteor - player's laser.
-        meteor - player
-        enemy - player
-        enemy laser - player
-        enemy - player's laser
-
-        These should cover the basic cases of collision within the game.
-    */
-    public boolean detectCollision(RectF objectA, RectF objectB) {
-            return RectF.intersects(objectA, objectB);
     }
 
     private void gameOver(){

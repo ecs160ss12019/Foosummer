@@ -1,6 +1,5 @@
 package com.gamecodeschool.asteroidsfs;
 
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -48,5 +47,4 @@ public class Opponent extends SpaceObject{
     }
 
     public float getShootAngle() {return shootAngle;}
-
 }
