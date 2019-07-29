@@ -51,6 +51,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private ObjectFactory factory;
     private GameView gameView;
     private SObjectsCollection gamePcs;
+    //Temporarily here
+    ParticleSystem mParticleSystem;
 
     // SYSTEM CLOCK
     private GameClock gameClock;
@@ -79,6 +81,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
+        //Temporarily here
+        mParticleSystem = new ParticleSystem ();
+        mParticleSystem.init(1000, display);
         gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
 
@@ -116,9 +121,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             if(!nowPaused){
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
-                    gameView.draw(gamePcs, gameProgress, userPause);
+                    gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
                 }
-                mCollision.checkCollision(gamePcs, gameProgress);
+                mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
                     gameOver();
 //                    gameProgress.reset(gamePcs, factory, objType);
@@ -136,7 +141,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
-                gameView.draw(gamePcs, gameProgress, userPause);
+                gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
                 Log.e("run: ", "nowPlaying is false: " + nowPlaying);
@@ -160,6 +165,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     private void update() {
+
+        // EXPLOSION
+        mParticleSystem.update(gameClock.getTimeElapsed() , display);
 
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
