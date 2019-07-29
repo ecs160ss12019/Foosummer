@@ -30,6 +30,9 @@ public class ObjectFactory {
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
 
+        private float oppX;
+        private float oppY;
+
         private float currentVelocityMagnitude;
         private Random rand = new Random();
         private int opponentHealth = 3;
@@ -87,19 +90,25 @@ public class ObjectFactory {
                                                 opponentVelocity, 100,
                                                 opponentHealth);
 
+
                         case OPPONENT2:
 
-                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
-                                        rand.nextInt(maxAngle) * Math.PI/180,
-                                        opponentVelocity, 100,
-                                        opponentHealth);
+                        return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
+                                rand.nextInt(maxAngle) * Math.PI/180,
+                                opponentVelocity, 100,
+                                opponentHealth);
 
                         case POWERUP:
-                            return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);
+                                return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);
+
 
                 }
                 //FIXME have to run some sort of Null point exception.
                 return null;
+        }
+
+        public PowerUps getPowerUp(PointF pos){
+                return new PowerUps(pos, 50);
         }
 
 //        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
@@ -118,7 +127,7 @@ public class ObjectFactory {
                 return new Laser(temp, dmg);
         }
 
-        // want to shoot in direction of player
+        //want to shoot in direction of player
         public Laser getOpponentLaser(PointF oppPos, float playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(oppPos, playerAngle, defaultLaserVelocity,
                         screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);

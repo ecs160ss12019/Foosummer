@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.graphics.Canvas;
@@ -51,6 +52,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private ObjectFactory factory;
     private GameView gameView;
     private SObjectsCollection gamePcs;
+    private Audio audio;
     //Temporarily here
     ParticleSystem mParticleSystem;
 
@@ -86,7 +88,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         mParticleSystem.init(1000, display);
         gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
-
+        audio = new Audio(context);
         startNewGame();
     }
 
@@ -145,7 +147,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
-                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+//                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
                 while(userPause){
                     gameClock.frameStart();
                     if(!userPause){
@@ -200,6 +202,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         //POWER UPS
+
+        if(mCollision.dropPowerUp){
+            gamePcs.mMineralPowerUps.add(factory.getPowerUp(mCollision.getDropPos()));
+        }
         // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
@@ -229,6 +235,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 i--;
             }
         }
+
+
     }
 
 
@@ -276,8 +284,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 //                if(userPause == false && nowPlaying == false){
 //                    nowPlaying = true;
 //                }
-                Log.e("onTouchEvent:", "userPause: " + userPause);
-                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
+//                Log.e("onTouchEvent:", "userPause: " + userPause);
+//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
                 //
                 //
 
@@ -421,13 +429,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Start the thread
         myGameThread.start();
+        audio.playClick();
     }
 
-
-
-
-
-
+    
     public void pause() {
         // Set nowPlaying to false
         // Stopping the thread isn't
@@ -438,6 +443,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
+        audio.pause();
     }
 
     private void gameOver(){
