@@ -45,12 +45,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private volatile boolean nowPlaying;
     private boolean nowPaused = true;
 
-    public int updateThisOpponentAngle;
-    public boolean updatePosition = false;
-    private PointF spawnNewOppThisPos;
-    private double spawnNewOppThisAngle;
-    private float updateWithThisAngle;
-
 
     // GAME OBJECTS
     private GameProgress gameProgress;

@@ -4,7 +4,6 @@ package com.gamecodeschool.asteroidsfs;
 import android.util.Log;
 import android.widget.Space;
 import android.graphics.PointF;
-
 import java.util.Random;
 
 /* *
