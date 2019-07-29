@@ -149,10 +149,7 @@ public class CollisionEngine {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
-                    if(gp.hasPowerUp(k)){
-                        gp.dropPowerUp(new PointF(temp.getBitmapX(),
-                                temp.getBitmapY()));
-                    }
+
 
 
                     gp.updateScore(temp.getSize());

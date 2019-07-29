@@ -51,9 +51,6 @@ public class GameProgress {
 
     // resets by setting our game progress variable to initial lvl.
     public void reset(SObjectsCollection gamePcs, ObjectFactory factory, SpaceObjectType objType) {
-        gPcs = gamePcs;
-        fact = factory;
-        obj = objType;
         myScore = initialScore;
         myLives = initialLife;
         level = initialLevel;
