@@ -22,6 +22,10 @@ public class GameView {
         private Paint myPaint;
         private Context ourContext;
         private PointF screenRes;
+
+        private boolean oppShotLaser;
+        public boolean checkOppShotLaser(){return oppShotLaser;}
+
         //Matrix shipMatrix = new Matrix();
 
         // Bitmaps that is contained within the gameview.
@@ -164,7 +168,7 @@ public class GameView {
                         }
 
                         // // OPPONENT
-                        // Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
+                        Log.d("GameView", "render.mOpponents.size() " + render.mOpponents.size());
                         for (int i = 0; i < render.mOpponents.size(); i++) {
                                 myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
                                         render.mOpponents.get(i).getBitmapY(), myPaint);

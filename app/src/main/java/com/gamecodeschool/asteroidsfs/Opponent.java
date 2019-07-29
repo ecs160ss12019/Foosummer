@@ -47,4 +47,6 @@ public class Opponent extends SpaceObject{
         return null;
     }
 
+    public float getShootAngle() {return shootAngle;}
+
 }

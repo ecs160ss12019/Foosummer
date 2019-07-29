@@ -46,6 +46,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private volatile boolean nowPlaying;
     private boolean nowPaused = true;
 
+    public int updateThisOpponentAngle;
+    public boolean updatePosition = false;
+    private PointF spawnNewOppThisPos;
+    private double spawnNewOppThisAngle;
+    private float updateWithThisAngle;
+
 
     // GAME OBJECTS
     private GameProgress gameProgress;
@@ -123,6 +129,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     mCollision.resetEnemies();
                 }
 
+
                 // check for collision between player and police laser
                 // check for collision between player's laser and powerup
                 // check for collision between player's laser and asteroids
@@ -151,6 +158,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
+                // store this i - update this opponent's position
+                updateThisOpponentAngle = i;
+                updateWithThisAngle = gamePcs.mOpponents.get(i).getShootAngle();
+                updatePosition = true;
             }
         }
 
@@ -186,8 +197,21 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mMineralPowerUps.get(i).update(timeElapsed, display);
         }
 
-                // OPPONENT
+        // OPPONENT
         for(int i = 0 ; i < gamePcs.mOpponents.size(); i++) {
+            // update opponent's angle after each shot
+            if(updatePosition){
+                Log.e("AsteroidsGame ", "gamePcs.mOpponents.get(updateThisOpponentAngle).angle before  = " + gamePcs.mOpponents.get(updateThisOpponentAngle).angle );
+
+                gamePcs.mOpponents.get(updateThisOpponentAngle).angle = -updateWithThisAngle+90;
+                updatePosition = false;
+
+                Log.e("AsteroidsGame ", "gamePcs.mOpponents.get(updateThisOpponentAngle).angle after  = " + gamePcs.mOpponents.get(updateThisOpponentAngle).angle );
+                //Log.e("AsteroidsGame ", "updatePosition  = " + updatePosition );
+
+            }
+
+
             gamePcs.mOpponents.get(i).update(timeElapsed, display);
         }
 
