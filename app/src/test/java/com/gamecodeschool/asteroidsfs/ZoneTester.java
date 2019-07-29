@@ -23,4 +23,17 @@ public class ZoneTester {
         }
     }
 
+    @Test
+    public void ZoneConstructorTest() {
+        Zone temp = new Zone(new Display(2000, 2000), 0.50f);
+
+        for(int i = 0; i < 100; i++) {
+            int tempX = temp.randomX();
+            int tempY = temp.randomY();
+            // test x and y results to make sure they stay within zone.
+            assertTrue((tempX >= 0 && tempX <= 500) || (tempX >= 1500 && tempX <= 2000));
+            assertTrue((tempY >= 0 && tempY <= 500) || (tempY >= 1500 && tempY <= 2000));
+        }
+    }
+
 }
