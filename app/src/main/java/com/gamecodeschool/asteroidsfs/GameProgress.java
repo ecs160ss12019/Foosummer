@@ -66,7 +66,7 @@ public class GameProgress {
     public void decLife() {
         myLives -= 1;
 
-        if (myLives <= 0) {
+        if (myLives < 1) {
             setHighScore();
             gameOver = true;
 //            reset();
@@ -74,8 +74,6 @@ public class GameProgress {
             gameOver = false;
         }
         Log.d("GameProgress", "myLives after decrementing: " + myLives);
-
-
     }
 
 
