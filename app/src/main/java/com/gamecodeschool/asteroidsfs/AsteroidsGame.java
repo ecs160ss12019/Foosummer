@@ -451,7 +451,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     }
 
     private void gameOver(){
-        gameView.drawGameOver();
+        gameView.drawGameOver(gameProgress);
         gameClock.frameStop();
         while(!userRestart){
             gameClock.frameStart();
