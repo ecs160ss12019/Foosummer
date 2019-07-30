@@ -147,33 +147,33 @@ public class GameView {
         int[] asteroidLargeDrawables = {
                 R.drawable.asteroidlarge_0,
                 R.drawable.asteroidlarge_1,
-//                R.drawable.asteroidlarge_2,
-//                R.drawable.asteroidlarge_3,
+                R.drawable.asteroidlarge_2,
+                R.drawable.asteroidlarge_3,
 //                R.drawable.asteroidlarge_4,
                 R.drawable.asteroidlarge_5,
                 R.drawable.asteroidlarge_6,
-//                R.drawable.asteroidlarge_7,
-//                R.drawable.asteroidlarge_8,
+                R.drawable.asteroidlarge_7,
+                R.drawable.asteroidlarge_8,
 //                R.drawable.asteroidlarge_9,
                 R.drawable.asteroidlarge_10,
                 R.drawable.asteroidlarge_11,
                 R.drawable.asteroidlarge_12,
-//                R.drawable.asteroidlarge_13
+                R.drawable.asteroidlarge_13,
 //                R.drawable.asteroidlarge_14,
                 R.drawable.asteroidlarge_15,
                 R.drawable.asteroidlarge_16,
-//                R.drawable.asteroidlarge_17,
-//                R.drawable.asteroidlarge_18,
+                R.drawable.asteroidlarge_17,
+                R.drawable.asteroidlarge_18,
 //                R.drawable.asteroidlarge_19,
                 R.drawable.asteroidlarge_20,
                 R.drawable.asteroidlarge_21,
                 R.drawable.asteroidlarge_22,
-//                R.drawable.asteroidlarge_23
+                R.drawable.asteroidlarge_23,
 //                R.drawable.asteroidlarge_24,
                 R.drawable.asteroidlarge_25,
                 R.drawable.asteroidlarge_26,
                 R.drawable.asteroidlarge_27,
-//                R.drawable.asteroidlarge_28,
+                R.drawable.asteroidlarge_28,
 //                R.drawable.asteroidlarge_29,
         };
 
@@ -270,22 +270,18 @@ public class GameView {
 
                 shipBitmap.setHasAlpha(true);
 
-                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo_1);
+                mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo3);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
 
                 mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent2);
                 mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize, shipSize, false);
 
-                mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
+                mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.laser_red);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
                         asteroidSizeFactor / LaserSizeFactor, false);
 
                 yellowPowerUpBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.yellowpowerup);
                 yellowPowerUpBM = Bitmap.createScaledBitmap(yellowPowerUpBM, asteroidSizeFactor, asteroidSizeFactor, false);
-
-                mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.olaser);
-                mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
-                asteroidSizeFactor / LaserSizeFactor, false);
 
                 pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
                 pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
