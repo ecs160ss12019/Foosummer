@@ -439,7 +439,6 @@ public class GameView {
                         // unlockCanvasAndPost is a method of SurfaceView
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
-
         }
 
         void drawPauseMenu(){
@@ -460,6 +459,23 @@ public class GameView {
 //                        // unlockCanvasAndPost is a method of SurfaceView
 //                        myHolder.unlockCanvasAndPost(myCanvas);
 //                }
+        }
+
+        void drawGameOver(){
+                if (myHolder.getSurface().isValid()) {
+                        // do i need myHolder to unlock/lock canvas here
+                        myCanvas = myHolder.lockCanvas();
+
+                        myPaint.setColor(Color.argb(255, 255, 255, 255));
+                        myPaint.setTextSize(screenRes.x / 20);
+                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
+                        // Draw some text to prompt restarting
+                        //                myPaint.setTextSize(blockSize * 2);
+                        myCanvas.drawText("Tap screen to start again",
+                                screenRes.x / 4, (screenRes.y / 2) + 150, myPaint);
+
+                        myHolder.unlockCanvasAndPost(myCanvas);
+                }
         }
 
 }
