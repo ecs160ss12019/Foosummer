@@ -299,146 +299,141 @@ public class GameView {
         // Draw the game objects and the HUD.
         // Receives SObjectsCollection packet that contains objects to be rendered by GameView.
         void draw(SObjectsCollection render, GameProgress gProg, boolean userPause, ParticleSystem ps) {
-                // include position of ship (updating move location to be drawn)
                 if (myHolder.getSurface().isValid()) {
                         // Lock the canvas (graphics memory) ready to draw
                         myCanvas = myHolder.lockCanvas();
                         if(!userPause){
-
-
-                                // Fills the screen with background "space" image
-                                myCanvas.drawBitmap(mBackGroundGif[b++], 0, 0, myPaint);
-                                //myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
-                                if(b == mBackGroundGif.length)
-                                        b = 0;
-
                                 // Choose a color to paint with
                                 myPaint.setColor(Color.argb(255, 75, 180, 250));
+                                drawBackground();
 
+                                if(AsteroidsGame.DEBUGGING){ printDebugging(render); }
 
-                                if(AsteroidsGame.DEBUGGING == true) {
-                                        Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
-                                        Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
-                                        Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
-                                        Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
-                                        Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getPosition().x);
-                                        Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getPosition().y);
-//                                Log.d("draw:", "value of blockSize: " + render.mBlockSize);
-                                        Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
-                                        Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
-                                }
+                                // Methods are ordered alphabetically below draw()
+                                drawAsteroids(render);
+                                drawPlayer(render);
+                                drawOpponent(render, gProg);
+                                drawLasers(render);
+                                drawPowerUps(render);
+                                drawParticleExplosion(ps);
+                                drawPauseButton();
+                                drawHUD(gProg);
 
-                                // draw the pause button
-                                myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint);
-
-
-
-                                // PLAYER SHIP
-                                //myCanvas.drawRect(render.mPlayer.getHitbox(), myPaint);
-                                //myCanvas.drawBitmap(shipBitmap, render.mPlayer.getMatrix(), myPaint);
-                                myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                                if(ss == spaceshipGIF.length)
-                                        ss = 0;
-
-
-                                // LASERS
-                                for(int i = 0; i < render.mPlayerLasers.size(); i++) {
-                                        myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
-                                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
-                                }
-
-                                for(int i = 0; i < render.mOpponentLasers.size(); i++) {
-                                        myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
-                                                render.mOpponentLasers.get(i).getBitmapY(), myPaint);
-                                }
-
-
-                                // ASTEROIDS
-                                for (int i = 0; i < render.mAsteroids.size(); i++) {
-                                        switch(render.mAsteroids.get(i).getSize()) {
-                                                case 1:
-                                                        // DRAW SMALL ASTEROID GIF
-                                                        myCanvas.drawBitmap(mAsteroidSmallGif[s++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                        if(s == mAsteroidSmallGif.length)
-                                                                s = 0;
-                                                        break;
-                                                case 2:
-                                                        // DRAW MEDIUM ASTEROID GIF
-                                                        myCanvas.drawBitmap(mAsteroidMediumGif[m++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                        if(m == mAsteroidMediumGif.length)
-                                                                m = 0;
-                                                        break;
-                                                case 3:
-                                                        // DRAW LARGE ASTEROID GIF
-                                                        myCanvas.drawBitmap(mAsteroidLargeGif[l++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                                        if(l == mAsteroidLargeGif.length)
-                                                                l = 0;
-                                                        break;
-                                        }
-                                }
-
-
-
-
-
-
-                                //
-                                // // POWER UPS
-                                if(render.mMineralPowerUps.size() > 0) {
-                                        for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
-                                                //                                render.mMineralPowerUps.get(i).draw(myCanvas, myPaint);
-                                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
-                                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
-                                        }
-                                }
-
-                        // // OPPONENT
-
-                        for (int i = 0; i < render.mOpponents.size(); i++) {
-                                // LOWER LEVEL OPPONENT
-                                if(gProg.getLevel() < 5){
-                                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
-                                                render.mOpponents.get(i).getBitmapY(), myPaint);
-                                }
-
-                                // SPAWN HIGHER LEVEL OPPONENT
-                                // should have both lower and higher level opponents on the board?
-                                if(gProg.getLevel() >= 5){
-                                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
-                                                render.mOpponents.get(i).getBitmapY(), myPaint);
-                                }
-                        }
-                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
-
-                        // Choose the font size
-                        myPaint.setTextSize(screenRes.x / 40);
-
-//                              Draw the HUD
-                                myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
-                                        screenRes.x / 50, myPaint);
-
-
-                                // particle system explosion
-                                // if(ps.mIsRunning == true){
-                                //      ps.draw()
-                                //      ps.mIsRunning = false;
-                                //{
-                                if(ps.mIsRunning == true){
-                                        ps.draw(myCanvas, myPaint);
-                                }
-
+                                Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
 
                         }
                         else{ drawPauseMenu(); }
-
-
-
-
 
                         // Display the drawing on screen
                         // unlockCanvasAndPost is a method of SurfaceView
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
+        }
+
+        private void drawAsteroids(SObjectsCollection render){
+                // ASTEROIDS
+                for (int i = 0; i < render.mAsteroids.size(); i++) {
+                        switch(render.mAsteroids.get(i).getSize()) {
+                                case 1:
+                                        // DRAW SMALL ASTEROID GIF
+                                        myCanvas.drawBitmap(mAsteroidSmallGif[s++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        if(s == mAsteroidSmallGif.length)
+                                                s = 0;
+                                        break;
+                                case 2:
+                                        // DRAW MEDIUM ASTEROID GIF
+                                        myCanvas.drawBitmap(mAsteroidMediumGif[m++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        if(m == mAsteroidMediumGif.length)
+                                                m = 0;
+                                        break;
+                                case 3:
+                                        // DRAW LARGE ASTEROID GIF
+                                        myCanvas.drawBitmap(mAsteroidLargeGif[l++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
+                                        if(l == mAsteroidLargeGif.length)
+                                                l = 0;
+                                        break;
+                        }
+                }
+        }
+
+        private void drawBackground(){
+                // Fills the screen with background "space" image
+                myCanvas.drawBitmap(mBackGroundGif[b++], 0, 0, myPaint);
+                //myCanvas.drawBitmap(mBackGround, 0, 0, myPaint);
+                if(b == mBackGroundGif.length)
+                        b = 0;
+        }
+
+        private void drawHUD(GameProgress gProg){
+                // Choose the font size
+                myPaint.setTextSize(screenRes.x / 40);
+
+                // Draws Game HUD
+                myCanvas.drawText("Score: " + gProg.getMyScore() + " Lives: " + gProg.getMyLives(), screenRes.x / 75 ,
+                        screenRes.x / 50, myPaint);
+        }
+
+        private void drawLasers(SObjectsCollection render){
+                // PLAYER LASERS
+                for(int i = 0; i < render.mPlayerLasers.size(); i++) {
+                        myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
+                                render.mPlayerLasers.get(i).getBitmapY(), myPaint);
+                }
+
+                // OPPONENT LASERS
+                for(int i = 0; i < render.mOpponentLasers.size(); i++) {
+                        myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
+                                render.mOpponentLasers.get(i).getBitmapY(), myPaint);
+                }
+        }
+
+        private void drawOpponent(SObjectsCollection render, GameProgress gProg){
+                // OPPONENT
+                for (int i = 0; i < render.mOpponents.size(); i++) {
+                        // LOWER LEVEL OPPONENT
+                        if(gProg.getLevel() < 5){
+                                myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                        render.mOpponents.get(i).getBitmapY(), myPaint);
+                        }
+
+                        // SPAWN HIGHER LEVEL OPPONENT
+                        // should have both lower and higher level opponents on the board?
+                        if(gProg.getLevel() >= 5){
+                                myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
+                                        render.mOpponents.get(i).getBitmapY(), myPaint);
+                        }
+                }
+        }
+
+        private void drawParticleExplosion(ParticleSystem ps){
+                // particle system explosion
+                // if(ps.mIsRunning == true){
+                //      ps.draw()
+                //      ps.mIsRunning = false;
+                //{
+                if(ps.mIsRunning == true){
+                        ps.draw(myCanvas, myPaint);
+                }
+        }
+
+        // draw the pause button
+        private void drawPauseButton(){ myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint); }
+
+        private void drawPowerUps(SObjectsCollection render){
+                // add switch case for power ups..?
+                // POWER UPS
+                if(render.mMineralPowerUps.size() > 0) {
+                        for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
+                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                        }
+                }
+        }
+
+        private void drawPlayer(SObjectsCollection render){
+                myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                if(ss == spaceshipGIF.length)
+                        ss = 0;
         }
 
         void drawPauseMenu(){
@@ -453,7 +448,6 @@ public class GameView {
                         // Choose the font size
                         myPaint.setTextSize(screenRes.x / 20);
 
-                        // Draw the HUD
                         myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
                         myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
 //                        // unlockCanvasAndPost is a method of SurfaceView
@@ -463,7 +457,6 @@ public class GameView {
 
         void drawGameOver(){
                 if (myHolder.getSurface().isValid()) {
-                        // do i need myHolder to unlock/lock canvas here
                         myCanvas = myHolder.lockCanvas();
 
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
@@ -476,6 +469,17 @@ public class GameView {
 
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
+        }
+
+        private void printDebugging(SObjectsCollection render){
+                Log.e("draw: ", "value of shiphitbox.left: " + render.mPlayer.getHitbox().left);
+                Log.e("draw: ", "value of shiphitbox.right: " + render.mPlayer.getHitbox().right);
+                Log.e("draw: ", "value of shiphitbox.top: " + render.mPlayer.getHitbox().top);
+                Log.e("draw: ", "value of shiphitbox.bottom: " + render.mPlayer.getHitbox().bottom);
+                Log.d("draw:", "value of shipcenter.x: " + render.mPlayer.getPosition().x);
+                Log.d("draw:", "value of shipcenter.y: " + render.mPlayer.getPosition().y);
+                Log.d("draw:", "value of shipbitmap.height: " + shipBitmap.getHeight());
+                Log.d("draw:", "value of shipbitmap.width: " + shipBitmap.getWidth());
         }
 
 }

@@ -99,6 +99,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     private void startNewGame() {
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
+        // is there a cleaner way to remove all elements from all respective arraylists?
         mParticleSystem.mParticles.removeAll(mParticleSystem.mParticles);
         gamePcs.mMineralPowerUps.removeAll(gamePcs.mMineralPowerUps);
         gamePcs.mAsteroids.removeAll(gamePcs.mAsteroids);

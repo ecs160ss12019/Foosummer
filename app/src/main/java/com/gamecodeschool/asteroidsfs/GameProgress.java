@@ -33,6 +33,7 @@ public class GameProgress {
 
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
+    final public int OppMultiplier = 5;
 
     public int getLevel() {
         return level;
