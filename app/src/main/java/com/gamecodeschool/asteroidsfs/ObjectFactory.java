@@ -30,14 +30,10 @@ public class ObjectFactory {
         final private double zone1MinMultiplier = 0.25;
         final private double zone2MinMultiplier = 0.50;
 
-        private float oppX;
-        private float oppY;
-
         private float currentVelocityMagnitude;
         private Random rand = new Random();
         private int opponentHealth = 3;
         private float opponentVelocity;
-        SpaceObjectType objType;
 
         private PointF defaultShipSize;
         static final public int shipScaleFactor = 20;
@@ -82,7 +78,7 @@ public class ObjectFactory {
                                                 point,
                                                 currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
-                        // case LASER:
+
                         case OPPONENT:
 
                                 return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
@@ -90,13 +86,6 @@ public class ObjectFactory {
                                                 opponentVelocity, 100,
                                                 opponentHealth);
 
-
-                        case OPPONENT2:
-
-                        return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
-                                rand.nextInt(maxAngle) * Math.PI/180,
-                                opponentVelocity, 100,
-                                opponentHealth);
 
                         case POWERUP:
                                 return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);

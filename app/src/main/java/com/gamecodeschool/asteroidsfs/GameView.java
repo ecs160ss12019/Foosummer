@@ -400,14 +400,14 @@ public class GameView {
 
                         for (int i = 0; i < render.mOpponents.size(); i++) {
                                 // LOWER LEVEL OPPONENT
-                                if(gProg.getLevel() < 5){
+                                if(gProg.getLevel() < 3){
                                         myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
                                                 render.mOpponents.get(i).getBitmapY(), myPaint);
                                 }
 
                                 // SPAWN HIGHER LEVEL OPPONENT
                                 // should have both lower and higher level opponents on the board?
-                                if(gProg.getLevel() >= 5){
+                                if(gProg.getLevel() >= 3){
                                         myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
                                                 render.mOpponents.get(i).getBitmapY(), myPaint);
                                 }
