@@ -23,6 +23,11 @@ public class Asteroid extends SpaceObject {
         hitRadius = hitRadius * newSize / (newSize + 1);
     }
 
+    void increaseVelocity() {
+        // increase the speed by 50%
+        velMagnitude = velMagnitude * 1.5f;
+    }
+
     public ArrayList<Asteroid> collisionAction() {
         ArrayList<Asteroid> temp = new ArrayList<Asteroid>();
         if(size > 1) {
@@ -31,6 +36,8 @@ public class Asteroid extends SpaceObject {
             //at randomized angle of at max 30 different from original.
             temp.add(new Asteroid(this, size - 1, r.nextInt(DEFAULT_SPLIT_ANGLE)));
             temp.add(new Asteroid(this, size - 1, -(r.nextInt(DEFAULT_SPLIT_ANGLE))));
+            temp.get(0).increaseVelocity();
+            temp.get(1).increaseVelocity();
         }
 
         return temp;

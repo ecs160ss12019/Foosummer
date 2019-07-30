@@ -23,6 +23,7 @@ public class GameProgress {
 
     // track user score and lives
     private int myScore = initialScore;
+    private int highScore = initialScore;
     private int myLives = initialLife; // abstract this to UserShip class?
     private int level = initialLevel; // we increment each time the player clears a level.
     private boolean gameOver = false;
@@ -33,6 +34,7 @@ public class GameProgress {
 
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
+    final public int OppMultiplier = 5;
 
     public int getLevel() {
         return level;
@@ -57,22 +59,21 @@ public class GameProgress {
         level = initialLevel;
         numOpps = initialNumOpps;
         numAsteroids = initialNumAsteroids;
+        gameOver = false;
         generateEnemies(level, gamePcs, factory, objType);
     }
-
 
     public void decLife() {
         myLives -= 1;
 
-        if (myLives <= 0) {
+        if (myLives < 1) {
+            setHighScore();
             gameOver = true;
 //            reset();
         } else {
             gameOver = false;
         }
-        Log.d("GameProgress", "myLives after decrementing: " + myLives);
-
-
+//        Log.d("GameProgress", "myLives after decrementing: " + myLives);
     }
 
 
@@ -121,10 +122,17 @@ public class GameProgress {
 
         }
 
-
+    }
 //    public int getNumAsteroids(){
 //        return numAsteroids;
 //    }
 
+    private void setHighScore() {
+        if(myScore > highScore){
+            highScore = myScore;
+        }
     }
+
+    public int getHighScore(){return highScore;}
+
 }

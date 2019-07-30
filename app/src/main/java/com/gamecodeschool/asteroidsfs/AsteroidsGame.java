@@ -7,8 +7,6 @@ import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.ArrayList;
@@ -16,10 +14,6 @@ import java.util.ArrayList;
 
 
 class AsteroidsGame extends SurfaceView implements Runnable{
-
-    Canvas canvas;
-    Paint paint;
-
 
     private final int NUM_BLOCKS_WIDE = 40;
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
@@ -66,6 +60,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     // distinguishes user pause vs "pause" when initializing the game
     boolean userPause = false;
 
+    // determines if user presses screen to restart after game over
+    private boolean userRestart = false;
+
     public AsteroidsGame(Context context, int x, int y) {
         // calls parent class constructor of SurfaceView
         super(context);
@@ -102,11 +99,16 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     private void startNewGame() {
 //        // FIXME: Change 3 to asteroid count variable that can be changed.
+        // is there a cleaner way to remove all elements from all respective arraylists?
+        mParticleSystem.mParticles.removeAll(mParticleSystem.mParticles);
+        gamePcs.mMineralPowerUps.removeAll(gamePcs.mMineralPowerUps);
+        gamePcs.mAsteroids.removeAll(gamePcs.mAsteroids);
+        gamePcs.mOpponents.removeAll(gamePcs.mOpponents);
+        gamePcs.mPlayerLasers.removeAll(gamePcs.mPlayerLasers);
+        gamePcs.mOpponentLasers.removeAll(gamePcs.mOpponentLasers);
         gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
         gameProgress.reset(gamePcs, factory, objType);
         factory.reset();
-
-
     }
 
 
@@ -124,10 +126,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
+                    audio.playClick(audio.sounds, 0);
                 }
                 mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
                     gameOver();
+                    // after this func, need to clear all elements in arraylists
 //                    gameProgress.reset(gamePcs, factory, objType);
 
                 }
@@ -144,6 +148,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
+                audio.pause();
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
@@ -272,6 +277,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
                 //
                 // need to consider pause for multi-touch also... need to test on Android
+                // determines if user paused game or not
                 if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
                     nowPaused = true;
                 }
@@ -279,15 +285,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     nowPaused = false;
 
                 }
-
                 userPause = nowPaused;
-//                if(userPause == false && nowPlaying == false){
-//                    nowPlaying = true;
-//                }
-//                Log.e("onTouchEvent:", "userPause: " + userPause);
-//                Log.e("onTouchEvent:", "nowPlaying: " + nowPlaying);
-                //
-                //
+
+                // starts new game if user presses the screen
+                // following game over
+                // "if( game is over == true)
+                if(gameProgress.getGameStatus()){
+                    userRestart = true;
+                }
+
 
 
 
@@ -429,7 +435,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Start the thread
         myGameThread.start();
-        audio.playClick();
+
     }
 
     
@@ -443,25 +449,24 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
-        audio.pause();
+
     }
 
     private void gameOver(){
-        // Draw some huge white text
-        paint.setColor(Color.argb(255, 255, 255, 255));
-        paint.setTextSize(blockSize * 10);
-
-        canvas.drawText("Game over!", blockSize * 4,
-                blockSize * 14, paint);
-
-        // Draw some text to prompt restarting
-        paint.setTextSize(blockSize * 2);
-        canvas.drawText("Tap screen to start again",
-                blockSize * 8,
-                blockSize * 18, paint);
-
+        audio.pause();
+        gameView.drawGameOver(gameProgress);
+        gameClock.frameStop();
+        while(!userRestart){
+            gameClock.frameStart();
+            if(userRestart){
+                break;
+            }
+            gameClock.frameStop();
+        }
+        // pause here until user presses screen to resume for a new game..
+        // nest "startNewGame()" into if statement conditioned on pause until touch
+        userRestart = false;
         startNewGame();
     }
-
 }
 

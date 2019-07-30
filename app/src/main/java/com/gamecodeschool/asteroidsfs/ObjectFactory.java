@@ -27,8 +27,8 @@ public class ObjectFactory {
         static final public int DIVISION_FACTOR = 25;
         final private int LASER_SIZE_FACTOR = 2;
         final private float LASER_VEL_FACTOR = 3;
-        final private double zone1MinMultiplier = 0.25;
-        final private double zone2MinMultiplier = 0.50;
+        final private float zone1MinMultiplier = 0.25f;
+        final private float zone2MinMultiplier = 0.50f;
 
         private float currentVelocityMagnitude;
         private Random rand = new Random();
@@ -45,10 +45,9 @@ public class ObjectFactory {
                 screen = display;
                 defaultVelocity = ((float)display.width) / TIME / MS_PER_S; // speed factor calculation
 
-                zone1 = new Zone((int)(display.width * zone1MinMultiplier), (int)(display.height * zone1MinMultiplier),
-                                display.width, display.height);
-                zone2 = new Zone((int)(display.width * zone2MinMultiplier), (int)(display.height * zone2MinMultiplier),
-                                display.width, display.height);
+                // Spawnable zones for non-player classes.
+                zone1 = new Zone(display, zone1MinMultiplier);
+                zone2 = new Zone(display, zone2MinMultiplier);
                 
 
                 currentVelocityMagnitude = defaultVelocity;
@@ -100,16 +99,6 @@ public class ObjectFactory {
                 return new PowerUps(pos, 50);
         }
 
-//        public PowerUps getSpaceObject(SpaceObjectType type, int hits) {
-//                double angle = rand.nextInt(maxAngle) * Math.PI / 180;
-//
-//                return new PowerUps(rand.nextInt(zone1.xDiff()) + zone1.minY,
-//                        rand.nextInt(zone1.yDiff()) + zone1.minY,
-//                        screen.width/DIVISION_FACTOR, screen.height/DIVISION_FACTOR, hits,
-//                        (float)(currentVelocityMagnitude * Math.cos(angle)),
-//                        (float)(currentVelocityMagnitude * Math.sin(angle)));
-//        }
-
         public Laser getPlayerLaser(PointF playerPos, double playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(playerPos, playerAngle, defaultLaserVelocity, 
                                                 screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR / 2);
@@ -150,6 +139,13 @@ class Zone {
             minY = minHeight;
             maxX = maxWidth;
             maxY = maxHeight;
+        }
+
+        Zone(Display display, float multiplier) {
+                minX = (int)(display.width * multiplier);
+                minY = (int)(display.height *multiplier);
+                maxX = display.width;
+                maxY = display.height;
         }
 
         public int xDiff() {
