@@ -284,7 +284,7 @@ public class GameView {
                 pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
                 pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
 
-                gameOverBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.gameoverscreen);
+                gameOverBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.gameovermenu1);
                 gameOverBM = Bitmap.createScaledBitmap(gameOverBM, screen.width, screen.height, false );
 
         }
@@ -453,7 +453,7 @@ public class GameView {
 //                }
         }
 
-        void drawGameOver(){
+        void drawGameOver(GameProgress gProg){
                 if (myHolder.getSurface().isValid()) {
                         myCanvas = myHolder.lockCanvas();
 //                        myCanvas.drawARGB(255, 100, 100, 100);
@@ -464,7 +464,16 @@ public class GameView {
                         // Draw some text to prompt restarting
                         //                myPaint.setTextSize(blockSize * 2);
                         myCanvas.drawText("Tap anywhere to restart",
-                                (screenRes.x / 4) - 30, (screenRes.y / 2) + 700, myPaint);
+                                (screenRes.x / 4) - 30, (screenRes.y / 2) + 500, myPaint);
+
+
+                        myPaint.setColor(Color.argb(100, 244, 232, 104));
+                        myPaint.setTextSize(screenRes.x / 40);
+                        myCanvas.drawText("HIGH SCORE: " + gProg.getHighScore(),
+                                (screenRes.x / 3) + 200, (screenRes.y / 2) + 675, myPaint);
+
+                        myCanvas.drawText("YOUR SCORE: " + gProg.getMyScore(),
+                                (screenRes.x / 3) + 190, (screenRes.y / 2) + 600, myPaint);
 
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }

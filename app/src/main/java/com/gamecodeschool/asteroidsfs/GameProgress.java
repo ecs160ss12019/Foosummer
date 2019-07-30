@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class GameProgress {
     final private int initialScore = 0;
-    final private int initialLife = 3;
+    final private int initialLife = 1;
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
@@ -23,6 +23,7 @@ public class GameProgress {
 
     // track user score and lives
     private int myScore = initialScore;
+    private int highScore = initialScore;
     private int myLives = initialLife; // abstract this to UserShip class?
     private int level = initialLevel; // we increment each time the player clears a level.
     private boolean gameOver = false;
@@ -62,11 +63,11 @@ public class GameProgress {
         generateEnemies(level, gamePcs, factory, objType);
     }
 
-
     public void decLife() {
         myLives -= 1;
 
         if (myLives <= 0) {
+            setHighScore();
             gameOver = true;
 //            reset();
         } else {
@@ -136,10 +137,17 @@ public class GameProgress {
 
         }
 
-
+    }
 //    public int getNumAsteroids(){
 //        return numAsteroids;
 //    }
 
+    private void setHighScore() {
+        if(myScore > highScore){
+            highScore = myScore;
+        }
     }
+
+    public int getHighScore(){return highScore;}
+
 }
