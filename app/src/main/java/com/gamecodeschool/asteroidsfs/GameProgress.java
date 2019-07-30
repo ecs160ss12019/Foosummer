@@ -57,6 +57,7 @@ public class GameProgress {
         level = initialLevel;
         numOpps = initialNumOpps;
         numAsteroids = initialNumAsteroids;
+        gameOver = false;
         generateEnemies(level, gamePcs, factory, objType);
     }
 

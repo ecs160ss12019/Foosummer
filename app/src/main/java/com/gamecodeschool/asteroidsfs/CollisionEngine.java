@@ -45,9 +45,9 @@ public class CollisionEngine {
         FIXME: Separate these into separate private methods for readability!!!
     */
     public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps) {
+        dropPowerUp = false;
 
         // player vs asteroid.
-        dropPowerUp = false;
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
         playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
         PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
@@ -63,6 +63,7 @@ public class CollisionEngine {
             if(SpaceObject.collisionCheck(P, temp)) {
                 P.resetPos();
                 // add subtract life logic here and possible start grace period count down.
+                gp.decLife();
 
                 didPowerUpDrop(asteroidDropProbability,
                         new PointF(temp.getBitmapX(), temp.getBitmapY()));
@@ -85,6 +86,7 @@ public class CollisionEngine {
                 P.resetPos();
                 // add subtract life logic here and possible start grace period count down.
                 // should the enemy ship be destroyed on collision with Player ship?
+                gp.decLife();
 
                 didPowerUpDrop(oppponentDropProbability,
                         new PointF(temp.getBitmapX(), temp.getBitmapY()));
@@ -175,6 +177,8 @@ public class CollisionEngine {
             if(SpaceObject.collisionCheck(oLaserList.get(i), P)) {
                 P.resetPos();
                 // add subtract life logic here and possible grace period count down.
+                gp.decLife();
+
                 oLaserList.remove(i);
                 i--;
                 break;
