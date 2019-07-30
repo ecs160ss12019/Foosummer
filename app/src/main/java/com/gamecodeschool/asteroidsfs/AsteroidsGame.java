@@ -126,6 +126,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
+                    audio.playClick(audio.sounds, 0);
                 }
                 mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
@@ -147,6 +148,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             // on pause..
             else if(userPause){
+                audio.pause();
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
 //                nowPlaying = false;
                 gameClock.frameStop();
@@ -433,7 +435,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         // Start the thread
         myGameThread.start();
-        audio.playClick();
+
     }
 
     
@@ -447,10 +449,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         } catch (InterruptedException e){
             Log.e("Error:", "joining thread");
         }
-        audio.pause();
+
     }
 
     private void gameOver(){
+        audio.pause();
         gameView.drawGameOver(gameProgress);
         gameClock.frameStop();
         while(!userRestart){

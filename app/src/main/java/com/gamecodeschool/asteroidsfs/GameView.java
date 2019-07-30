@@ -13,7 +13,7 @@ import android.graphics.PointF;
 
 // make this an interface
 
-public class GameView {
+public class  GameView {
         final private int LaserSizeFactor = 2;
 
         private SurfaceHolder myHolder;
