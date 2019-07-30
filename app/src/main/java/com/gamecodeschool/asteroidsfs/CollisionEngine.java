@@ -116,7 +116,6 @@ public class CollisionEngine {
     private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
-
                 Opponent temp = oList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
                     ps.emitParticles(
@@ -130,6 +129,7 @@ public class CollisionEngine {
                     pList.remove(i);
                     //FIXME: Need to add score logic here!
                     // For now enemy dies in 1 hit.
+                    gp.updateScore(gp.OppMultiplier);
 
                     didPowerUpDrop(oppponentDropProbability,
                             new PointF(temp.getBitmapX(), temp.getBitmapY()));
