@@ -192,7 +192,7 @@ public class GameView {
         Bitmap greenPowerUpBM;
         Bitmap mOpponentLaserBM;
         Bitmap pauseButtonBM;
-        Bitmap pauseMenuBM;
+        Bitmap gameOverBM;
         Bitmap[] mBackGroundGif = new Bitmap[backgroundDrawables.length];
         Bitmap[] spaceshipGIF = new Bitmap[spaceshipDrawables.length];
         Bitmap[] mAsteroidSmallGif = new Bitmap[asteroidSmallDrawables.length];
@@ -268,8 +268,6 @@ public class GameView {
                 mPlayerLaserBM = Bitmap.createScaledBitmap(mPlayerLaserBM, asteroidSizeFactor / LaserSizeFactor,
                         asteroidSizeFactor / LaserSizeFactor, false);
 
-                shipBitmap.setHasAlpha(true);
-
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo3);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
 
@@ -286,8 +284,8 @@ public class GameView {
                 pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
                 pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
 
-                pauseMenuBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausemenu);
-//                pauseMenuBM = Bitmap.createScaledBitmap(pauseMenuBM, )
+                gameOverBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.gameoverscreen);
+                gameOverBM = Bitmap.createScaledBitmap(gameOverBM, screen.width, screen.height, false );
 
         }
 
@@ -458,14 +456,15 @@ public class GameView {
         void drawGameOver(){
                 if (myHolder.getSurface().isValid()) {
                         myCanvas = myHolder.lockCanvas();
-
+//                        myCanvas.drawARGB(255, 100, 100, 100);
+                        myCanvas.drawBitmap(gameOverBM, 0, 0, myPaint);
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
-                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
+//                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
                         // Draw some text to prompt restarting
                         //                myPaint.setTextSize(blockSize * 2);
-                        myCanvas.drawText("Tap screen to start again",
-                                screenRes.x / 4, (screenRes.y / 2) + 150, myPaint);
+                        myCanvas.drawText("Tap anywhere to restart",
+                                (screenRes.x / 4) - 30, (screenRes.y / 2) + 700, myPaint);
 
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
