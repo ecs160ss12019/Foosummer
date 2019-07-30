@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class GameProgress {
     final private int initialScore = 0;
-    final private int initialLife = 1;
+    final private int initialLife = 3;
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
