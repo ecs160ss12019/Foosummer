@@ -26,7 +26,11 @@ public class Player extends SpaceObject{
 	private final int boxLength;
 	private final PointF resetPos;
 	private PowerMods pow = new PowerMods();
-	private boolean invincible = false;
+//	private boolean invincible = false;
+	private boolean shieldInvincibility;
+	private boolean respawnInvincibility;
+	private long respawnCountdown;
+	final long DEFAULT_INVINCIBILITY_RESPAWN_TIME = 3000;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
@@ -106,6 +110,11 @@ public class Player extends SpaceObject{
 		position.x = resetPos.x;
 		position.y = resetPos.y;
 		pow.disablePowerUps();
+
+		// respawn invincibility
+		// just lost a life (declife)
+		// should i not set respawnstate and just call function to add to respawncountdown
+		respawnCountdown += DEFAULT_INVINCIBILITY_RESPAWN_TIME;
 	}
 
 	public PointF getPosition(){ return new PointF(position.x, position.y); }
@@ -114,12 +123,14 @@ public class Player extends SpaceObject{
 
 
 
-
-
 	// Shoots if condition is met. Returns null otherwise.
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {
 		// if (justRespawned == true...) return null for x seconds
-		return pow.shootCondition(timeIncrement) ? fac.getPlayerLaser(getPosition(), angle, 1) : null;
+		if(respawnInvincibility){
+			return null;
+		}else{
+			return pow.shootCondition(timeIncrement) ? fac.getPlayerLaser(getPosition(), angle, 1) : null;
+		}
 	}
 
 	// returns current shoot interval timer stored within the PowerMods
@@ -133,11 +144,16 @@ public class Player extends SpaceObject{
 		// current logic only accounts for shield invincibility
 		if(pow.shieldEnabled(timeElapsed)){
 //			return true;
-			invincible = true;
+			shieldInvincibility = true;
+			// setRespawnState(false)
 		}
-		else {
+		else if (justRespawned(timeElapsed)){
+			respawnInvincibility = true;
+//			setShieldState(false);
+		}
+		else{
 //			return false;
-			invincible = false;
+			deactivateInvincibility();
 		}
 
 		// else if (justRespawned){ return true && disable laser for x seconds }
@@ -148,7 +164,6 @@ public class Player extends SpaceObject{
 	public void receivePowerUp(PowerUp powerUpType){
 		switch(powerUpType){
 			case SHIELD:
-				// pow.startShieldTimer
 				pow.activateShield();
 				break;
 
@@ -159,10 +174,23 @@ public class Player extends SpaceObject{
 		}
 	}
 
-//	private void setRespawnState(){}
-//	private void setShieldState(){}
-	public boolean getShieldState(){return invincible;}
-//	public boolean getRespawnState(){}
+	private boolean justRespawned(long timeDecrement){
+		respawnCountdown -= timeDecrement;
+		if(respawnCountdown < 0){
+			respawnCountdown = 0;
+			return false;
+		}
+		return true;
+	}
+
+//	private void setRespawnState(boolean respawnState){ respawnInvincibility = respawnState;}
+//	private void setShieldState(boolean shieldState){ shieldInvincibility = shieldState; }
+	private void deactivateInvincibility(){
+		shieldInvincibility = false;
+		respawnInvincibility = false;
+	}
+	public boolean getShieldState(){return shieldInvincibility;}
+	public boolean getRespawnState(){return respawnInvincibility;}
 
 }
 
@@ -183,8 +211,6 @@ class PowerMods {
 	final long DEFAULT_INVINCIBILITY_DURATION = 10000;
 
 	long currentShootThreshold;
-//	long invincibilityTimer;
-//	boolean invincible; // marks if the ship can be hit or not.
 	long currentElapsedTime;
 	long invincibilityCountDown;
 	// initialize with default initial states.
@@ -214,23 +240,13 @@ class PowerMods {
 	// case condition from power up picked up
 	public void activateShield(){
 		invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
-
-
-//			if(invincibilityTimer)
-//		if(invincible){
-//			invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
-//		}
-//		else{
-//			invincible = true;
-//		}
 	}
 
 	// constantly updated from game engine update()
-	public boolean shieldEnabled(long timeIncrement){
-		invincibilityCountDown -= timeIncrement;
+	public boolean shieldEnabled(long timeDecrement){
+		invincibilityCountDown -= timeDecrement;
 		if(invincibilityCountDown < 0){
 			invincibilityCountDown = 0;
-//			invincible = false;
 			return false;
 			// turn off invincibility
 		}

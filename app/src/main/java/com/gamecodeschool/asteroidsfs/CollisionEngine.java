@@ -48,7 +48,7 @@ public class CollisionEngine {
         dropPowerUp = false;
 
         // player vs asteroid.
-        if(collection.mPlayer.getShieldState()){
+        if(collection.mPlayer.getShieldState() || collection.mPlayer.getRespawnState()){
             PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
             PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
             playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);

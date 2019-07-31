@@ -15,12 +15,14 @@ import android.graphics.PointF;
 
 public class GameView {
         final private int LaserSizeFactor = 2;
+        private boolean toggleTransparency= false;
 
         private SurfaceHolder myHolder;
         private Canvas myCanvas;
         private Paint myPaint;
         private Context ourContext;
         private PointF screenRes;
+
 
         //Matrix shipMatrix = new Matrix();
         int[] backgroundDrawables = {
@@ -315,6 +317,7 @@ public class GameView {
                                 // Methods are ordered alphabetically below draw()
                                 drawAsteroids(render);
                                 drawPlayer(render);
+                                myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
                                 drawLasers(render);
                                 drawPowerUps(render);
@@ -446,10 +449,28 @@ public class GameView {
         private void drawPlayer(SObjectsCollection render){
                 if(render.mPlayer.getShieldState()){
                         myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == spaceshipGIF.length)
+                                ss = 0;
                 }
-                myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                if(ss == spaceshipGIF.length)
-                        ss = 0;
+                else if(render.mPlayer.getRespawnState()){
+                        if(toggleTransparency){
+                                myPaint.setAlpha(0);
+                                toggleTransparency = false;
+                        }
+                        else{
+                                myPaint.setAlpha(255);
+                                toggleTransparency = true;
+                        }
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == spaceshipGIF.length)
+                                ss = 0;
+                }
+                else{
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == spaceshipGIF.length)
+                                ss = 0;
+                }
         }
 
         void drawPauseMenu(){
