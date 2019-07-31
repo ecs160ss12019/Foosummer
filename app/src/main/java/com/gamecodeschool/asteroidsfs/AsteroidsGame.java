@@ -2,6 +2,7 @@ package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.VelocityTracker;
+import android.graphics.Canvas;
 
 import java.util.ArrayList;
 // these imports deal with ArrayList class in java
