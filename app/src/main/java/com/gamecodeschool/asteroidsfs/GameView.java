@@ -351,8 +351,7 @@ public class  GameView {
                                                 l = 0;
                                         break;
                         }
-                }
-        }
+//                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
 
         private void drawBackground(){
                 // Fills the screen with background "space" image
