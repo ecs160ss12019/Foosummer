@@ -20,6 +20,7 @@ public class Opponent extends SpaceObject{
 
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private final long SHOOT_INTERVAL = 2900;
+    private double addAngle = 200;
 
 
     public Opponent(PointF position, double angle, float velocityMag, float hitRadius, int health) {
@@ -32,9 +33,19 @@ public class Opponent extends SpaceObject{
         super.update(time, display);
 
         if(updatePosition){
-            angle = shootAngle+200;
+            angle = shootAngle+addAngle;
             updatePosition = false;
         }
+
+    }
+
+    public void launchSuicideShip(PointF playerPos) {
+
+        getX = playerPos.x - position.x;
+        getY = playerPos.y - position.y;
+        angle = (float)Math.atan2(getY, getX);
+        velMagnitude += velMagnitude/500;
+
     }
 
 

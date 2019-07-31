@@ -106,6 +106,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs.mOpponents.removeAll(gamePcs.mOpponents);
         gamePcs.mPlayerLasers.removeAll(gamePcs.mPlayerLasers);
         gamePcs.mOpponentLasers.removeAll(gamePcs.mOpponentLasers);
+        gamePcs.mSuiciders.removeAll(gamePcs.mSuiciders);
+
         gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
         gameProgress.reset(gamePcs, factory, objType);
         factory.reset();
@@ -221,17 +223,25 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
         for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
 
-            oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
+            // Lower level opponents shoot the player
+            // Higher level opponents do not - they're on a suicide mission to destroy player
 
-            if(oppShootResult != null) {
-                gamePcs.mOpponentLasers.add(oppShootResult);
+                oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
 
-                // update the position of opponent at this index
-                gamePcs.mOpponents.get(i).updateOppPosition(true);
-            }
+                if(oppShootResult != null) {
+                    gamePcs.mOpponentLasers.add(oppShootResult);
 
+                    // update the position of opponent at this index
+                    gamePcs.mOpponents.get(i).updateOppPosition(true);
+                }
             gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
+
+    for(int i = 0; i < gamePcs.mSuiciders.size(); i++){
+        gamePcs.mSuiciders.get(i).launchSuicideShip(gamePcs.mPlayer.getPosition());
+        gamePcs.mSuiciders.get(i).update(gameClock.getTimeElapsed(), display);
+    }
+
 
         // OPPONENT LASER
         for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {

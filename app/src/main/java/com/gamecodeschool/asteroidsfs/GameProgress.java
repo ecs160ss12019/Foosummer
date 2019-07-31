@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class GameProgress {
     final private int initialScore = 0;
-    final private int initialLife = 3;
+    final private int initialLife = 100;
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
@@ -114,12 +114,21 @@ public class GameProgress {
         for (int i = 0; i < numAsteroids; i++) {
             gamePcs.mAsteroids.add((Asteroid) factory.getSpaceObject(objType.ASTEROID));
         }
+
+
+        int numShooters = rand.nextInt(numOpps);
+        int numSuiciders = numOpps - numShooters;
         for (int i = 0; i < numOpps; i++) {
-
-            // modify the opponent coordinates to spawn away from player
-            SpaceObject opp1 = factory.getSpaceObject(objType.OPPONENT);
-            gamePcs.mOpponents.add((Opponent) opp1);
-
+            if(level < 3){
+                SpaceObject opp = factory.getSpaceObject(objType.OPPONENT);
+                gamePcs.mOpponents.add((Opponent) opp);
+            }
+            else if(Math.random() > 0.35){
+                SpaceObject opp = factory.getSpaceObject(objType.OPPONENT);
+                gamePcs.mOpponents.add((Opponent) opp);
+            }
+            else {gamePcs.mSuiciders.add((Suicider) factory.getSpaceObject(objType.SUICIDER));}
+            //gamePcs.mSuiciders.add((Suicider) factory.getSpaceObject(objType.SUICIDER));
         }
 
     }

@@ -54,6 +54,8 @@ public class CollisionEngine {
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
         playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+        pLaserSuiciderCollision(collection.mPlayerLasers, collection.mSuiciders, gProg, ps);
+        playerSuiciderCollision(collection.mPlayer, collection.mSuiciders, gProg);
     }
 
     // See if player collided with any of the asteroids.
@@ -113,6 +115,29 @@ public class CollisionEngine {
         }
     }
 
+    private void playerSuiciderCollision(Player P, ArrayList<Suicider> sList, GameProgress gp){
+        for(int i = 0; i < sList.size(); i++) {
+            Suicider temp = sList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                P.resetPos();
+                // add subtract life logic here and possible start grace period count down.
+                // should the enemy ship be destroyed on collision with Player ship?
+                gp.decLife();
+
+                didPowerUpDrop(oppponentDropProbability,
+                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
+                sList.remove(i);
+                i--;
+                if(sList.size() == 0){
+                    oppsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+
     private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
@@ -145,6 +170,40 @@ public class CollisionEngine {
             }
         }
     }
+
+    private void pLaserSuiciderCollision(ArrayList<Laser> pList, ArrayList<Suicider> sList, GameProgress gp, ParticleSystem ps) {
+        for(int i = 0; i < pList.size(); i++) {
+            for(int k = 0; k < sList.size(); k++) {
+                Suicider temp = sList.get(k);
+                if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    ps.emitParticles(
+                            new PointF(
+                                    temp.getPosition().x,
+                                    temp.getPosition().y
+
+                            )
+                    );
+
+                    pList.remove(i);
+                    //FIXME: Need to add score logic here!
+                    // For now enemy dies in 1 hit.
+                    gp.updateScore(gp.OppMultiplier);
+
+                    didPowerUpDrop(oppponentDropProbability,
+                            new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
+                    sList.remove(k);
+                    i--;
+                    k--;
+                    if(sList.size() == 0){
+                        oppsEliminated = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
 
     private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList, GameProgress gp){
         for(int i = 0; i < pList.size(); i++) {
