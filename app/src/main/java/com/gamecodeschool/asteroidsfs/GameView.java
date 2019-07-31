@@ -283,6 +283,9 @@ public class GameView {
                 yellowPowerUpBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.yellowpowerup);
                 yellowPowerUpBM = Bitmap.createScaledBitmap(yellowPowerUpBM, asteroidSizeFactor, asteroidSizeFactor, false);
 
+                bluePowerUpBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.bluepowerup);
+                bluePowerUpBM = Bitmap.createScaledBitmap(bluePowerUpBM, asteroidSizeFactor, asteroidSizeFactor, false);
+
                 pauseButtonBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.pausebutton);
                 pauseButtonBM = Bitmap.createScaledBitmap(pauseButtonBM, asteroidSizeFactor, asteroidSizeFactor, false);
 
@@ -319,7 +322,7 @@ public class GameView {
                                 drawPauseButton();
                                 drawHUD(gProg);
 
-                                Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
+//                                Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
 
                         }
                         else{ drawPauseMenu(); }
@@ -422,15 +425,28 @@ public class GameView {
         private void drawPowerUps(SObjectsCollection render){
                 // add switch case for power ups..?
                 // POWER UPS
-                if(render.mMineralPowerUps.size() > 0) {
-                        for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
-                                myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
-                                        render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+//                switch (powerUpType)
+
+                for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
+                        switch(render.mMineralPowerUps.get(i).getPowerUpType()){
+                                case FIRE_RATE:
+                                        myCanvas.drawBitmap(yellowPowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                                render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                                        break;
+
+                                case SHIELD:
+                                        myCanvas.drawBitmap(bluePowerUpBM, render.mMineralPowerUps.get(i).getBitmapX(),
+                                                render.mMineralPowerUps.get(i).getBitmapY(), myPaint);
+                                        break;
                         }
+
                 }
         }
 
         private void drawPlayer(SObjectsCollection render){
+                if(render.mPlayer.getShieldState()){
+                        myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
+                }
                 myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
                 if(ss == spaceshipGIF.length)
                         ss = 0;

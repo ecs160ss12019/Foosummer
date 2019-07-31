@@ -175,7 +175,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // EXPLOSION
         mParticleSystem.update(gameClock.getTimeElapsed() , display);
 
-        // shooting action each update.
+        // shooting action each update. (FIXME: PUT THIS SHOOT RESULT AFTER PLAYER UPDATE..)
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         if(DEBUGGING) {
@@ -187,6 +187,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // PLAYER
+//        if()
         gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 

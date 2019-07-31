@@ -26,6 +26,7 @@ public class Player extends SpaceObject{
 	private final int boxLength;
 	private final PointF resetPos;
 	private PowerMods pow = new PowerMods();
+	private boolean invincible = false;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
@@ -46,6 +47,7 @@ public class Player extends SpaceObject{
 	// Update arguments within the AsteroidsGame class
 	@Override
 	public void update(long timeElapsed, Display display ) {
+		isInvincible(timeElapsed);
 		if(moveState == true) {
 			computePlayerVelocity();
 		} else {
@@ -99,26 +101,55 @@ public class Player extends SpaceObject{
 	}
 
 	// Returns player back to center of the screen.
+	// change this to resetPlayer()..
 	public void resetPos() {
 		position.x = resetPos.x;
 		position.y = resetPos.y;
+		pow.disablePowerUps();
 	}
 
 	public PointF getPosition(){ return new PointF(position.x, position.y); }
 
+
+
+
+
+
+
 	// Shoots if condition is met. Returns null otherwise.
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {
+		// if (justRespawned == true...) return null for x seconds
 		return pow.shootCondition(timeIncrement) ? fac.getPlayerLaser(getPosition(), angle, 1) : null;
 	}
 
 	// returns current shoot interval timer stored within the PowerMods
 	public long getTimer() {return pow.currentShootThreshold; }
 
+	// void or boolean..
+	private void isInvincible(long timeElapsed){
+//		if(invincible == true){ return true; }
+//		else{ return false; }
+		//
+		// current logic only accounts for shield invincibility
+		if(pow.shieldEnabled(timeElapsed)){
+//			return true;
+			invincible = true;
+		}
+		else {
+//			return false;
+			invincible = false;
+		}
+
+		// else if (justRespawned){ return true && disable laser for x seconds }
+		// add else if for respawn invincibility...
+	}
+
 
 	public void receivePowerUp(PowerUp powerUpType){
 		switch(powerUpType){
 			case SHIELD:
 				// pow.startShieldTimer
+				pow.activateShield();
 				break;
 
 			case FIRE_RATE:
@@ -127,6 +158,12 @@ public class Player extends SpaceObject{
 				break;
 		}
 	}
+
+//	private void setRespawnState(){}
+//	private void setShieldState(){}
+	public boolean getShieldState(){return invincible;}
+//	public boolean getRespawnState(){}
+
 }
 
 /* 
@@ -136,23 +173,24 @@ public class Player extends SpaceObject{
  * 	- Shooting speed - this can go up? Might not do this.
  *  - Invincibility time frame. When 0, the ship cannot be hit.
  */
-enum PowerUp {FIRE_RATE, SHIELD};
 
 class PowerMods {
 	// final constants that define default parameters.
 	final long DEFAULT_SHOOT_THRESHOLD = 500; // in ms
 	final long DEFAULT_THRESHOLD_DECREMENT = 50; // Time for additional shot!
-	final long DEFAULT_INVINCIBILITY_TIMER = 5000; // in ms so 5s
+//	final long DEFAULT_INVINCIBILITY_TIMER = 5000; // in ms so 5s
 	final int MINIMUM_SHOOT_INTERVAL = 100;
+	final long DEFAULT_INVINCIBILITY_DURATION = 10000;
 
 	long currentShootThreshold;
-	long elapsedInvincibilityTime;
-	boolean invincible; // marks if the ship can be hit or not.
+//	long invincibilityTimer;
+//	boolean invincible; // marks if the ship can be hit or not.
 	long currentElapsedTime;
+	long invincibilityCountDown;
 	// initialize with default initial states.
 	PowerMods() {
 		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
-		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
+//		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
 
 	// Everytime time interval is increased. Generate laser and shoot.
@@ -173,10 +211,36 @@ class PowerMods {
 		}
 	}
 
+	// case condition from power up picked up
+	public void activateShield(){
+		invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
+
+
+//			if(invincibilityTimer)
+//		if(invincible){
+//			invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
+//		}
+//		else{
+//			invincible = true;
+//		}
+	}
+
+	// constantly updated from game engine update()
+	public boolean shieldEnabled(long timeIncrement){
+		invincibilityCountDown -= timeIncrement;
+		if(invincibilityCountDown < 0){
+			invincibilityCountDown = 0;
+//			invincible = false;
+			return false;
+			// turn off invincibility
+		}
+		return true;
+	}
+
 	// When player lose life, all upgrade settings are reset.
 	public void disablePowerUps(){
 		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
-		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
+//		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
 
 }
