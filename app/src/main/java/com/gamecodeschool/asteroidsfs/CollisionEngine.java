@@ -65,9 +65,6 @@ public class CollisionEngine {
                 // add subtract life logic here and possible start grace period count down.
                 gp.decLife();
 
-                didPowerUpDrop(asteroidDropProbability,
-                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
-
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
                 i--;
@@ -88,9 +85,6 @@ public class CollisionEngine {
                 // should the enemy ship be destroyed on collision with Player ship?
                 gp.decLife();
 
-                didPowerUpDrop(oppponentDropProbability,
-                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
-
                 oList.remove(i);
                 i--;
                 if(oList.size() == 0){
@@ -106,6 +100,10 @@ public class CollisionEngine {
             PowerUps temp = puList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 // add power up feature on collision
+
+                //FIXME:
+                P.receivePowerUp(PowerUp.FIRE_RATE);
+//                P.receivePowerUp(PowerUp.SHIELD);
                 puList.remove(i);
                 i--;
                 break;

@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.graphics.Point;
 
+
 //extends SpaceObject
 public class Player extends SpaceObject{
 
@@ -103,19 +104,29 @@ public class Player extends SpaceObject{
 		position.y = resetPos.y;
 	}
 
-	public PointF getPosition(){
-		return new PointF(position.x, position.y);
-	}
+	public PointF getPosition(){ return new PointF(position.x, position.y); }
 
 	// Shoots if condition is met. Returns null otherwise.
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {
-		return pow.shootCondition(timeIncrement) ? fac.getPlayerLaser() : null ;
+		return pow.shootCondition(timeIncrement) ? fac.getPlayerLaser(getPosition(), angle, 1) : null;
 	}
 
 	// returns current shoot interval timer stored within the PowerMods
-	public long getTimer() {return pow.currentShootInterval; }
+	public long getTimer() {return pow.currentShootThreshold; }
 
 
+	public void receivePowerUp(PowerUp powerUpType){
+		switch(powerUpType){
+			case SHIELD:
+				// pow.startShieldTimer
+				break;
+
+			case FIRE_RATE:
+				// modify fire rate
+				pow.increaseFireRate();
+				break;
+		}
+	}
 }
 
 /* 
@@ -125,52 +136,47 @@ public class Player extends SpaceObject{
  * 	- Shooting speed - this can go up? Might not do this.
  *  - Invincibility time frame. When 0, the ship cannot be hit.
  */
+enum PowerUp {FIRE_RATE, SHIELD};
+
 class PowerMods {
 	// final constants that define default parameters.
-	final long DEFAULT_SHOOT_INTERVAL = 500; // in ms
-	final long DEFAULT_VOLLEY_INTERVAL = 150; // Time for additional shot!
+	final long DEFAULT_SHOOT_THRESHOLD = 500; // in ms
+	final long DEFAULT_THRESHOLD_DECREMENT = 50; // Time for additional shot!
 	final long DEFAULT_INVINCIBILITY_TIMER = 5000; // in ms so 5s
-	final int DEFAULT_VOLLEY = 1;
-	final int MAX_SHOTS_PER_VOLLEY = 3; // 
+	final int MINIMUM_SHOOT_INTERVAL = 100;
 
-	long currentShootInterval;
-	int currentVolleyCounter; // Current counter to additional
-	int currentShotsPerVolley; // Starts with 1 until max of 4.
-	int volleyTimer = 0; // The timer for additional volley.
+	long currentShootThreshold;
 	long elapsedInvincibilityTime;
 	boolean invincible; // marks if the ship can be hit or not.
+	long currentElapsedTime;
 	// initialize with default initial states.
 	PowerMods() {
-		currentShootInterval     = DEFAULT_SHOOT_INTERVAL;
-		currentVolleyCounter     = DEFAULT_VOLLEY; // player default shoots once per volley.
+		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
 		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
 
 	// Everytime time interval is increased. Generate laser and shoot.
-	public shootCondition(long timeIncrement) {
+	public boolean shootCondition(long timeIncrement) {
 		boolean retVal = false;
-		currentShootInterval += timeIncrement;
-		if(currentShootInterval >= DEFAULT_SHOOT_INTERVAL) {
-			currentShootInterval = 0;
+		currentElapsedTime += timeIncrement;
+		if(currentElapsedTime >= currentShootThreshold) {
+			currentElapsedTime = 0;
 			retVal = true;
-		}
-
-		if() {
-
 		}
 		return retVal;
 	}
 
-	// We can increment current shots per volley till we reach max upgrade.
-	public boolean powerUpShots() {
-		if(currentVolleyCounter < MAX_SHOTS_PER_VOLLEY)
-			currentVolleyCounter++;
+	// Power up increases Player fire rate up to max threshold
+	public void increaseFireRate(){
+		if(currentShootThreshold > MINIMUM_SHOOT_INTERVAL){
+			currentShootThreshold -= DEFAULT_THRESHOLD_DECREMENT;
+		}
 	}
 
 	// When player lose life, all upgrade settings are reset.
-	public void reset() {
-		currentShootInterval     = DEFAULT_SHOOT_INTERVAL;
-		currentVolleyCounter     = DEFAULT_VOLLEY;
+	public void disablePowerUps(){
+		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
 		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
+
 }
