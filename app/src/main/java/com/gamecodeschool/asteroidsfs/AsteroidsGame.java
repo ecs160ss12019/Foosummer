@@ -265,7 +265,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: // First touch point
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
-                mTouchHandler.inputEvent(event);
+                nowPaused = mTouchHandler.inputEvent(event, nowPaused);
+                userPause = nowPaused; // synchronize userpause and nowpause after initial start.
+                if(gameProgress.getGameStatus()) // Allows user to touch and restart
+                    userRestart = true;
                 break;
             case MotionEvent.ACTION_MOVE: // A pointer has moved.
                 mTouchHandler.updateRotation(event); // Only thing we care in touch event when it comes to move is rotate.
