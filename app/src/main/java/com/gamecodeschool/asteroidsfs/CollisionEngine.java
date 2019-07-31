@@ -51,7 +51,7 @@ public class CollisionEngine {
         playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
         playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
         PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
-        PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
+        PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
         playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
     }
@@ -146,12 +146,18 @@ public class CollisionEngine {
         }
     }
 
-    private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList, GameProgress gp){
+    private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
                 if(SpaceObject.collisionCheck(pList.get(i), temp)) {
+                    ps.emitParticles(
+                            new PointF(
+                                    temp.getPosition().x,
+                                    temp.getPosition().y
 
+                            )
+                    );
 
 
                     gp.updateScore(temp.getSize());
