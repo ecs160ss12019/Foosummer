@@ -193,11 +193,11 @@ public class  GameView {
         Bitmap mOpponentLaserBM;
         Bitmap pauseButtonBM;
         Bitmap gameOverBM;
-        Bitmap[] mBackGroundGif = new Bitmap[backgroundDrawables.length];
-        Bitmap[] spaceshipGIF = new Bitmap[spaceshipDrawables.length];
-        Bitmap[] mAsteroidSmallGif = new Bitmap[asteroidSmallDrawables.length];
-        Bitmap[] mAsteroidMediumGif = new Bitmap[asteroidMediumDrawables.length];
-        Bitmap[] mAsteroidLargeGif = new Bitmap[asteroidLargeDrawables.length];
+        Bitmap[] mBackGroundGif;
+        Bitmap[] spaceshipGIF;
+        Bitmap[] mAsteroidSmallGif;
+        Bitmap[] mAsteroidMediumGif;
+        Bitmap[] mAsteroidLargeGif;
         int b, ss, s, m, l = 0;
 
 
@@ -226,25 +226,20 @@ public class  GameView {
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.spaceship_0);
                 // // Modify the bitmaps to face the ship
                 // // in the correct direction
-                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING, 
+                shipBitmap = Bitmap.createScaledBitmap(shipBitmap, shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                                                 shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                                                 true);
 
 
                 // BACKGROUND BITMAP
-                for(int i = 0; i < backgroundDrawables.length ; i++) {
-                        mBackGroundGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), backgroundDrawables[i]);
-                        mBackGroundGif[i] = Bitmap.createScaledBitmap(mBackGroundGif[i], screen.width, screen.height, true);
-                }
-                //mBackGround = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.outerspacebackground1);
-
+                mBackGroundGif = createGIF(backgroundDrawables, screen.width,
+                                                screen.height, true);
 
                 // SPACESHIP BITMAP
                 spaceshipGIF = createGIF(spaceshipDrawables,
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         true);
-
 
                 // ASTEROID SMALL BITMAP
                 mAsteroidSmallGif = createGIF(asteroidSmallDrawables, asteroidSizeFactor,
@@ -411,14 +406,8 @@ public class  GameView {
         }
 
         private void drawParticleExplosion(ParticleSystem ps){
-                // particle system explosion
-                // if(ps.mIsRunning == true){
-                //      ps.draw()
-                //      ps.mIsRunning = false;
-                //{
-                if(ps.mIsRunning == true){
+                if(ps.mIsRunning == true)
                         ps.draw(myCanvas, myPaint);
-                }
         }
 
         // draw the pause button
