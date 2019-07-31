@@ -9,8 +9,7 @@ public class Particle extends SpaceObject {
     }
 
 
-    @Override
-    public void update(long time, final Display screen) {
+    public void update(long time) {
         // UPDATING NEW POSITION VARIABLE.
         position.x += velMagnitude * Math.cos(angle) * time;
         position.y += velMagnitude * Math.sin(angle) * time;

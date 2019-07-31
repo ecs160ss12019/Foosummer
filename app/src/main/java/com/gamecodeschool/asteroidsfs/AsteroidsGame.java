@@ -175,7 +175,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private void update() {
 
         // EXPLOSION
-        mParticleSystem.update(gameClock.getTimeElapsed() , display);
+        mParticleSystem.update(gameClock.getTimeElapsed());
 
         // shooting action each update.
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
