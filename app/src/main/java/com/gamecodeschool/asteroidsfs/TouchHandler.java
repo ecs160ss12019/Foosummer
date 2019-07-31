@@ -2,7 +2,6 @@ package com.gamecodeschool.asteroidsfs;
 
 import android.util.Log;
 import android.view.MotionEvent;
-
 // Touch Classification based on the touch location.
 enum TouchClass {
 	MOVE,
@@ -13,7 +12,7 @@ enum TouchClass {
 /*
  * TouchHandler will receive input from the onTouchEvent.
  * All Player related movements and actions with information
- * 	received from on touch event is all handled here.
+ * 	received from on touch event is all handled here
  */
 public class TouchHandler {
 	Player playerRef;
@@ -56,7 +55,8 @@ public class TouchHandler {
 	// Based on change to X position since last angle update request. We calculate new rotational radian angle
 	public void requestAngleUpdate() {
 		if(rotationPointerId != INVALID) {
-			float deltaX = newX - oldX;
+			// When old x is 0, don't calculate delta to prevent jumpy rotation.
+			float deltaX = oldX != 0 ? newX - oldX : 0;
 			playerRef.updateRotation(deltaX * ROTATION_CONSTANT);
 			oldX = newX;
 		} else {
@@ -110,7 +110,6 @@ public class TouchHandler {
 	// We keep the ID of what we're tracking if current tracking motion is invalid.
 	private void move(MotionEvent event) {
 		if(moveId == INVALID) {
-			Log.d("TouchHandler", "Assigned ID: " + event.getPointerId(event.getActionIndex()));
 			moveId = event.getPointerId(event.getActionIndex()); // get a constant marker for the id.
 			playerRef.setMoveState(true);
 		}
@@ -124,9 +123,7 @@ public class TouchHandler {
 	// Check to see if the event is what we're tracking. Update when rotating.
 	private void rotate(MotionEvent event) {
 		if(rotationPointerId == INVALID) {
-			Log.d("TouchHandler", "Assigned ID: " + event.getPointerId(event.getActionIndex()));
 			rotationPointerId = event.getPointerId(event.getActionIndex());
-			oldX = event.getX(event.getActionIndex()); // set the original point of the event.
 		}
 	}
 
