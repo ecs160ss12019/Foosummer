@@ -241,29 +241,29 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     /*
-        Receive touch event here.
-        We parse the MotionEvent and interact with the TouchHandler
-        The TouchHandler will let us know if we're interested in tracking the MotionEvent by
-            result after the MotionEvent is handled by the TouchHandler.
+        Receive touch event.
+        Three possible events:
+            - Enable Mobility
+            - Rotation based on pixel drag per update cycle.
+            - Pause menu area touched.
     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 //        Log.d("TouchEvent:", event.actionToString(event.getAction()) + " Index: " + event.getActionIndex());
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: // First touch point
-                mTouchHandler.setRotation(event);
-                break;
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
-
-                break;
-            case MotionEvent.ACTION_POINTER_UP:  // A touch pointer has been lifted.
+                mTouchHandler.inputEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE: // A pointer has moved.
-                mTouchHandler.updateRotation(event);
+                mTouchHandler.updateRotation(event); // Only thing we care in touch event when it comes to move is rotate.
                 break;
+            case MotionEvent.ACTION_POINTER_UP:  // A touch pointer has been lifted.
             case MotionEvent.ACTION_UP: // Last pointer up action
+                mTouchHandler.removeEvent(event);
+                break;
             case MotionEvent.ACTION_CANCEL:
-                mTouchHandler.reset();
+                mTouchHandler.reset(); // This case exist for just incase a cancel action is received
                 break;
         }
         return true;
