@@ -328,29 +328,30 @@ public class  GameView {
                 }
         }
 
-        private void drawAsteroids(SObjectsCollection render){
+        private void drawAsteroids(SObjectsCollection render) {
                 // ASTEROIDS
                 for (int i = 0; i < render.mAsteroids.size(); i++) {
-                        switch(render.mAsteroids.get(i).getSize()) {
+                        switch (render.mAsteroids.get(i).getSize()) {
                                 case 1:
                                         // DRAW SMALL ASTEROID GIF
                                         myCanvas.drawBitmap(mAsteroidSmallGif[s++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        if(s == mAsteroidSmallGif.length)
+                                        if (s == mAsteroidSmallGif.length)
                                                 s = 0;
                                         break;
                                 case 2:
                                         // DRAW MEDIUM ASTEROID GIF
                                         myCanvas.drawBitmap(mAsteroidMediumGif[m++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        if(m == mAsteroidMediumGif.length)
+                                        if (m == mAsteroidMediumGif.length)
                                                 m = 0;
                                         break;
                                 case 3:
                                         // DRAW LARGE ASTEROID GIF
                                         myCanvas.drawBitmap(mAsteroidLargeGif[l++], render.mAsteroids.get(i).getBitmapX(), render.mAsteroids.get(i).getBitmapY(), myPaint);
-                                        if(l == mAsteroidLargeGif.length)
+                                        if (l == mAsteroidLargeGif.length)
                                                 l = 0;
                                         break;
                         }
+//                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
                 }
         }
 

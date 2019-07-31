@@ -1,8 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_DEG;
-import static com.gamecodeschool.asteroidsfs.GameConfig.MIN_DEG;
-import static com.gamecodeschool.asteroidsfs.GameConfig.ROTATE_RATE;
 import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
 
 import android.graphics.Matrix;
@@ -16,13 +14,11 @@ public class Player extends SpaceObject{
 
 	private RectF mRect;
 	protected Matrix playerMatrix = new Matrix();
-	// 0 = stopped, 1 = clockwise, 2 = counter-clockwise
-	private int[] rotationStates = { 0, 1, 2 };
-	private int rotateState;
 	// true if player is moving, false if player is stationary
 	private boolean moveState;
 	// Vars required for timed shooting.
 	private long laserTimer = 0; // Everytime this is > 500ms, we shoot.
+	private double rotationIncrement; // t
 	private final long SHOOT_INTERVAL = 500;
 	private final int boxLength;
 	private final PointF resetPos;
@@ -72,24 +68,11 @@ public class Player extends SpaceObject{
 
 	void setMoveState(boolean playerMove) {moveState = playerMove;}
 
-	void setRotationState(int playerRotate) {rotateState = rotationStates[playerRotate];}
-
-	void rotatePlayer(){
-
-		if(rotateState == 1){
-			if(angle < MIN_DEG){
-				angle = MAX_DEG;
-			}
-			angle -= ROTATE_RATE;
-		} else if (rotateState == 2) {
-			if (angle > MAX_DEG) {
-				angle = MIN_DEG;
-			}
-			angle += ROTATE_RATE;
-		}
+	private void rotatePlayer(){
+		angle = (angle + rotationIncrement) % MAX_DEG; // Modulus prevents overflow of continuous increment.
 	}
 
-	void computePlayerVelocity(){
+	private void computePlayerVelocity(){
 		if(velMagnitude < VELOCITY_RATE * 20) {
 			velMagnitude += VELOCITY_RATE;
 		}
@@ -118,6 +101,10 @@ public class Player extends SpaceObject{
 		}
 
 		return null;
+	}
+
+	public void updateRotation(double newRate) {
+		rotationIncrement = newRate;
 	}
 
 	public long getTimer() {return laserTimer; }
