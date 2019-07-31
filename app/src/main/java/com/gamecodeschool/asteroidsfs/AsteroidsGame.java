@@ -55,6 +55,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     SpaceObjectType objType; // Enum used for object creation.
 
+    SpaceObjectType oppType;
+
     private CollisionEngine mCollision;
 
     // distinguishes user pause vs "pause" when initializing the game
@@ -107,9 +109,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs.mPlayerLasers.removeAll(gamePcs.mPlayerLasers);
         gamePcs.mOpponentLasers.removeAll(gamePcs.mOpponentLasers);
         gamePcs.mSuiciders.removeAll(gamePcs.mSuiciders);
+        gamePcs.mShooters.removeAll(gamePcs.mShooters);
 
         gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
-        gameProgress.reset(gamePcs, factory, objType);
+        gameProgress.reset(gamePcs, factory, oppType);
         factory.reset();
     }
 
@@ -221,26 +224,46 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // OPPONENT
         Laser oppShootResult;
 
-        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+        for(Opponent o : gamePcs.mOpponents){
+            if(o instanceof Shooter){
+                oppType = SpaceObjectType.SHOOTER;
+            }
+            else{
+                oppType = SpaceObjectType.SUICIDER;
+            }
+            oppShootResult = o.attack(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition(), oppType);
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
 
-            // Lower level opponents shoot the player
-            // Higher level opponents do not - they're on a suicide mission to destroy player
-
-                oppShootResult = gamePcs.mOpponents.get(i).shoot(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
-
-                if(oppShootResult != null) {
-                    gamePcs.mOpponentLasers.add(oppShootResult);
-
-                    // update the position of opponent at this index
-                    gamePcs.mOpponents.get(i).updateOppPosition(true);
-                }
-            gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
+                // update the position of opponent at this index
+                o.updateOppPosition(true);
+            }
+            o.update(gameClock.getTimeElapsed(), display);
         }
 
-    for(int i = 0; i < gamePcs.mSuiciders.size(); i++){
-        gamePcs.mSuiciders.get(i).launchSuicideShip(gamePcs.mPlayer.getPosition());
-        gamePcs.mSuiciders.get(i).update(gameClock.getTimeElapsed(), display);
-    }
+//        for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+//
+//            // Lower level opponents shoot the player
+//            // Higher level opponents do not - they're on a suicide mission to destroy player
+////            if(gamePcs.mOpponents.get(i) )
+//
+//                oppShootResult = gamePcs.mOpponents.get(i).attack(gameClock.getTimeElapsed(),
+//                        factory, gamePcs.mPlayer.getPosition(), gamePcs.mOpponents.get(i).objType);
+//
+//                if(oppShootResult != null) {
+//                    gamePcs.mOpponentLasers.add(oppShootResult);
+//
+//                    // update the position of opponent at this index
+//                    gamePcs.mOpponents.get(i).updateOppPosition(true);
+//                }
+//
+//            gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
+//        }
+//
+////    for(int i = 0; i < gamePcs.mSuiciders.size(); i++){
+////        gamePcs.mSuiciders.get(i).launchSuicideShip(gamePcs.mPlayer.getPosition());
+////        gamePcs.mSuiciders.get(i).update(gameClock.getTimeElapsed(), display);
+////    }
 
 
         // OPPONENT LASER

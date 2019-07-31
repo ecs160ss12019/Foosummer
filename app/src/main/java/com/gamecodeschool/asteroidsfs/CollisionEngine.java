@@ -54,8 +54,8 @@ public class CollisionEngine {
         PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg);
         oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
         playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
-        pLaserSuiciderCollision(collection.mPlayerLasers, collection.mSuiciders, gProg, ps);
-        playerSuiciderCollision(collection.mPlayer, collection.mSuiciders, gProg);
+//        pLaserSuiciderCollision(collection.mPlayerLasers, collection.mSuiciders, gProg, ps);
+//        playerSuiciderCollision(collection.mPlayer, collection.mSuiciders, gProg);
     }
 
     // See if player collided with any of the asteroids.

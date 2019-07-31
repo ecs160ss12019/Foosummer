@@ -116,20 +116,17 @@ public class GameProgress {
         }
 
 
-        int numShooters = rand.nextInt(numOpps);
-        int numSuiciders = numOpps - numShooters;
         for (int i = 0; i < numOpps; i++) {
-            if(level < 3){
-                SpaceObject opp = factory.getSpaceObject(objType.OPPONENT);
-                gamePcs.mOpponents.add((Opponent) opp);
+            if(level < 3 || Math.random() > 0.35){
+                gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SHOOTER));
+                gamePcs.mOpponents.get(i).setOppType(objType.SHOOTER);
             }
-            else if(Math.random() > 0.35){
-                SpaceObject opp = factory.getSpaceObject(objType.OPPONENT);
-                gamePcs.mOpponents.add((Opponent) opp);
+            else {
+                gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SUICIDER));
+                gamePcs.mOpponents.get(i).setOppType(objType.SUICIDER);
             }
-            else {gamePcs.mSuiciders.add((Suicider) factory.getSpaceObject(objType.SUICIDER));}
-            //gamePcs.mSuiciders.add((Suicider) factory.getSpaceObject(objType.SUICIDER));
         }
+
 
     }
 //    public int getNumAsteroids(){

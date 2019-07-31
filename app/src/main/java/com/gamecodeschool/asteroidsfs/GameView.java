@@ -311,7 +311,7 @@ public class  GameView {
                                 drawAsteroids(render);
                                 drawPlayer(render);
                                 drawOpponent(render, gProg);
-                                drawSuicider(render, gProg);
+                                //drawSuicider(render, gProg);
                                 drawLasers(render, gProg);
                                 drawPowerUps(render);
                                 drawParticleExplosion(ps);
@@ -392,9 +392,22 @@ public class  GameView {
 
         private void drawOpponent(SObjectsCollection render, GameProgress gProg){
                 // OPPONENT
+
                 for (int i = 0; i < render.mOpponents.size(); i++) {
-                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
-                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                        switch(render.mOpponents.get(i).getOppType()) {
+                                case SHOOTER:
+
+                                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+                                case SUICIDER:
+
+                                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+
+                        }
+
                 }
         }
 
@@ -429,12 +442,12 @@ public class  GameView {
                         ss = 0;
         }
 
-        private void drawSuicider(SObjectsCollection render, GameProgress gProg){
-                for(int i = 0; i < render.mSuiciders.size(); i++){
-                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mSuiciders.get(i).getBitmapX(),
-                                render.mSuiciders.get(i).getBitmapY(), myPaint);
-                }
-        }
+//        private void drawSuicider(SObjectsCollection render, GameProgress gProg){
+//                for(int i = 0; i < render.mSuiciders.size(); i++){
+//                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mSuiciders.get(i).getBitmapX(),
+//                                render.mSuiciders.get(i).getBitmapY(), myPaint);
+//                }
+//        }
 
         void drawPauseMenu(){
 //                if (myHolder.getSurface().isValid()) {

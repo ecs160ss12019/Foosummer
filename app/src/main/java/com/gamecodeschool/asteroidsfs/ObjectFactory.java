@@ -80,15 +80,19 @@ public class ObjectFactory {
                                                 point,
                                                 currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
+//
+//                        case OPPONENT:
+//
+//                                // override opponentVelocity in respective derived classes
+//                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
+//                                        rand.nextInt(maxAngle) * Math.PI/180,
+//                                        opponentVelocity, 100);
 
-                        case OPPONENT:
-
-                                Log.e("ObjectFactory class", "opponentVelocity is " + opponentVelocity);
+                        case SHOOTER:
 
                                 return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
                                                 rand.nextInt(maxAngle) * Math.PI/180,
-                                                opponentVelocity, 100,
-                                                opponentHealth);
+                                                opponentVelocity, 100);
 
 
                         case POWERUP:
@@ -98,8 +102,7 @@ public class ObjectFactory {
                         case SUICIDER:
                                 return new Suicider(new PointF(zone2.randomX(), zone2.randomY()),
                                         rand.nextInt(maxAngle) * Math.PI/180,
-                                        suiciderVelocity, 100,
-                                        opponentHealth);
+                                        suiciderVelocity, 100);
 
 
                 }
