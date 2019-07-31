@@ -240,28 +240,21 @@ public class  GameView {
 
 
                 // SPACESHIP BITMAP
-                for(int i = 0; i < spaceshipDrawables.length ; i++) {
-                        spaceshipGIF[i] = BitmapFactory.decodeResource(ourContext.getResources(), spaceshipDrawables[i]);
-                        spaceshipGIF[i] = Bitmap.createScaledBitmap(spaceshipGIF[i], shipSize + GameConfig.PLAYER_SHIP_PADDING,
-                                                                        shipSize + GameConfig.PLAYER_SHIP_PADDING, true);
-                }
+                spaceshipGIF = createGIF(spaceshipDrawables,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        true);
 
 
                 // ASTEROID SMALL BITMAP
-                for(int i = 0; i < asteroidSmallDrawables.length ; i++) {
-                        mAsteroidSmallGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidSmallDrawables[i]);
-                        mAsteroidSmallGif[i] = Bitmap.createScaledBitmap(mAsteroidSmallGif[i], asteroidSizeFactor*1, asteroidSizeFactor*1, false);
-                }
+                mAsteroidSmallGif = createGIF(asteroidSmallDrawables, asteroidSizeFactor,
+                                                asteroidSizeFactor, false);
                 // ASTEROID MEDIUM BITMAP
-                for(int i = 0; i < asteroidMediumDrawables.length ; i++) {
-                        mAsteroidMediumGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidMediumDrawables[i]);
-                        mAsteroidMediumGif[i] = Bitmap.createScaledBitmap(mAsteroidMediumGif[i], asteroidSizeFactor*2, asteroidSizeFactor*2, false);
-                }
+                mAsteroidMediumGif = createGIF(asteroidMediumDrawables, asteroidSizeFactor*2,
+                                                asteroidSizeFactor*2, false);
                 // ASTEROID LARGE BITMAP
-                for(int i = 0; i < asteroidLargeDrawables.length ; i++) {
-                        mAsteroidLargeGif[i] = BitmapFactory.decodeResource(ourContext.getResources(), asteroidLargeDrawables[i]);
-                        mAsteroidLargeGif[i] = Bitmap.createScaledBitmap(mAsteroidLargeGif[i], asteroidSizeFactor*3, asteroidSizeFactor*3, false);
-                }
+                mAsteroidLargeGif = createGIF(asteroidLargeDrawables, asteroidSizeFactor*3,
+                                                asteroidSizeFactor*3, false);
 
                 // Player laser bitmap creation. For now, let's make lasers half the asteroid size.
                 mPlayerLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.plaser);
@@ -287,6 +280,15 @@ public class  GameView {
                 gameOverBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.gameovermenu1);
                 gameOverBM = Bitmap.createScaledBitmap(gameOverBM, screen.width, screen.height, false );
 
+        }
+
+        private Bitmap[] createGIF(int[] drawables, int dstWidth, int dstHeight, boolean filter) {
+            Bitmap[] tempGIF = new Bitmap[drawables.length];
+            for(int i = 0; i < drawables.length ; i++) {
+                tempGIF[i] = BitmapFactory.decodeResource(ourContext.getResources(), drawables[i]);
+                tempGIF[i] = Bitmap.createScaledBitmap(tempGIF[i], dstWidth, dstHeight, filter);
+            }
+            return tempGIF;
         }
 
         public Point getBitmapDim() {
@@ -353,6 +355,10 @@ public class  GameView {
                         }
 //                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
                 }
+        }
+
+        private void drawGIF(Bitmap[] gif) {
+
         }
 
         private void drawBackground(){
