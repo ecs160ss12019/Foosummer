@@ -16,12 +16,15 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.ZONE_2_MIN_MULTIPLIER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.SHIP_SCALE_FACTOR;
 
 import android.graphics.PointF;
-import android.util.Log;
+
 import java.util.Random;
 
 /*
- * This object takes care of spawning new objects.
- * The main use will be on every level. All objects are spawned at beginning of level. (for now)
+ * ObjectFactory stores constants and some minimal calculations necessary to create objects.
+ * This object also uses Zone object to handle randomized spawn spots for certain objects such as
+ *      Asteroid and Opponents. This helps us have randomized spawn and to keep the spawned objects
+ *      away from the player in initial level.
+ * This object provides a centralized place to call for object creation.
  */
 public class ObjectFactory {
         final private int asteroidSizeFactor;
@@ -41,7 +44,8 @@ public class ObjectFactory {
         private PointF defaultShipSize;
 
 
-        // When this object is first made for the game engine. The screen 
+        // Upon creation, initialize parameters necessary to scale size of objects and other related
+        // constants for the game.
         ObjectFactory(Display display) {
                 asteroidSizeFactor = display.width / DIVISION_FACTOR;
                 screen = display;
@@ -60,11 +64,10 @@ public class ObjectFactory {
                 defaultShipSize = new PointF(screen.width / SHIP_SCALE_FACTOR,
                         screen.height / SHIP_SCALE_FACTOR);
 
-//                defaultPowerUpSize =
         }
 
 
-        // Switch Object getter. Chose enum switch, supposedly this is the fastest.
+        // Switch based object getter. For Objects that only uses parameters known to the Factory.
         public SpaceObject getSpaceObject(SpaceObjectType type) {
                 double angle = rand.nextInt(MAX_ANGLE) * Math.PI / 180;
 
@@ -80,13 +83,6 @@ public class ObjectFactory {
                                                 point,
                                                 currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
-//
-//                        case OPPONENT:
-//
-//                                // override opponentVelocity in respective derived classes
-//                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
-//                                        rand.nextInt(MAX_ANGLE) * Math.PI/180,
-//                                        opponentVelocity, 100);
 
                         case SHOOTER:
 
@@ -106,10 +102,11 @@ public class ObjectFactory {
 
 
                 }
-                //FIXME have to run some sort of Null point exception.
                 return null;
         }
 
+
+        // BELOW are methods for generating specific objects with different parameters.
         public PowerUps getPowerUp(PointF pos){
                 return new PowerUps(pos, 50);
         }
@@ -167,23 +164,23 @@ class Zone {
                 return maxX - minX;
         }
 
-        // returns randomized x values related to the zone.
+        // Returns horizontal position that is certain percentage of screen away from the center.
         public int randomX() {
                 Random r = new Random();
                 int result = r.nextInt(xDiff());
 
-                return result <= xDiff() / 2 ? result : result + minX;
+                return (result <= xDiff() / 2) ? result : (result + minX);
         }
         
         public int yDiff() {
                 return maxY - minY;
         }
 
-        // returns random Y value within defined Y zone.
+        // Returns vertical position that is certain percentage of screen away from center.
         public int randomY() {
                 Random r = new Random();
                 int result = r.nextInt(yDiff());
 
-                return result <= yDiff() / 2 ? result : result + minY;
+                return (result <= yDiff() / 2) ? result : (result + minY);
         }
 }

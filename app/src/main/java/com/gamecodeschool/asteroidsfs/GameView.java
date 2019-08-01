@@ -15,6 +15,8 @@ import android.view.SurfaceHolder;
 import android.content.Context;
 import android.graphics.PointF;
 
+import java.util.ArrayList;
+
 // make this an interface
 
 public class  GameView {
@@ -29,6 +31,14 @@ public class  GameView {
         int[] spaceshipDrawables = {
                 R.drawable.spaceship_0,
                 R.drawable.spaceship_1,
+        };
+        int[] spaceship2Drawables = {
+                R.drawable.spaceship2_0,
+                R.drawable.spaceship2_1,
+        };
+        int[] spaceship3Drawables = {
+                R.drawable.spaceship3_0,
+                R.drawable.spaceship3_1,
         };
         int[] asteroidSmallDrawables = {
                 R.drawable.asteroidsmall_0,
@@ -48,34 +58,34 @@ public class  GameView {
         int[] asteroidMediumDrawables = {
                 R.drawable.asteroidmedium_0,
                 R.drawable.asteroidmedium_1,
-//                R.drawable.asteroidsmall_2,
-//                R.drawable.asteroidsmall_3,
-//                R.drawable.asteroidsmall_4,
+//                R.drawable.asteroidmedium_2,
+//                R.drawable.asteroidmedium_3,
+//                R.drawable.asteroidmedium_4,
                 R.drawable.asteroidmedium_5,
                 R.drawable.asteroidmedium_6,
-//                R.drawable.asteroidsmall_7,
-//                R.drawable.asteroidsmall_8,
-//                R.drawable.asteroidsmall_9,
+//                R.drawable.asteroidmedium_7,
+//                R.drawable.asteroidmedium_8,
+//                R.drawable.asteroidmedium_9,
                 R.drawable.asteroidmedium_10,
                 R.drawable.asteroidmedium_11,
-//                R.drawable.asteroidsmall_12,
-//                R.drawable.asteroidsmall_13
-//                R.drawable.asteroidsmall_14,
+//                R.drawable.asteroidmedium_12,
+//                R.drawable.asteroidmedium_13
+//                R.drawable.asteroidmedium_14,
                 R.drawable.asteroidmedium_15,
                 R.drawable.asteroidmedium_16,
-//                R.drawable.asteroidsmall_17,
-//                R.drawable.asteroidsmall_18,
-//                R.drawable.asteroidsmall_19,
+//                R.drawable.asteroidmedium_17,
+//                R.drawable.asteroidmedium_18,
+//                R.drawable.asteroidmedium_19,
                 R.drawable.asteroidmedium_20,
                 R.drawable.asteroidmedium_21,
-//                R.drawable.asteroidsmall_22,
-//                R.drawable.asteroidsmall_23
-//                R.drawable.asteroidsmall_24,
+//                R.drawable.asteroidmedium_22,
+//                R.drawable.asteroidmedium_23
+//                R.drawable.asteroidmedium_24,
                 R.drawable.asteroidmedium_25,
                 R.drawable.asteroidmedium_26,
-//                R.drawable.asteroidsmall_27,
-//                R.drawable.asteroidsmall_28,
-//                R.drawable.asteroidsmall_29,
+//                R.drawable.asteroidmedium_27,
+//                R.drawable.asteroidmedium_28,
+                R.drawable.asteroidmedium_29,
         };
         int[] asteroidLargeDrawables = {
                 R.drawable.asteroidlarge_0,
@@ -128,6 +138,9 @@ public class  GameView {
         Bitmap gameOverBM;
         Bitmap[] mBackGroundGif;
         Bitmap[] spaceshipGIF;
+        Bitmap[] spaceship2GIF;
+        Bitmap[] spaceship3GIF;
+        ArrayList<Bitmap[]> ships;
         Bitmap[] mAsteroidSmallGif;
         Bitmap[] mAsteroidMediumGif;
         Bitmap[] mAsteroidLargeGif;
@@ -142,6 +155,7 @@ public class  GameView {
                 myHolder = surfHolder;
                 myPaint = new Paint();
                 screenRes = new PointF(screen.width, screen.height);
+                ships = new ArrayList<>();
                 // Preload bitmaps for asteroids and make 3 different scale ones.
 //                Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
 //                Bitmap asteroidSmallBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroidsmall_0);
@@ -168,6 +182,17 @@ public class  GameView {
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         true);
+                spaceship2GIF = createGIF(spaceship2Drawables,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        true);
+                spaceship3GIF = createGIF(spaceship3Drawables,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        true);
+                ships.add(spaceshipGIF);
+                ships.add(spaceship2GIF);
+                ships.add(spaceship3GIF);
 
                 // ASTEROID SMALL BITMAP
                 mAsteroidSmallGif = createGIF(asteroidSmallDrawables, asteroidSizeFactor,
@@ -240,7 +265,7 @@ public class  GameView {
 
                                 // Methods are ordered alphabetically below draw()
                                 drawAsteroids(render);
-                                drawPlayer(render);
+                                drawPlayer(render, spaceshipGIF);
                                 myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
                                 //drawSuicider(render, gProg);
@@ -370,11 +395,11 @@ public class  GameView {
                 }
         }
 
-        private void drawPlayer(SObjectsCollection render){
+        private void drawPlayer(SObjectsCollection render, Bitmap[] shipGIF){
                 if(render.mPlayer.getShieldState()){
                         myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
                                 ss = 0;
                 }
                 else if(render.mPlayer.getRespawnState()){
@@ -386,13 +411,13 @@ public class  GameView {
                                 myPaint.setAlpha(255);
                                 toggleTransparency = true;
                         }
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
                                 ss = 0;
                 }
                 else{
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
                                 ss = 0;
                 }
         }
@@ -403,6 +428,31 @@ public class  GameView {
 //                                render.mSuiciders.get(i).getBitmapY(), myPaint);
 //                }
 //        }
+
+
+        void drawShipMenu() {
+                if (myHolder.getSurface().isValid()) {
+                        myCanvas = myHolder.lockCanvas();
+                        myCanvas.drawARGB(255, 0, 0, 0);
+
+                        // Draw spaceship options
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], 0, 0, myPaint);
+                        myCanvas.drawBitmap(spaceship2GIF[ss++], screenRes.x/2, screenRes.y/2, myPaint);
+                        if(ss == spaceship2GIF.length)
+                                ss = 0;
+
+
+                        // Prompt user to choose a spaceship
+                        myPaint.setColor(Color.argb(255, 255, 255, 255));
+                        myPaint.setTextSize(screenRes.x / 20);
+                        myCanvas.drawText("Choose Your Spaceship",
+                                                                        (screenRes.x / 4) - 30,
+                                                                        (screenRes.y / 2) + 500,
+                                                                        myPaint);
+
+                        myHolder.unlockCanvasAndPost(myCanvas);
+                }
+        }
 
         void drawPauseMenu(){
 //                if (myHolder.getSurface().isValid()) {
