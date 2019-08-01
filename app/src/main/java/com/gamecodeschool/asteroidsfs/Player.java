@@ -2,6 +2,12 @@ package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_DEG;
 import static com.gamecodeschool.asteroidsfs.GameConfig.VELOCITY_RATE;
+import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_INVINCIBILITY_RESPAWN_TIME;
+import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_SHOOT_THRESHOLD;
+import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_INVINCIBILITY_DURATION;
+import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_THRESHOLD_DECREMENT;
+import static com.gamecodeschool.asteroidsfs.GameConfig.MINIMUM_SHOOT_INTERVAL;
+
 
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -26,7 +32,6 @@ public class Player extends SpaceObject{
 	private boolean shieldInvincibility;
 	private boolean respawnInvincibility;
 	private long respawnCountdown;
-	final long DEFAULT_INVINCIBILITY_RESPAWN_TIME = 3000;
 
 //	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
@@ -190,11 +195,6 @@ public class Player extends SpaceObject{
 
 class PowerMods {
 	// final constants that define default parameters.
-	final long DEFAULT_SHOOT_THRESHOLD = 500; // in ms
-	final long DEFAULT_THRESHOLD_DECREMENT = 50; // Time for additional shot!
-//	final long DEFAULT_INVINCIBILITY_TIMER = 5000; // in ms so 5s
-	final int MINIMUM_SHOOT_INTERVAL = 100;
-	final long DEFAULT_INVINCIBILITY_DURATION = 10000;
 
 	long currentShootThreshold;
 	long currentElapsedTime;

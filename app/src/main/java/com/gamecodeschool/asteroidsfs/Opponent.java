@@ -1,14 +1,15 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.SHOOT_INTERVAL;
+
 import android.graphics.PointF;
-import android.util.Log;
 
 public class Opponent extends SpaceObject {
     protected float getX;
     protected float getY;
     protected boolean updatePosition = false;
-    private long laserTimer = 0; // Every time this is > 2900ms, opponent shoots.
-    private final long SHOOT_INTERVAL = 2900;
+
+    private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private double addAngle = 200; // Ideal angle change after each shot
     private double shootAngle;
     private double angleToPlayer;

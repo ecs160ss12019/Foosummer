@@ -1,5 +1,8 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.NUM_BLOCKS_WIDE;
+// import static com.gamecodeschool.asteroidsfs.GameConfig.MILLIS_IN_SECOND; FIXME: not used/needed?
+
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -10,6 +13,7 @@ import android.view.SurfaceView;
 class AsteroidsGame extends SurfaceView implements Runnable{
 
     private final int NUM_BLOCKS_WIDE = 40;
+
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
 
     // Toggle for debugging
@@ -46,8 +50,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // Distinguishes user pause vs "pause" when initializing the game
     private boolean userPause = false;
-
-    // Determines if user presses screen to restart after game over
+    // determines when user has chosen a ship to start
+    private boolean userStart = false;
+    // determines if user presses screen to restart after game over
     private boolean userRestart = false;
 
 
@@ -145,7 +150,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     }
 
 
-
     private void update() {
 
         // Synchronize call to touch handler for player's angle calculation.
@@ -229,7 +233,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: // First touch point
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
@@ -295,6 +298,20 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // nest "startNewGame()" into if statement conditioned on pause until touch
         userRestart = false;
         startNewGame();
+    }
+
+    private void startMenu() {
+        audio.pause();
+        gameView.drawShipMenu();
+        gameClock.frameStop();
+        while(!userStart) {
+            gameClock.frameStart();
+            if(userStart) break;
+            gameClock.frameStop();
+        }
+        // pause here until user presses screen to resume for a new game..
+        // nest "startNewGame()" into if statement conditioned on pause until touch
+        userStart = false;
     }
 }
 

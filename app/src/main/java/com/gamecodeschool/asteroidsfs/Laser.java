@@ -1,7 +1,10 @@
 package com.gamecodeschool.asteroidsfs;
 
-import android.graphics.PointF;
-
+/*
+ *  The Laser can be shot by either the player or enemy classes.
+ *  Main difference from SpaceObject is that it has damage value and it does not wrap
+ *      around when it reaches beyond the screen.
+ */
 public class Laser extends SpaceObject {
     int damage; // the damage that this thing can do.
 

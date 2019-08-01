@@ -1,5 +1,8 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.ASTEROID_DROP_PROB;
+import static com.gamecodeschool.asteroidsfs.GameConfig.OPPONENT_DROP_PROB;
+
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -28,8 +31,6 @@ public class CollisionEngine {
     boolean asteroidsEliminated = false;
     boolean oppsEliminated = false;
 //    Random powerUpSeed = new Random();
-    double asteroidDropProbability = 0.10;
-    double oppponentDropProbability = 0.20;
     boolean dropPowerUp = false;
     private PointF powerUpPos;
 //    GameProgress playerStatus = new GameProgress();
@@ -128,28 +129,6 @@ public class CollisionEngine {
         }
     }
 
-    private void playerSuiciderCollision(Player P, ArrayList<Suicider> sList, GameProgress gp){
-        for(int i = 0; i < sList.size(); i++) {
-            Suicider temp = sList.get(i);
-            if(SpaceObject.collisionCheck(P, temp)) {
-                P.resetPos();
-                // add subtract life logic here and possible start grace period count down.
-                // should the enemy ship be destroyed on collision with Player ship?
-                gp.decLife();
-
-                didPowerUpDrop(oppponentDropProbability,
-                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
-
-                sList.remove(i);
-                i--;
-                if(sList.size() == 0){
-                    oppsEliminated = true;
-                }
-                break;
-            }
-        }
-    }
-
 
     private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
@@ -169,7 +148,7 @@ public class CollisionEngine {
                     // For now enemy dies in 1 hit.
                     gp.updateScore(gp.OppMultiplier);
 
-                    didPowerUpDrop(oppponentDropProbability,
+                    didPowerUpDrop(OPPONENT_DROP_PROB,
                             new PointF(temp.getBitmapX(), temp.getBitmapY()));
 
                     oList.remove(k);
@@ -200,7 +179,7 @@ public class CollisionEngine {
 
                     gp.updateScore(temp.getSize());
 
-                    didPowerUpDrop(asteroidDropProbability,
+                    didPowerUpDrop(ASTEROID_DROP_PROB,
                             new PointF(temp.getBitmapX(), temp.getBitmapY()));
 
                     aList.addAll(temp.collisionAction());
