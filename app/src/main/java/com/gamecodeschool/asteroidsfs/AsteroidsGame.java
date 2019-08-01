@@ -235,6 +235,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
                 nowPaused = mTouchHandler.inputEvent(event, nowPaused);
                 userPause = nowPaused; // Synchronize userPause and nowPause after initial start.
+
                 if(gameProgress.getGameStatus()) // Allows user to touch and restart
                     userRestart = true;
                 break;
