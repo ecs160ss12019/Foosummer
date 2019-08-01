@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- *  Asteroid is a SpaceObject that can collide with player.
- *  The asteroid can split +- 30 degree when size is greater than 1.
- *  The size multiplier changes the hit detection radius and the bitmap size of the asteroid.
- *  Split asteroid spawns smaller ones that move faster.
+ * The Asteroid class represents an asteroid moving in space.
+ * Thus, it extends SpaceObject to inherit all moving functionality.
+ * The asteroid class extra functionality such as increasing its speed,
+ * used for asteroids that were disintegrated, and collision detection.
  */
+
 public class Asteroid extends SpaceObject {
     private int size; // The Size multiplier of asteroid
     private final int DEFAULT_SPLIT_ANGLE = 30; // DEFAULT MAX SPLIT POSSIBLE ANGLE
@@ -20,7 +21,9 @@ public class Asteroid extends SpaceObject {
         this.size = size;
     }
 
-    // This constructor is specifically used with creating splitting asteroids
+    // This constructor is used to make a copy of the asteroid w/ a different size and direction.
+    // It is used when the player hits an asteroid and it disintegrates into two smaller copies
+    // of itself.
     Asteroid(SpaceObject copy, int newSize, int theta) {
         super(copy);
         size = newSize;

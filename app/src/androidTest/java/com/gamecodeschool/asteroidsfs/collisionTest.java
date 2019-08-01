@@ -1,5 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import org.junit.Before;
@@ -21,16 +22,25 @@ public class collisionTest {
     // asteroidHeight,
     // asteroidXVelocity,
     // asteroidYVelocity));
+
+    Display screen;
+
+    collisionTest(Display screen) {
+        this.screen = screen;
+    }
+
+
     @Test
     public void testCollision() {
-        Asteroid A = new Asteroid(0, 0, 10, 10, 10, 0); // This asteroid moves toward B
-        Asteroid B = new Asteroid(30, 0, 10, 10, 0, 0); // This asteroid stands still
+        //Asteroid(angle, pos, velocityMagnitude, hitRadius, size)
+        Asteroid A = new Asteroid(0, new PointF(50,50), 1, 1, 3); // This asteroid moves toward B
+        Asteroid B = new Asteroid(0, new PointF(0,0), 0, 1, 3); // This asteroid stands still
 
         for(int i = 0; i < 3; i++) {
-            A.update(1, 1000, 1000);
+            A.update(1, screen);
         }
 
         // After 3 incremented position update. A and B should collide.
-        assertTrue(RectF.intersects(A.getHitbox(), B.getHitbox()));
+        assertTrue(A.collisionCheck(A, B));
     }
 }

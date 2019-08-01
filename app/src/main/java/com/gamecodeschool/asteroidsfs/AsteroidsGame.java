@@ -70,7 +70,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // distinguishes user pause vs "pause" when initializing the game
     boolean userPause = false;
-
+    // determines when user has chosen a ship to start
+    private boolean userStart = false;
     // determines if user presses screen to restart after game over
     private boolean userRestart = false;
 
@@ -140,6 +141,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gameClock.frameStart();
 
             if(!nowPaused){
+                //FIXME: need to change condition
+//                if(true) {
+//                    startMenu();
+//                }
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
@@ -363,6 +368,20 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // nest "startNewGame()" into if statement conditioned on pause until touch
         userRestart = false;
         startNewGame();
+    }
+
+    private void startMenu() {
+        audio.pause();
+        gameView.drawShipMenu();
+        gameClock.frameStop();
+        while(!userStart) {
+            gameClock.frameStart();
+            if(userStart) break;
+            gameClock.frameStop();
+        }
+        // pause here until user presses screen to resume for a new game..
+        // nest "startNewGame()" into if statement conditioned on pause until touch
+        userStart = false;
     }
 }
 
