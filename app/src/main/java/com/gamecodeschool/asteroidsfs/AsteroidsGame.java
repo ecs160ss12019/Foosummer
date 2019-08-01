@@ -142,9 +142,9 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
             if(!nowPaused){
                 //FIXME: need to change condition
-                if(true) {
-                    startMenu();
-                }
+//                if(true) {
+//                    startMenu();
+//                }
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
