@@ -510,12 +510,14 @@ public class  GameView {
                         myCanvas.drawARGB(255, 0, 0, 0);
 
                         // Draw spaceship options
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], 0, 0, myPaint);
-                        myCanvas.drawBitmap(spaceship2GIF[ss++], screenRes.x/2, screenRes.y/2, myPaint);
+                        float thirdWidth = screenRes.x/3;
+                        float halfHeight = screenRes.y/2;
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], thirdWidth/2, halfHeight, myPaint);
+                        myCanvas.drawBitmap(spaceship2GIF[ss++], thirdWidth/2 + thirdWidth, screenRes.y/2, myPaint);
+                        myCanvas.drawBitmap(spaceship3GIF[ss++], thirdWidth/2 + thirdWidth + thirdWidth, screenRes.y/2, myPaint);
                         if(ss == spaceship2GIF.length)
                                 ss = 0;
-
-
+                        
                         // Prompt user to choose a spaceship
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
@@ -523,7 +525,6 @@ public class  GameView {
                                                                         (screenRes.x / 4) - 30,
                                                                         (screenRes.y / 2) + 500,
                                                                         myPaint);
-
                         myHolder.unlockCanvasAndPost(myCanvas);
                 }
         }
