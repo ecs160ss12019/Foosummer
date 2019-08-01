@@ -1,6 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -180,7 +181,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // synchronize call to touch handler for player's angle calculation.
         mTouchHandler.requestAngleUpdate();
         // EXPLOSION
-        mParticleSystem.update(gameClock.getTimeElapsed() , display);
+        mParticleSystem.update(gameClock.getTimeElapsed());
 
         // shooting action each update. (FIXME: PUT THIS SHOOT RESULT AFTER PLAYER UPDATE..)
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);

@@ -34,11 +34,11 @@ public class ParticleSystem {
     }
 
 
-    public void update(long time, final Display screen) {
+    public void update(long time) {
         mDuration += time;
 
         for(Particle p : mParticles)
-            p.update(time, screen);
+            p.update(time);
 
         if (mDuration > EXPLOSION_INTERVAL)
             mIsRunning = false;
