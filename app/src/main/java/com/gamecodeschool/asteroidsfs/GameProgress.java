@@ -1,6 +1,14 @@
 package com.gamecodeschool.asteroidsfs;
 
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_SCORE;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LIFE;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LEVEL;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_OPPONENTS;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_ASTEROIDS;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_POWERUPS;
+
+
 import android.util.Log;
 import android.widget.Space;
 import android.graphics.PointF;
@@ -13,23 +21,16 @@ import java.util.Random;
  * - We should store things such as score constants on this object.
  */
 public class GameProgress {
-    final private int initialScore = 0;
-    final private int initialLife = 100;
-    final private int initialLevel = 1;
-    final private int initialNumOpps = 1;
-    final private int initialNumAsteroids = 2;
-    final private int initialNumPowerUps = 1;
-
 
     // track user score and lives
-    private int myScore = initialScore;
-    private int highScore = initialScore;
-    private int myLives = initialLife; // abstract this to UserShip class?
-    private int level = initialLevel; // we increment each time the player clears a level.
+    private int myScore = INITIAL_SCORE;
+    private int highScore = INITIAL_SCORE;
+    private int myLives = INITIAL_LIFE; // abstract this to UserShip class?
+    private int level = INITIAL_LEVEL; // we increment each time the player clears a level.
     private boolean gameOver = false;
-    private int numOpps = initialNumOpps;
-    private int numAsteroids = initialNumAsteroids;
-    private int numPowerUps = initialNumPowerUps;
+    private int numOpps = INITIAL_NUM_OPPONENTS;
+    private int numAsteroids = INITIAL_NUM_ASTEROIDS;
+    private int numPowerUps = INITIAL_NUM_POWERUPS;
     private Random rand = new Random();
 
 
@@ -54,11 +55,11 @@ public class GameProgress {
 
     // resets by setting our game progress variable to initial lvl.
     public void reset(SObjectsCollection gamePcs, ObjectFactory factory, SpaceObjectType objType) {
-        myScore = initialScore;
-        myLives = initialLife;
-        level = initialLevel;
-        numOpps = initialNumOpps;
-        numAsteroids = initialNumAsteroids;
+        myScore = INITIAL_SCORE;
+        myLives = INITIAL_LIFE;
+        level = INITIAL_LEVEL;
+        numOpps = INITIAL_NUM_OPPONENTS;
+        numAsteroids = INITIAL_NUM_ASTEROIDS;
         gameOver = false;
         generateEnemies(level, gamePcs, factory, objType);
     }
@@ -103,7 +104,7 @@ public class GameProgress {
         // for the corresponding level
         // numAsteroids = currLevel * (numAsteroids multiplier)
         // numOpps = currLevel * (numOpps multiplier)
-        if (level > initialLevel) {
+        if (level > INITIAL_LEVEL) {
             numAsteroids += 2;
         }
         if (level % 3 == 0) {

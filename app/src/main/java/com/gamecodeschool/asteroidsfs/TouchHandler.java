@@ -1,5 +1,8 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.INVALID;
+import static com.gamecodeschool.asteroidsfs.GameConfig.NO_ROTATION;
+
 import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,8 +31,6 @@ public class TouchHandler {
 	float oldX = 0;
 	float newX = 0;
 
-	final private int INVALID = -1;
-	final private int NO_ROTATION = 0;
 	final private double ROTATION_CONSTANT; // Radian / pixel constant
 
 	TouchHandler(Display display) {

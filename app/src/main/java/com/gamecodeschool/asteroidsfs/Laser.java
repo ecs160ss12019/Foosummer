@@ -1,9 +1,9 @@
 package com.gamecodeschool.asteroidsfs;
 
 /*
- * The Laser class represents a laser shot across space.
- * Thus, it extends SpaceObject to inherit the moving functionality.
- * It also checks screen boundaries but does not wrap around.
+ *  The Laser class represents a laser shot across space, it can be shot by either the
+ *  player or enemy classes. Main difference from SpaceObject is that it has damage value
+ *  and it does not wrap around when it reaches beyond the screen.
  */
 
 public class Laser extends SpaceObject {
