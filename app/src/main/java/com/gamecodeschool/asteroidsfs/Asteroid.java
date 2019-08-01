@@ -1,13 +1,17 @@
 package com.gamecodeschool.asteroidsfs;
 
-    import android.graphics.PointF;
-    import android.widget.Space;
-
-    import java.util.ArrayList;
+import android.graphics.PointF;
+import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ *  Asteroid is a SpaceObject that can collide with player.
+ *  The asteroid can split +- 30 degree when size is greater than 1.
+ *  The size multiplier changes the hit detection radius and the bitmap size of the asteroid.
+ *  Split asteroid spawns smaller ones that move faster.
+ */
 public class Asteroid extends SpaceObject {
-    private int size;       //Define different size asteroids
+    private int size; // The Size multiplier of asteroid
     private final int DEFAULT_SPLIT_ANGLE = 30; // DEFAULT MAX SPLIT POSSIBLE ANGLE
 
     // Using this constructor does not generate a RectF in the SpaceObject.
@@ -16,11 +20,12 @@ public class Asteroid extends SpaceObject {
         this.size = size;
     }
 
+    // This constructor is specifically used with creating splitting asteroids
     Asteroid(SpaceObject copy, int newSize, int theta) {
         super(copy);
         size = newSize;
-        angle += theta * Math.PI / 180;
-        hitRadius = hitRadius * newSize / (newSize + 1);
+        angle += theta * Math.PI / 180; // Theta is in degree, converts to radian for unit consistency
+        hitRadius = hitRadius * newSize / (newSize + 1); // Reduce hit box for size reduction
     }
 
     void increaseVelocity() {
@@ -28,6 +33,10 @@ public class Asteroid extends SpaceObject {
         velMagnitude = velMagnitude * 1.5f;
     }
 
+    /*
+        Asteroid returns ArrayList of Asteroid upon collision. Smaller asteroids are created with
+        randomized angle with limited range. +- 30 degree angles.
+    */
     public ArrayList<Asteroid> collisionAction() {
         ArrayList<Asteroid> temp = new ArrayList<Asteroid>();
         if(size > 1) {

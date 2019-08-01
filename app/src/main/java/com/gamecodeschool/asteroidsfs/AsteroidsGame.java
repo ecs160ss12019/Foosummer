@@ -297,7 +297,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//        Log.d("TouchEvent:", event.actionToString(event.getAction()) + " Index: " + event.getActionIndex());
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: // First touch point
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
