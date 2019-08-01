@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.VelocityTracker;
+import android.graphics.Canvas;
 
 import java.util.ArrayList;
 // these imports deal with ArrayList class in java
@@ -182,7 +183,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // EXPLOSION
         mParticleSystem.update(gameClock.getTimeElapsed());
 
-        // shooting action each update.
+        // shooting action each update. (FIXME: PUT THIS SHOOT RESULT AFTER PLAYER UPDATE..)
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         if(DEBUGGING) {
@@ -194,6 +195,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // PLAYER
+//        if()
         gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
@@ -264,7 +266,10 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: // First touch point
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
-                mTouchHandler.inputEvent(event);
+                nowPaused = mTouchHandler.inputEvent(event, nowPaused);
+                userPause = nowPaused; // synchronize userpause and nowpause after initial start.
+                if(gameProgress.getGameStatus()) // Allows user to touch and restart
+                    userRestart = true;
                 break;
             case MotionEvent.ACTION_MOVE: // A pointer has moved.
                 mTouchHandler.updateRotation(event); // Only thing we care in touch event when it comes to move is rotate.

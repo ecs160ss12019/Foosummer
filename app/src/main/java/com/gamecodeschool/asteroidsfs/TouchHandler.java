@@ -1,5 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 // Touch Classification based on the touch location.
@@ -19,6 +20,7 @@ public class TouchHandler {
 	Display display;
 	int rotationPointerId;
 	int moveId;
+	PointF pauseRadius = new PointF(2497, 116); // FIXME: For now this is hardcoded.
 
 	float oldX = 0;
 	float newX = 0;
@@ -36,9 +38,11 @@ public class TouchHandler {
 
 	
 	// Classify the newest event. Then check if they're valid before modifying state.
-	public void inputEvent(MotionEvent event) {
+	// Simply pass pause if touch type is not Pause, if Pause. Flip value
+	public boolean inputEvent(MotionEvent event, boolean pause) {
 		int newestIndex = event.getActionIndex();
-		TouchClass classificationResult = getClassification(event.getX(newestIndex));
+		TouchClass classificationResult = getClassification(new PointF(event.getX(newestIndex),
+													event.getY(newestIndex)));
 		// Dispatch to util method based on classification.
 		switch(classificationResult) {
 			case MOVE:
@@ -49,7 +53,10 @@ public class TouchHandler {
 				break;
 			case PAUSE:
 				pause(event);
+				pause = (pause == true) ? false : true;
+				break;
 		}
+		return pause;
 	}
 
 	// Based on change to X position since last angle update request. We calculate new rotational radian angle
@@ -103,8 +110,8 @@ public class TouchHandler {
 	// ------------------------------------------------------------------------------------
 
 	// Based on the touch position X, get classification of the method.
-	private TouchClass getClassification(float x) {
-		return x < display.width / 2 ? TouchClass.ROTATION : rightsideTouchClass(x);
+	private TouchClass getClassification(PointF input) {
+		return input.x < display.width / 2 ? TouchClass.ROTATION : rightsideTouchClass(input);
 	}	
 
 	// We keep the ID of what we're tracking if current tracking motion is invalid.
@@ -116,8 +123,8 @@ public class TouchHandler {
 	}
 	
 	// FIXME: Complete this later to accomodate pause.
-	private TouchClass rightsideTouchClass(float intputX) {
-		return TouchClass.MOVE; // for now it only returns move. Add position comparison for pause menu!!
+	private TouchClass rightsideTouchClass(PointF input) {
+		return (input.x > pauseRadius.x && input.y < pauseRadius.y) ? TouchClass.PAUSE : TouchClass.MOVE; // for now it only returns move. Add position comparison for pause menu!!
 	}
 	
 	// Check to see if the event is what we're tracking. Update when rotating.
@@ -129,7 +136,7 @@ public class TouchHandler {
 
 	//FIXME: Implement later!
 	private void pause(MotionEvent event) {
-
+		
 	}
 
 }

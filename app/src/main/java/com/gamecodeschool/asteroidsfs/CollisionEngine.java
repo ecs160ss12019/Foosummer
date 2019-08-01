@@ -48,12 +48,20 @@ public class CollisionEngine {
         dropPowerUp = false;
 
         // player vs asteroid.
-        playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
-        playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
-        PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
-        PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
-        oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
-        playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+        if(collection.mPlayer.getShieldState() || collection.mPlayer.getRespawnState()){
+            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
+            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
+            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+        }
+        else {
+            playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
+            playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
+            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
+            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
+            oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
+            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+        }
+
     }
 
     // See if player collided with any of the asteroids.
@@ -65,8 +73,8 @@ public class CollisionEngine {
                 // add subtract life logic here and possible start grace period count down.
                 gp.decLife();
 
-                didPowerUpDrop(asteroidDropProbability,
-                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
+                // add invincibility for respawn
+                // disable powerups (reset fire rate)
 
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
@@ -88,9 +96,6 @@ public class CollisionEngine {
                 // should the enemy ship be destroyed on collision with Player ship?
                 gp.decLife();
 
-                didPowerUpDrop(oppponentDropProbability,
-                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
-
                 oList.remove(i);
                 i--;
                 if(oList.size() == 0){
@@ -106,6 +111,16 @@ public class CollisionEngine {
             PowerUps temp = puList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 // add power up feature on collision
+                //FIXME:
+                switch(temp.getPowerUpType()){
+                    case FIRE_RATE:
+                        P.receivePowerUp(PowerUp.FIRE_RATE);
+                        break;
+
+                    case SHIELD:
+                        P.receivePowerUp(PowerUp.SHIELD);
+                        break;
+                }
                 puList.remove(i);
                 i--;
                 break;
