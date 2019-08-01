@@ -72,7 +72,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         mParticleSystem.init(1000, display);
         mTouchHandler = new TouchHandler(display);
         gameClock = new GameClock();
-        gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
+        gamePcs.mBlockSize = blockSize;
         audio = new Audio(context);
         startNewGame();
     }
