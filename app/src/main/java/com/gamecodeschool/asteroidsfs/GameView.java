@@ -517,7 +517,7 @@ public class  GameView {
                         myCanvas.drawBitmap(spaceship3GIF[ss++], thirdWidth/2 + thirdWidth + thirdWidth, screenRes.y/2, myPaint);
                         if(ss == spaceship2GIF.length)
                                 ss = 0;
-                        
+
                         // Prompt user to choose a spaceship
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
