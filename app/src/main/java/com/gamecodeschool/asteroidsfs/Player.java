@@ -12,28 +12,23 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.MINIMUM_SHOOT_INTERVAL;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.util.Log;
 import android.graphics.Point;
 
-
-//extends SpaceObject
 public class Player extends SpaceObject{
 
 	private RectF mRect;
 	protected Matrix playerMatrix = new Matrix();
+	private PowerMods pow = new PowerMods();
 	// true if player is moving, false if player is stationary
 	private boolean moveState;
 	// Vars required for timed shooting.
 	private double rotationIncrement; // t
 	private final int boxLength;
 	private final PointF resetPos;
-	private PowerMods pow = new PowerMods();
-//	private boolean invincible = false;
 	private boolean shieldInvincibility;
 	private boolean respawnInvincibility;
 	private long respawnCountdown;
 
-//	PointF pos, double angle, float velocityMagnitude, float hitCircleSize
 	Player(PointF pos, float playerLength) {
 		super(pos, 0, 0, playerLength);
 		resetPos = new PointF(pos.x, pos.y);
@@ -47,7 +42,6 @@ public class Player extends SpaceObject{
 
 	}
 
-
 	// Update the Player- Called each frame/loop
 	// Update arguments within the AsteroidsGame class
 	@Override
@@ -60,29 +54,21 @@ public class Player extends SpaceObject{
 		}
 		super.update(timeElapsed, display); // default movement behavior.
 		rotatePlayer();
+
+		// using Players hitbox to assign translation for movement.
 		this.mRect.offsetTo(position.x - boxLength, position.y - boxLength);
 	}
 
 	// Rotates and moves the matrix to match the current angle the player is facing.
+	// (coordinates the matrix to manipulate the bitmap of the ship)
 	public Matrix configMatrix(Point bitmapDim, int blockSize){
 		this.playerMatrix.setRotate((float)(angle * 180/Math.PI),
 				bitmapDim.x / 2, bitmapDim.y / 2);
 
 		this.playerMatrix.postTranslate((position.x) - hitRadius - GameConfig.PLAYER_SHIP_PADDING / 2,
 				(position.y) - hitRadius - GameConfig.PLAYER_SHIP_PADDING / 2);
+
 		return this.playerMatrix;
-	}
-
-
-	public RectF getHitbox() {return mRect;}
-
-	public Matrix getMatrix() {return playerMatrix;}
-
-	// State control regarding movement and rotation.
-	void setMoveState(boolean playerMove) {moveState = playerMove;}
-
-	private void rotatePlayer(){
-		angle = (angle + rotationIncrement) % MAX_DEG; // Modulus prevents overflow of continuous increment.
 	}
 
 	private void computePlayerVelocity(){
@@ -92,27 +78,19 @@ public class Player extends SpaceObject{
 	}
 
 	// Returns player back to center of the screen.
-	// change this to resetPlayer()..
 	public void resetPos() {
 		position.x = resetPos.x;
 		position.y = resetPos.y;
 		pow.disablePowerUps();
 
-		// respawn invincibility
-		// just lost a life (declife)
-		// should i not set respawnstate and just call function to add to respawncountdown
+		// Start timer for respawn invincibility
 		respawnCountdown += DEFAULT_INVINCIBILITY_RESPAWN_TIME;
 	}
 
-	public PointF getPosition(){ return new PointF(position.x, position.y); }
-
-
-
-
-
 	// Shoots if condition is met. Returns null otherwise.
 	public Laser shoot(long timeIncrement, ObjectFactory fac) {
-		// if (justRespawned == true...) return null for x seconds
+		// if Player just respawned, respawn
+		// invincibility state disables shooting
 		if(respawnInvincibility){
 			return null;
 		}else{
@@ -120,34 +98,24 @@ public class Player extends SpaceObject{
 		}
 	}
 
-	// returns current shoot interval timer stored within the PowerMods
-	public long getTimer() {return pow.currentShootThreshold; }
-
-	// void or boolean..
+	// Determines if Player is currently in Invincible state
 	private void isInvincible(long timeElapsed){
-//		if(invincible == true){ return true; }
-//		else{ return false; }
-		//
-		// current logic only accounts for shield invincibility
 		if(pow.shieldEnabled(timeElapsed)){
-//			return true;
 			shieldInvincibility = true;
-			// setRespawnState(false)
 		}
 		else if (justRespawned(timeElapsed)){
 			respawnInvincibility = true;
-//			setShieldState(false);
 		}
 		else{
-//			return false;
+
+			// if Player is neither in respawn invincibility
+			// or shield invincibility states
 			deactivateInvincibility();
 		}
-
-		// else if (justRespawned){ return true && disable laser for x seconds }
-		// add else if for respawn invincibility...
 	}
 
-
+	// Determines the type of power up and assigns
+	// the appropriate power up functionality
 	public void receivePowerUp(PowerUp powerUpType){
 		switch(powerUpType){
 			case SHIELD:
@@ -155,16 +123,12 @@ public class Player extends SpaceObject{
 				break;
 
 			case FIRE_RATE:
-				// modify fire rate
 				pow.increaseFireRate();
 				break;
 		}
 	}
 
-	public void updateRotation(double newRate) {
-		rotationIncrement = newRate;
-	}
-
+	// Count down timer for respawn invincibility on respawn
 	private boolean justRespawned(long timeDecrement){
 		respawnCountdown -= timeDecrement;
 		if(respawnCountdown < 0){
@@ -174,14 +138,26 @@ public class Player extends SpaceObject{
 		return true;
 	}
 
-//	private void setRespawnState(boolean respawnState){ respawnInvincibility = respawnState;}
-//	private void setShieldState(boolean shieldState){ shieldInvincibility = shieldState; }
 	private void deactivateInvincibility(){
 		shieldInvincibility = false;
 		respawnInvincibility = false;
 	}
+
+	public RectF getHitbox() {return mRect;}
+	public Matrix getMatrix() {return playerMatrix;}
+	public PointF getPosition(){ return new PointF(position.x, position.y); }
 	public boolean getShieldState(){return shieldInvincibility;}
 	public boolean getRespawnState(){return respawnInvincibility;}
+
+	// returns current shoot interval timer stored within the PowerMods
+	public long getTimer() {return pow.currentShootThreshold; }
+
+	// State control regarding movement and rotation.
+	public void setMoveState(boolean playerMove) {moveState = playerMove;}
+
+	// Modulus prevents overflow of continuous increment.
+	private void rotatePlayer(){ angle = (angle + rotationIncrement) % MAX_DEG; }
+	public void updateRotation(double newRate) { rotationIncrement = newRate; }
 
 }
 
@@ -194,15 +170,12 @@ public class Player extends SpaceObject{
  */
 
 class PowerMods {
-	// final constants that define default parameters.
-
 	long currentShootThreshold;
 	long currentElapsedTime;
 	long invincibilityCountDown;
 	// initialize with default initial states.
 	PowerMods() {
 		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
-//		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
 
 	// Everytime time interval is increased. Generate laser and shoot.
@@ -223,26 +196,27 @@ class PowerMods {
 		}
 	}
 
-	// case condition from power up picked up
+	// if invincibility power up is picked up,
+	// increment the invincibility shield duration
 	public void activateShield(){
 		invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
 	}
 
-	// constantly updated from game engine update()
+	// determines if shield invincibility is enabled
+	// by decrementing the countdown until the
+	// shield power up duration ends (when count down equals 0)
 	public boolean shieldEnabled(long timeDecrement){
 		invincibilityCountDown -= timeDecrement;
 		if(invincibilityCountDown < 0){
 			invincibilityCountDown = 0;
 			return false;
-			// turn off invincibility
 		}
 		return true;
 	}
 
-	// When player lose life, all upgrade settings are reset.
+	// When player loses life, all upgrade settings are reset.
 	public void disablePowerUps(){
 		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
-//		elapsedInvincibilityTime = DEFAULT_INVINCIBILITY_TIMER;
 	}
 
 }
