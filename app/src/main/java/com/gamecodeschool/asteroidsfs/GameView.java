@@ -261,8 +261,8 @@ public class  GameView {
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo3);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
 
-                mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent2);
-                mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize, shipSize, false);
+                mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo2);
+                mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize*2, shipSize, false);
 
                 mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.laser_red);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
@@ -314,7 +314,8 @@ public class  GameView {
                                 drawPlayer(render);
                                 myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
-                                drawLasers(render);
+                                //drawSuicider(render, gProg);
+                                drawLasers(render, gProg);
                                 drawPowerUps(render);
                                 drawParticleExplosion(ps);
                                 drawPauseButton();
@@ -324,6 +325,7 @@ public class  GameView {
 
                         }
                         else{ drawPauseMenu(); }
+
 
                         // Display the drawing on screen
                         // unlockCanvasAndPost is a method of SurfaceView
@@ -353,6 +355,7 @@ public class  GameView {
                                         if (l == mAsteroidLargeGif.length)
                                                 l = 0;
                                         break;
+
                         }
 //                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
                 }
@@ -375,7 +378,7 @@ public class  GameView {
                         screenRes.x / 50, myPaint);
         }
 
-        private void drawLasers(SObjectsCollection render){
+        private void drawLasers(SObjectsCollection render, GameProgress gProg){
                 // PLAYER LASERS
                 for(int i = 0; i < render.mPlayerLasers.size(); i++) {
                         myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
@@ -386,24 +389,29 @@ public class  GameView {
                 for(int i = 0; i < render.mOpponentLasers.size(); i++) {
                         myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
                                 render.mOpponentLasers.get(i).getBitmapY(), myPaint);
+
                 }
+
         }
 
         private void drawOpponent(SObjectsCollection render, GameProgress gProg){
                 // OPPONENT
+
                 for (int i = 0; i < render.mOpponents.size(); i++) {
-                        // LOWER LEVEL OPPONENT
-                        if(gProg.getLevel() < 5){
-                                myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
-                                        render.mOpponents.get(i).getBitmapY(), myPaint);
+                        switch(render.mOpponents.get(i).getOppType()) {
+                                case SHOOTER:
+
+                                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+                                case SUICIDER:
+
+                                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+
                         }
 
-                        // SPAWN HIGHER LEVEL OPPONENT
-                        // should have both lower and higher level opponents on the board?
-                        if(gProg.getLevel() >= 5){
-                                myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
-                                        render.mOpponents.get(i).getBitmapY(), myPaint);
-                        }
                 }
         }
 
@@ -462,6 +470,13 @@ public class  GameView {
                                 ss = 0;
                 }
         }
+
+//        private void drawSuicider(SObjectsCollection render, GameProgress gProg){
+//                for(int i = 0; i < render.mSuiciders.size(); i++){
+//                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mSuiciders.get(i).getBitmapX(),
+//                                render.mSuiciders.get(i).getBitmapY(), myPaint);
+//                }
+//        }
 
         void drawPauseMenu(){
 //                if (myHolder.getSurface().isValid()) {

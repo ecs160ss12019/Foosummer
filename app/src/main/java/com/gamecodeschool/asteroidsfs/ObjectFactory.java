@@ -22,6 +22,7 @@ public class ObjectFactory {
         final private float TIME = 20; // time it should take to cross screen in seconds
         final private float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
         final private float OPPONENT_TIME = 20;
+        final private float SUICIDER_TIME = 15;
         final private float MS_PER_S = 1000; // 1000 milliseconds per 1 second
         final private int MAX_ASTEROID_SIZE_LEVEL = 3;
         static final public int DIVISION_FACTOR = 25;
@@ -30,14 +31,11 @@ public class ObjectFactory {
         final private float zone1MinMultiplier = 0.25f;
         final private float zone2MinMultiplier = 0.50f;
 
-        private float oppX;
-        private float oppY;
-
         private float currentVelocityMagnitude;
         private Random rand = new Random();
         private int opponentHealth = 3;
         private float opponentVelocity;
-        SpaceObjectType objType;
+        private float suiciderVelocity;
 
         private PointF defaultShipSize;
         static final public int shipScaleFactor = 20;
@@ -57,6 +55,7 @@ public class ObjectFactory {
                 currentVelocityMagnitude = defaultVelocity;
                 defaultLaserVelocity = ((float)display.width) / LASER_TIME / MS_PER_S;
                 opponentVelocity = ((float)display.width) / OPPONENT_TIME / MS_PER_S;
+                suiciderVelocity = ((float)display.width) / SUICIDER_TIME / MS_PER_S;
 
                 defaultShipSize = new PointF(screen.width / shipScaleFactor,
                         screen.height / shipScaleFactor);
@@ -81,23 +80,29 @@ public class ObjectFactory {
                                                 point,
                                                 currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
-                        // case LASER:
-                        case OPPONENT:
+//
+//                        case OPPONENT:
+//
+//                                // override opponentVelocity in respective derived classes
+//                                return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
+//                                        rand.nextInt(maxAngle) * Math.PI/180,
+//                                        opponentVelocity, 100);
+
+                        case SHOOTER:
 
                                 return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
                                                 rand.nextInt(maxAngle) * Math.PI/180,
-                                                opponentVelocity, 100,
-                                                opponentHealth);
+                                                opponentVelocity, 100);
 
-                        case OPPONENT2:
-
-                        return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
-                                rand.nextInt(maxAngle) * Math.PI/180,
-                                opponentVelocity, 100,
-                                opponentHealth);
 
                         case POWERUP:
                                 return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);
+
+
+                        case SUICIDER:
+                                return new Suicider(new PointF(zone2.randomX(), zone2.randomY()),
+                                        rand.nextInt(maxAngle) * Math.PI/180,
+                                        suiciderVelocity, 100);
 
 
                 }

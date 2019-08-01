@@ -6,6 +6,7 @@ public enum SpaceObjectType {
     ASTEROID,
     LASER,
     OPPONENT,
-    OPPONENT2,
+    SHOOTER,
+    SUICIDER,
     POWERUP;
 }
