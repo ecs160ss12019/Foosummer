@@ -1,5 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.EXPLOSION_INTERVAL;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,7 +17,6 @@ public class ParticleSystem {
     ArrayList<Particle> mParticles;
     Random random = new Random();
     boolean mIsRunning = false;
-    private final long EXPLOSION_INTERVAL = 1000;
 
     //Maybe replace with a call to getObject() in ObjectFactory
     public void init(int numParticles, Display display){

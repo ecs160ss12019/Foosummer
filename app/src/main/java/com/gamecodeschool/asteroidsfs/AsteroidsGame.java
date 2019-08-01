@@ -1,5 +1,8 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.NUM_BLOCKS_WIDE;
+// import static com.gamecodeschool.asteroidsfs.GameConfig.MILLIS_IN_SECOND; FIXME: not used/needed?
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,8 +25,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     Canvas canvas;
     Paint paint;
 
-
-    private final int NUM_BLOCKS_WIDE = 40;
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
 
     // Toggle for debugging
@@ -31,8 +32,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // Drawing objects
     private SurfaceHolder myHolder;
-    // Number of milliseconds in a second
-    private final int MILLIS_IN_SECOND = 1000;
     /* 
         JSC: Let's eventually replace screen resolution 
         with this object variable (that contains the screen x y size)

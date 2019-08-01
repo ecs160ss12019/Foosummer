@@ -1,5 +1,7 @@
 package com.gamecodeschool.asteroidsfs;
 
+import static com.gamecodeschool.asteroidsfs.GameConfig.SHOOT_INTERVAL;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,7 +16,6 @@ public class Opponent extends SpaceObject {
     protected float getY;
     protected boolean updatePosition = false;
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
-    private final long SHOOT_INTERVAL = 2900;
     private double addAngle = 200;
     private double shootAngle;
     private double angleToPlayer;

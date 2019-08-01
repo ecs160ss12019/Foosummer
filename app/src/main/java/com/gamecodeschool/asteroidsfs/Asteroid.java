@@ -1,14 +1,14 @@
 package com.gamecodeschool.asteroidsfs;
 
-    import android.graphics.PointF;
-    import android.widget.Space;
+import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_SPLIT_ANGLE;
 
-    import java.util.ArrayList;
+import android.graphics.PointF;
+import android.widget.Space;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Asteroid extends SpaceObject {
     private int size;       //Define different size asteroids
-    private final int DEFAULT_SPLIT_ANGLE = 30; // DEFAULT MAX SPLIT POSSIBLE ANGLE
 
     // Using this constructor does not generate a RectF in the SpaceObject.
     Asteroid(double angle, PointF pos, float velocityMagnitude, float asteroidSize, int size) {
