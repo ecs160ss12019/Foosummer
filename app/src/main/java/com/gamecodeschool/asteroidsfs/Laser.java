@@ -1,6 +1,10 @@
 package com.gamecodeschool.asteroidsfs;
 
-import android.graphics.PointF;
+/*
+ * The Laser class represents a laser shot across space.
+ * Thus, it extends SpaceObject to inherit the moving functionality.
+ * It also checks screen boundaries but does not wrap around.
+ */
 
 public class Laser extends SpaceObject {
     int damage; // the damage that this thing can do.
