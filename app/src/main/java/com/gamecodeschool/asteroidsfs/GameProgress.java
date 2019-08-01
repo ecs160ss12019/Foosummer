@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class GameProgress {
     final private int initialScore = 0;
-    final private int initialLife = 3;
+    final private int initialLife = 100;
     final private int initialLevel = 1;
     final private int initialNumOpps = 1;
     final private int initialNumAsteroids = 2;
@@ -114,26 +114,22 @@ public class GameProgress {
         for (int i = 0; i < numAsteroids; i++) {
             gamePcs.mAsteroids.add((Asteroid) factory.getSpaceObject(objType.ASTEROID));
         }
+
+
         for (int i = 0; i < numOpps; i++) {
-
-            // modify the opponent coordinates to spawn away from player
-            SpaceObject opp1 = factory.getSpaceObject(objType.OPPONENT);
-
-            opp1.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
-            opp1.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
-
-            gamePcs.mOpponents.add((Opponent) opp1);
-            if (level > 5) {
-                SpaceObject opp2 = factory.getSpaceObject(objType.OPPONENT2);
-
-                opp2.position.x = gamePcs.mPlayer.getPosition().x + rand.nextInt(1000);
-                opp2.position.y = gamePcs.mPlayer.getPosition().y + rand.nextInt(2500);
-
-                gamePcs.mOpponents.add((Opponent) opp2);
+            if(level < 3 || Math.random() > 0.35){
+                gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SHOOTER));
+                gamePcs.mOpponents.get(i).setOppType(objType.SHOOTER);
+                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
             }
+            else {
+                gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SUICIDER));
+                gamePcs.mOpponents.get(i).setOppType(objType.SUICIDER);
 
-
+                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
+            }
         }
+
 
     }
 //    public int getNumAsteroids(){

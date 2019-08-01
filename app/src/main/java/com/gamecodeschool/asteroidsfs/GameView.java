@@ -11,6 +11,8 @@ import android.view.SurfaceHolder;
 import android.content.Context;
 import android.graphics.PointF;
 
+import java.util.ArrayList;
+
 // make this an interface
 
 public class  GameView {
@@ -81,6 +83,10 @@ public class  GameView {
         int[] spaceshipDrawables = {
                 R.drawable.spaceship_0,
                 R.drawable.spaceship_1,
+        };
+        int[] spaceship2Drawables = {
+                R.drawable.spaceship2_0,
+                R.drawable.spaceship2_1,
         };
         int[] asteroidSmallDrawables = {
                 R.drawable.asteroidsmall_0,
@@ -197,10 +203,12 @@ public class  GameView {
         Bitmap gameOverBM;
         Bitmap[] mBackGroundGif;
         Bitmap[] spaceshipGIF;
+        Bitmap[] spaceship2GIF;
+        ArrayList<Bitmap[]> ships;
         Bitmap[] mAsteroidSmallGif;
         Bitmap[] mAsteroidMediumGif;
         Bitmap[] mAsteroidLargeGif;
-        int b, ss, s, m, l = 0;
+        int b, ss1, ss2, s, m, l = 0;
 
 
 
@@ -211,6 +219,7 @@ public class  GameView {
                 myHolder = surfHolder;
                 myPaint = new Paint();
                 screenRes = new PointF(screen.width, screen.height);
+                ships = new ArrayList<Bitmap[]>();
                 // Preload bitmaps for asteroids and make 3 different scale ones.
 //                Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
 //                Bitmap asteroidSmallBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroidsmall_0);
@@ -242,6 +251,12 @@ public class  GameView {
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         shipSize + GameConfig.PLAYER_SHIP_PADDING,
                                         true);
+                spaceship2GIF = createGIF(spaceship2Drawables,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        shipSize + GameConfig.PLAYER_SHIP_PADDING,
+                                        true);
+                ships.add(spaceshipGIF);
+                ships.add(spaceship2GIF);
 
                 // ASTEROID SMALL BITMAP
                 mAsteroidSmallGif = createGIF(asteroidSmallDrawables, asteroidSizeFactor,
@@ -261,8 +276,8 @@ public class  GameView {
                 mOpponentBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo3);
                 mOpponentBitmap = Bitmap.createScaledBitmap(mOpponentBitmap, shipSize*2, shipSize, false);
 
-                mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.opponent2);
-                mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize, shipSize, false);
+                mOpponent2Bitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.ufo2);
+                mOpponent2Bitmap = Bitmap.createScaledBitmap(mOpponent2Bitmap, shipSize*2, shipSize, false);
 
                 mOpponentLaserBM = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.laser_red);
                 mOpponentLaserBM = Bitmap.createScaledBitmap(mOpponentLaserBM, asteroidSizeFactor / LaserSizeFactor,
@@ -314,7 +329,8 @@ public class  GameView {
                                 drawPlayer(render);
                                 myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
-                                drawLasers(render);
+                                //drawSuicider(render, gProg);
+                                drawLasers(render, gProg);
                                 drawPowerUps(render);
                                 drawParticleExplosion(ps);
                                 drawPauseButton();
@@ -324,6 +340,7 @@ public class  GameView {
 
                         }
                         else{ drawPauseMenu(); }
+
 
                         // Display the drawing on screen
                         // unlockCanvasAndPost is a method of SurfaceView
@@ -353,6 +370,7 @@ public class  GameView {
                                         if (l == mAsteroidLargeGif.length)
                                                 l = 0;
                                         break;
+
                         }
 //                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
                 }
@@ -375,7 +393,7 @@ public class  GameView {
                         screenRes.x / 50, myPaint);
         }
 
-        private void drawLasers(SObjectsCollection render){
+        private void drawLasers(SObjectsCollection render, GameProgress gProg){
                 // PLAYER LASERS
                 for(int i = 0; i < render.mPlayerLasers.size(); i++) {
                         myCanvas.drawBitmap(mPlayerLaserBM, render.mPlayerLasers.get(i).getBitmapX(),
@@ -386,24 +404,29 @@ public class  GameView {
                 for(int i = 0; i < render.mOpponentLasers.size(); i++) {
                         myCanvas.drawBitmap(mOpponentLaserBM, render.mOpponentLasers.get(i).getBitmapX(),
                                 render.mOpponentLasers.get(i).getBitmapY(), myPaint);
+
                 }
+
         }
 
         private void drawOpponent(SObjectsCollection render, GameProgress gProg){
                 // OPPONENT
+
                 for (int i = 0; i < render.mOpponents.size(); i++) {
-                        // LOWER LEVEL OPPONENT
-                        if(gProg.getLevel() < 5){
-                                myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
-                                        render.mOpponents.get(i).getBitmapY(), myPaint);
+                        switch(render.mOpponents.get(i).getOppType()) {
+                                case SHOOTER:
+
+                                        myCanvas.drawBitmap(mOpponentBitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+                                case SUICIDER:
+
+                                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
+                                                render.mOpponents.get(i).getBitmapY(), myPaint);
+                                        break;
+
                         }
 
-                        // SPAWN HIGHER LEVEL OPPONENT
-                        // should have both lower and higher level opponents on the board?
-                        if(gProg.getLevel() >= 5){
-                                myCanvas.drawBitmap(mOpponent2Bitmap, render.mOpponents.get(i).getBitmapX(),
-                                        render.mOpponents.get(i).getBitmapY(), myPaint);
-                        }
                 }
         }
 
@@ -439,9 +462,9 @@ public class  GameView {
         private void drawPlayer(SObjectsCollection render){
                 if(render.mPlayer.getShieldState()){
                         myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
-                                ss = 0;
+                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss1 == spaceshipGIF.length)
+                                ss1 = 0;
                 }
                 else if(render.mPlayer.getRespawnState()){
                         if(toggleTransparency){
@@ -452,16 +475,23 @@ public class  GameView {
                                 myPaint.setAlpha(255);
                                 toggleTransparency = true;
                         }
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
-                                ss = 0;
+                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss1 == spaceshipGIF.length)
+                                ss1 = 0;
                 }
                 else{
-                        myCanvas.drawBitmap(spaceshipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == spaceshipGIF.length)
-                                ss = 0;
+                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss1 == spaceshipGIF.length)
+                                ss1 = 0;
                 }
         }
+
+//        private void drawSuicider(SObjectsCollection render, GameProgress gProg){
+//                for(int i = 0; i < render.mSuiciders.size(); i++){
+//                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mSuiciders.get(i).getBitmapX(),
+//                                render.mSuiciders.get(i).getBitmapY(), myPaint);
+//                }
+//        }
 
         void drawPauseMenu(){
 //                if (myHolder.getSurface().isValid()) {

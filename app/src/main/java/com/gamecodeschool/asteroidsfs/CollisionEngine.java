@@ -128,6 +128,29 @@ public class CollisionEngine {
         }
     }
 
+    private void playerSuiciderCollision(Player P, ArrayList<Suicider> sList, GameProgress gp){
+        for(int i = 0; i < sList.size(); i++) {
+            Suicider temp = sList.get(i);
+            if(SpaceObject.collisionCheck(P, temp)) {
+                P.resetPos();
+                // add subtract life logic here and possible start grace period count down.
+                // should the enemy ship be destroyed on collision with Player ship?
+                gp.decLife();
+
+                didPowerUpDrop(oppponentDropProbability,
+                        new PointF(temp.getBitmapX(), temp.getBitmapY()));
+
+                sList.remove(i);
+                i--;
+                if(sList.size() == 0){
+                    oppsEliminated = true;
+                }
+                break;
+            }
+        }
+    }
+
+
     private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
