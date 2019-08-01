@@ -4,26 +4,15 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.NUM_BLOCKS_WIDE;
 // import static com.gamecodeschool.asteroidsfs.GameConfig.MILLIS_IN_SECOND; FIXME: not used/needed?
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.VelocityTracker;
-import android.graphics.Canvas;
-
-import java.util.ArrayList;
-// these imports deal with ArrayList class in java
 
 
 class AsteroidsGame extends SurfaceView implements Runnable{
-    Canvas canvas;
-    Paint paint;
+
+    private final int NUM_BLOCKS_WIDE = 40;
 
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
 
@@ -32,58 +21,49 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     // Drawing objects
     private SurfaceHolder myHolder;
-    /* 
-        JSC: Let's eventually replace screen resolution 
-        with this object variable (that contains the screen x y size)
-    */
-    private Display display; 
-    // Number of hits to destroy PowerUps
-    private int hitsLeft= 3;
+    private Display display;
 
-    // Here is the Thread and two control variables
+    // The Thread and two control variables
     private Thread myGameThread = null;
     // This volatile variable can be accessed
     // from inside and outside the thread
     private volatile boolean nowPlaying;
     private boolean nowPaused = false;
 
-
-    // GAME OBJECTS
+    // Game objects
     private GameProgress gameProgress;
     private ObjectFactory factory;
     private GameView gameView;
+    private CollisionEngine mCollision;
     private SObjectsCollection gamePcs;
     private Audio audio;
     private TouchHandler mTouchHandler;
-    //Temporarily here
-    ParticleSystem mParticleSystem;
+    private ParticleSystem mParticleSystem;
 
-    // SYSTEM CLOCK
+    // System clock
     private GameClock gameClock;
 
-    SpaceObjectType objType; // Enum used for object creation.
-
+    // Enum used for object creation.
+    SpaceObjectType objType;
+    // Used to distinguish opponent types in object factory
     SpaceObjectType oppType;
 
-    private CollisionEngine mCollision;
-
-    // distinguishes user pause vs "pause" when initializing the game
-    boolean userPause = false;
+    // Distinguishes user pause vs "pause" when initializing the game
+    private boolean userPause = false;
     // determines when user has chosen a ship to start
     private boolean userStart = false;
     // determines if user presses screen to restart after game over
     private boolean userRestart = false;
 
+
     public AsteroidsGame(Context context, int x, int y) {
-        // calls parent class constructor of SurfaceView
+        // Calls parent class constructor of SurfaceView
         super(context);
         display = new Display(x, y);
 
-
         blockSize = x / NUM_BLOCKS_WIDE;
 
-        // Initialize the objects
-        // ready for drawing with
+        // Initialize the objects ready for start of game
         // getHolder is a method of Surfaceview
         myHolder = getHolder();
         gameView = new GameView(context, myHolder, display);
@@ -91,7 +71,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gameProgress = new GameProgress();
         gamePcs = new SObjectsCollection(display);
         mCollision = new CollisionEngine();
-        //Temporarily here
         mParticleSystem = new ParticleSystem ();
         mParticleSystem.init(1000, display);
         mTouchHandler = new TouchHandler(display);
@@ -102,16 +81,13 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     }
 
 
-
-
     /*
         When we start the game we reset the game state such as level
         initial meteor count.
         and clear all lasers and enemy space ships.
     */
     private void startNewGame() {
-//        // FIXME: Change 3 to asteroid count variable that can be changed.
-        // is there a cleaner way to remove all elements from all respective arraylists?
+
         mParticleSystem.mParticles.removeAll(mParticleSystem.mParticles);
         gamePcs.mMineralPowerUps.removeAll(gamePcs.mMineralPowerUps);
         gamePcs.mAsteroids.removeAll(gamePcs.mAsteroids);
@@ -129,21 +105,13 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     }
 
 
-
-
-
-
     @Override
     public void run() {
         while(nowPlaying) {
-            //What time is it now at the start of the loop?
+            // What time is it now at the start of the loop?
             gameClock.frameStart();
 
             if(!nowPaused){
-                //FIXME: need to change condition
-//                if(true) {
-//                    startMenu();
-//                }
                 if(gameClock.getTimeElapsed() > 0) {
                     update();
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
@@ -152,22 +120,19 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
                 if(gameProgress.getGameStatus()){
                     gameOver();
-                    // after this func, need to clear all elements in arraylists
-//                    gameProgress.reset(gamePcs, factory, objType);
-
                 }
+                // Return true if all enemies are destroyed then advance to next level
                 if(mCollision.checkEnemiesRemaining()){
                     gameProgress.startNextLevel(gamePcs, factory, objType);
                     mCollision.resetEnemies();
                 }
             }
-            // on pause..
+            // Pause music and game frame on user pause
             else if(userPause){
                 audio.pause();
                 gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
-//                nowPlaying = false;
                 gameClock.frameStop();
-//                Log.e("run: ", "nowPlaying is false: " + nowPlaying);
+
                 while(userPause){
                     gameClock.frameStart();
                     if(!userPause){
@@ -182,18 +147,22 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             // Store the answer in timeThisFrame
             gameClock.frameStop();
         }
-//        Log.e("run:", "userPause: " + userPause);
     }
 
 
-
     private void update() {
-        // synchronize call to touch handler for player's angle calculation.
+
+        // Synchronize call to touch handler for player's angle calculation.
         mTouchHandler.requestAngleUpdate();
+
         // EXPLOSION
         mParticleSystem.update(gameClock.getTimeElapsed());
 
-        // shooting action each update. (FIXME: PUT THIS SHOOT RESULT AFTER PLAYER UPDATE..)
+        // PLAYER
+        gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
+        gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
+
+        // PLAYER LASER
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         if(DEBUGGING) {
@@ -204,18 +173,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             gamePcs.mPlayerLasers.add(shootResult);
         }
 
-        // PLAYER
-//        if()
-        gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
-        gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
-
-
-        // ASTEROIDS
-        for(int i = 0 ; i < gamePcs.mAsteroids.size() ; i++) {
-            gamePcs.mAsteroids.get(i).update(gameClock.getTimeElapsed(), display);
-        }
-
-        // PLAYER LASER we call different update since this has a boolean attached to it.
+        // PLAYER LASER we call a different update since this has a boolean attached to it.
         for(int i = 0; i < gamePcs.mPlayerLasers.size(); i++) {
             if(gamePcs.mPlayerLasers.get(i).updateL(gameClock.getTimeElapsed(), display)) {
                 gamePcs.mPlayerLasers.remove(i);
@@ -223,12 +181,15 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
         }
 
-        //POWER UPS
+        // ASTEROIDS
+        for(int i = 0 ; i < gamePcs.mAsteroids.size() ; i++) {
+            gamePcs.mAsteroids.get(i).update(gameClock.getTimeElapsed(), display);
+        }
 
+        // POWER UPS
         if(mCollision.dropPowerUp){
             gamePcs.mMineralPowerUps.add(factory.getPowerUp(mCollision.getDropPos()));
         }
-        // PowerUp position - currently stationary
         for(int i = 0; i < gamePcs.mMineralPowerUps.size(); i++) {
             gamePcs.mMineralPowerUps.get(i).update(gameClock.getTimeElapsed(), display);
         }
@@ -236,48 +197,20 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         // OPPONENT
         Laser oppShootResult;
 
-//        for(Opponent o : gamePcs.mOpponents){
-////            if(o instanceof Shooter){
-////                oppType = SpaceObjectType.SHOOTER;
-////            }
-////            else{
-////                oppType = SpaceObjectType.SUICIDER;
-////            }
-//            oppShootResult = o.attack(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
-//            if(oppShootResult != null) {
-//                gamePcs.mOpponentLasers.add(oppShootResult);
-//
-//                // update the position of opponent at this index
-//                //o.updateOppPosition(true);
-//                gamePcs.mShooters.get(i).updateOppPosition(true);
-//            }
-//            o.update(gameClock.getTimeElapsed(), display);
-//        }
-
         for(int i = 0; i < gamePcs.mOpponents.size(); i++) {
+            oppShootResult = gamePcs.mOpponents.get(i).attack(gameClock.getTimeElapsed(),
+                    factory, gamePcs.mPlayer.getPosition());
 
-            // Lower level opponents shoot the player
-            // Higher level opponents do not - they're on a suicide mission to destroy player
-//            if(gamePcs.mOpponents.get(i) )
+            if(oppShootResult != null) {
+                gamePcs.mOpponentLasers.add(oppShootResult);
 
-                oppShootResult = gamePcs.mOpponents.get(i).attack(gameClock.getTimeElapsed(),
-                        factory, gamePcs.mPlayer.getPosition());
+                // Shooter moves away in a different angle after each shot
+                gamePcs.mOpponents.get(i).updateOppPosition(true);
+            }
 
-                if(oppShootResult != null) {
-                    gamePcs.mOpponentLasers.add(oppShootResult);
-
-                    // update the position of opponent at this index
-                    gamePcs.mOpponents.get(i).updateOppPosition(true);
-                }
-
+            // Update position of both Shooters and Suiciders
             gamePcs.mOpponents.get(i).update(gameClock.getTimeElapsed(), display);
         }
-//
-////    for(int i = 0; i < gamePcs.mSuiciders.size(); i++){
-////        gamePcs.mSuiciders.get(i).launchSuicideShip(gamePcs.mPlayer.getPosition());
-////        gamePcs.mSuiciders.get(i).update(gameClock.getTimeElapsed(), display);
-////    }
-
 
         // OPPONENT LASER
         for(int i = 0; i < gamePcs.mOpponentLasers.size(); i++) {
@@ -289,7 +222,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     }
-
 
 
     /*
@@ -305,7 +237,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_DOWN: // First touch point
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
                 nowPaused = mTouchHandler.inputEvent(event, nowPaused);
-                userPause = nowPaused; // synchronize userpause and nowpause after initial start.
+                userPause = nowPaused; // Synchronize userPause and nowPause after initial start.
                 if(gameProgress.getGameStatus()) // Allows user to touch and restart
                     userRestart = true;
                 break;
@@ -317,13 +249,11 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                 mTouchHandler.removeEvent(event);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                mTouchHandler.reset(); // This case exist for just incase a cancel action is received
+                mTouchHandler.reset(); // This case exist for just in case a cancel action is received
                 break;
         }
         return true;
     }
-
-
 
 
 
@@ -352,6 +282,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     }
 
+
     private void gameOver(){
         audio.pause();
         gameView.drawGameOver(gameProgress);
@@ -363,7 +294,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             }
             gameClock.frameStop();
         }
-        // pause here until user presses screen to resume for a new game..
+        // Pause here until user presses screen to resume for a new game..
         // nest "startNewGame()" into if statement conditioned on pause until touch
         userRestart = false;
         startNewGame();
