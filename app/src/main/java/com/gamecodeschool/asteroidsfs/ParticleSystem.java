@@ -4,9 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
-
 import java.util.ArrayList;
 import java.util.Random;
+
+
+/*
+ * The ParticleSystem class is used a factory to generate a number of particles.
+ * This class is used when simulating an explosion in a collision.
+ */
 
 public class ParticleSystem {
 
@@ -17,10 +22,8 @@ public class ParticleSystem {
     boolean mIsRunning = false;
     private final long EXPLOSION_INTERVAL = 1000;
 
-    //Maybe replace with a call to getObject() in ObjectFactory
-    public void init(int numParticles, Display display){
+    public void init(int numParticles, Display display) {
         mParticles = new ArrayList<>();
-
         // Create the particles
         for (int i = 0; i < numParticles; i++) {
             PointF position = new PointF(
@@ -33,7 +36,8 @@ public class ParticleSystem {
         }
     }
 
-
+    // Update particles only for a specific amount of time
+    // In this case, for one second.
     public void update(long time) {
         mDuration += time;
 
@@ -55,7 +59,8 @@ public class ParticleSystem {
 
     public void draw(Canvas canvas, Paint paint) {
         for (Particle p : mParticles) {
-            paint.setColor(Color.argb(255,255,255,255));
+            // draw system of particles in green
+            paint.setColor(Color.argb(255,30,255,5));
             canvas.drawRect(p.getPosition().x, p.getPosition().y,
                             p.getPosition().x+5, p.getPosition().y+5, paint);
         }
