@@ -3,11 +3,7 @@ package com.gamecodeschool.asteroidsfs;
 public class GameConfig {
     // PLAYER CLASS (including PowerMods)
     static final double MAX_DEG = 6.28318530718; // RADIAN VALUE FOR 360
-    static final double MIN_DEG = 0;
     static final float VELOCITY_RATE = 0.02f;
-    static final float WRAP_AROUND_OFFSET = 96;
-    static final float MAX_VELOCITY = 1;
-    static final double RAD_TO_DEG = 0.0174533;
     static final int PLAYER_SHIP_PADDING = 30; // pixel padding. this  / 2 is padding on each applied side.
     static final long DEFAULT_INVINCIBILITY_RESPAWN_TIME = 3000;
     static final long DEFAULT_SHOOT_THRESHOLD = 500; // in ms
@@ -41,7 +37,7 @@ public class GameConfig {
     // OBJECT_FACTORY CLASS
     static final int MAX_ANGLE = 360;
     static final float TIME = 20; // time it should take to cross screen in seconds
-    static final float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
+    static final float LASER_TIME = 3.0f; // Default seconds it takes for laser to cross screen width.
     static final float OPPONENT_TIME = 20;
     static final float SUICIDER_TIME = 15;
     static final float MS_PER_S = 1000; // 1000 milliseconds per 1 second

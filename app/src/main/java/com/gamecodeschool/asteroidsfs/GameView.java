@@ -311,7 +311,6 @@ public class  GameView {
                                         break;
 
                         }
-//                        Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
                 }
         }
 

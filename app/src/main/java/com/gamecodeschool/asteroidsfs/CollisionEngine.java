@@ -3,47 +3,32 @@ package com.gamecodeschool.asteroidsfs;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ASTEROID_DROP_PROB;
 import static com.gamecodeschool.asteroidsfs.GameConfig.OPPONENT_DROP_PROB;
 
-import android.content.Context;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.graphics.PointF;
 
 import java.util.ArrayList;
 
-import java.util.Random;
-
-import android.graphics.PointF;
-
 
 /* 
  * The CollisionEngine's main role is detecting the collision between objects.
- * - ATM: the engine runs n^2 algorithm for comparing arraylists.
- * - The reason why we use brute force is that our object count should not be big enough
- *      to have significant negative performance.
+ *  Brute force algorithm is used for collicsion detection. We break on first collision detected.
  * The CollisionEngine's second role is to faciliate collision action between two objects.
+ *  For example. Asteroids can split when destroyed by colliding with laser and player.
  */
 public class CollisionEngine {
     int totalHits = 0;
     boolean asteroidsEliminated = false;
     boolean oppsEliminated = false;
-//    Random powerUpSeed = new Random();
     boolean dropPowerUp = false;
     private PointF powerUpPos;
-//    GameProgress playerStatus = new GameProgress();
 
     /*
-        We go through run through all object pairs that can be collided.
+        We run through all object pairs that can be collided.
         player laser - asteroid
         player laser - opponent
         enemy laser - player
         asteroid - player
         powerup - player 
         These should cover the basic cases of collision within the game.
-        FIXME: Separate these into separate private methods for readability!!!
     */
     public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps) {
         dropPowerUp = false;
@@ -65,18 +50,16 @@ public class CollisionEngine {
 
     }
 
-    // See if player collided with any of the asteroids.
+    // When player collides with asteroid, trigger asteroid collision and reset player.
+    // Also, life is decremented since player died
     private void playerAsteroidCollision(Player P, ArrayList<Asteroid> aList, GameProgress gp) {
         for(int i = 0; i < aList.size(); i++) {
             Asteroid temp = aList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 P.resetPos();
-                // add subtract life logic here and possible start grace period count down.
-                gp.decLife();
+                gp.decLife(); // You pay for the mistake with your life
 
                 // add invincibility for respawn
-                // disable powerups (reset fire rate)
-
                 aList.addAll(temp.collisionAction());
                 aList.remove(i);
                 i--;
@@ -93,17 +76,16 @@ public class CollisionEngine {
             Opponent temp = oList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 P.resetPos();
-                // add subtract life logic here and possible start grace period count down.
-                // should the enemy ship be destroyed on collision with Player ship?
-                gp.decLife();
+            // add subtract life logic here and possible start grace period count down.
+            // should the enemy ship be destroyed on collision with Player ship?
+            gp.decLife();
 
-                oList.remove(i);
-                i--;
-                if(oList.size() == 0){
-                    oppsEliminated = true;
-                }
-                break;
+            oList.remove(i);
+            if(oList.size() == 0){
+                oppsEliminated = true;
             }
+            break;
+        }
         }
     }
 
@@ -112,7 +94,6 @@ public class CollisionEngine {
             PowerUps temp = puList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 // add power up feature on collision
-                //FIXME:
                 switch(temp.getPowerUpType()){
                     case FIRE_RATE:
                         P.receivePowerUp(PowerUp.FIRE_RATE);
@@ -123,7 +104,6 @@ public class CollisionEngine {
                         break;
                 }
                 puList.remove(i);
-                i--;
                 break;
             }
         }
@@ -144,7 +124,6 @@ public class CollisionEngine {
                     );
 
                     pList.remove(i);
-                    //FIXME: Need to add score logic here!
                     // For now enemy dies in 1 hit.
                     gp.updateScore(gp.OppMultiplier);
 
@@ -153,7 +132,6 @@ public class CollisionEngine {
 
                     oList.remove(k);
                     i--;
-                    k--;
                     if(oList.size() == 0){
                         oppsEliminated = true;
                     }
@@ -203,7 +181,6 @@ public class CollisionEngine {
                 gp.decLife();
 
                 oLaserList.remove(i);
-                i--;
                 break;
             }
         }
@@ -231,66 +208,5 @@ public class CollisionEngine {
     }
 
     public PointF getDropPos() {return this.powerUpPos;}
-
-
-
-    // FIXME for now these code will not be used, but left in there as a possible future usage if we need some sort of timer function 
-    // FIXME for the collision endgine.
-    // Sources: https://stackoverflow.com/questions/10032003/how-to-make-a-countdown-timer-in-android
-    // https://stackoverflow.com/questions/3134683/android-toast-in-a-thread
-
-    //Declare timer
-    // CountDownTimer cTimer = null;
-
-/*
-    //start timer function
-    public void startTimer(final SObjectsCollection gamePcs) {
-        cTimer = new CountDownTimer(3000, 1000) {
-            int i = 0;
-            public void onTick(long millisUntilFinished) {
-                i++;
-                Log.d("CollisionEngine", "grace period implemented " + i);
-            }
-            public void onFinish() {
-                totalHits += 1;
-                // decrement player's life
-                gamePcs.gameProgress.decLife();
-            }
-        };
-        cTimer.start();
-    }*/
-
-
-    // //cancel timer
-    // public void cancelTimer() {
-    //     if(cTimer!=null)
-    //         cTimer.cancel();
-    // }
-
-
-    // public void startTimer(final Context context, final SObjectsCollection gamePcs) {
-    //     Handler handler = new Handler(Looper.getMainLooper());
-    //     handler.post(new Runnable() {
-    //         public void run() {
-    //             cTimer = new CountDownTimer(3000, 100) {
-    //                 int i = 0;
-
-    //                 public void onTick(long millisUntilFinished) {
-    //                     i++;
-    //                     Log.d("CollisionEngine", "grace period implemented " + i);
-    //                 }
-    //                 public void onFinish() {
-    //                     //totalHits += 1;
-    //                     // decrement player's life
-    //                     //gamePcs.gameProgress.decLife();
-    //                     Log.d("CollisionEngine", "grace period done!");
-
-    //                    /* Log.d("CollisionEngine", "total hits from inside onFinish " + totalHits);*/
-    //                 }
-    //             };
-    //             cTimer.start();
-    //         }
-    //     });
-    // }
 }
 
