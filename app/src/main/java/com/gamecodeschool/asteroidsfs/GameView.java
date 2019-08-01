@@ -208,7 +208,7 @@ public class  GameView {
         Bitmap[] mAsteroidSmallGif;
         Bitmap[] mAsteroidMediumGif;
         Bitmap[] mAsteroidLargeGif;
-        int b, ss1, ss2, s, m, l = 0;
+        int b, ss, s, m, l = 0;
 
 
 
@@ -326,7 +326,7 @@ public class  GameView {
 
                                 // Methods are ordered alphabetically below draw()
                                 drawAsteroids(render);
-                                drawPlayer(render);
+                                drawPlayer(render, spaceshipGIF);
                                 myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
                                 //drawSuicider(render, gProg);
@@ -459,12 +459,12 @@ public class  GameView {
                 }
         }
 
-        private void drawPlayer(SObjectsCollection render){
+        private void drawPlayer(SObjectsCollection render, Bitmap[] shipGIF){
                 if(render.mPlayer.getShieldState()){
                         myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
-                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss1 == spaceshipGIF.length)
-                                ss1 = 0;
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
+                                ss = 0;
                 }
                 else if(render.mPlayer.getRespawnState()){
                         if(toggleTransparency){
@@ -475,14 +475,14 @@ public class  GameView {
                                 myPaint.setAlpha(255);
                                 toggleTransparency = true;
                         }
-                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss1 == spaceshipGIF.length)
-                                ss1 = 0;
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
+                                ss = 0;
                 }
                 else{
-                        myCanvas.drawBitmap(spaceshipGIF[ss1++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss1 == spaceshipGIF.length)
-                                ss1 = 0;
+                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                        if(ss == shipGIF.length)
+                                ss = 0;
                 }
         }
 
@@ -492,6 +492,31 @@ public class  GameView {
 //                                render.mSuiciders.get(i).getBitmapY(), myPaint);
 //                }
 //        }
+
+
+        void drawShipMenu() {
+                if (myHolder.getSurface().isValid()) {
+                        myCanvas = myHolder.lockCanvas();
+                        myCanvas.drawARGB(255, 0, 0, 0);
+
+                        // Draw spaceship options
+                        myCanvas.drawBitmap(spaceshipGIF[ss++], 0, 0, myPaint);
+                        myCanvas.drawBitmap(spaceship2GIF[ss++], screenRes.x/2, screenRes.y/2, myPaint);
+                        if(ss == spaceship2GIF.length)
+                                ss = 0;
+
+
+                        // Prompt user to choose a spaceship
+                        myPaint.setColor(Color.argb(255, 255, 255, 255));
+                        myPaint.setTextSize(screenRes.x / 20);
+                        myCanvas.drawText("Choose Your Spaceship",
+                                                                        (screenRes.x / 4) - 30,
+                                                                        (screenRes.y / 2) + 500,
+                                                                        myPaint);
+
+                        myHolder.unlockCanvasAndPost(myCanvas);
+                }
+        }
 
         void drawPauseMenu(){
 //                if (myHolder.getSurface().isValid()) {
