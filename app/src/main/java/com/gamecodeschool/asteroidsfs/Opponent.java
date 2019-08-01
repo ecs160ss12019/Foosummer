@@ -16,12 +16,31 @@ public class Opponent extends SpaceObject {
     private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
     private final long SHOOT_INTERVAL = 2900;
     private double addAngle = 200;
+    private double shootAngle;
+    private double angleToPlayer;
     private SpaceObjectType oppType;
-
 
     public void updateOppPosition(boolean status) {
         updatePosition = status;
     }
+
+    @Override
+    public void update(long time, Display display){
+        super.update(time, display);
+
+        if(updatePosition){
+            Log.e("opponent", "angle is " + angle);
+
+           // this.angle += addAngle;
+
+            angle = angle + 200;
+            updatePosition = false;
+
+            Log.e("opponent", " updated angle is " + angle);
+        }
+
+    }
+
 
     public Opponent(PointF position, double angle, float velocityMag, float hitRadius) {
         super(position, angle, velocityMag, hitRadius);
@@ -30,19 +49,21 @@ public class Opponent extends SpaceObject {
     Laser attack(long timeIncrement, ObjectFactory fac, PointF playerPos) {
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
-        angle = (float)Math.atan2(getY, getX);
+        angleToPlayer = (float)Math.atan2(getY, getX);
+
         switch (this.oppType) {
             case SHOOTER:
                 laserTimer += timeIncrement;
                 if (laserTimer > SHOOT_INTERVAL) {
                     laserTimer = 0;
-                    angle += addAngle;
-                    return fac.getOpponentLaser(new PointF(position.x, position.y), (float)angle, 1);
+                    shootAngle = angleToPlayer;
+                    return fac.getOpponentLaser(new PointF(position.x, position.y), (float)shootAngle, 1);
                 }
                 break;
 
 
             case SUICIDER:
+                angle = angleToPlayer;
                 velMagnitude += velMagnitude/10000;
                 break;
         }
