@@ -2,6 +2,7 @@ package com.gamecodeschool.asteroidsfs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
@@ -9,11 +10,17 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.VelocityTracker;
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 // these imports deal with ArrayList class in java
 
 
 class AsteroidsGame extends SurfaceView implements Runnable{
+    Canvas canvas;
+    Paint paint;
+
 
     private final int NUM_BLOCKS_WIDE = 40;
     int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
@@ -38,7 +45,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     // This volatile variable can be accessed
     // from inside and outside the thread
     private volatile boolean nowPlaying;
-    private boolean nowPaused = true;
+    private boolean nowPaused = false;
 
 
     // GAME OBJECTS
@@ -47,6 +54,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private GameView gameView;
     private SObjectsCollection gamePcs;
     private Audio audio;
+    private TouchHandler mTouchHandler;
     //Temporarily here
     ParticleSystem mParticleSystem;
 
@@ -85,6 +93,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         //Temporarily here
         mParticleSystem = new ParticleSystem ();
         mParticleSystem.init(1000, display);
+        mTouchHandler = new TouchHandler(display);
         gameClock = new GameClock();
         gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
         audio = new Audio(context);
@@ -112,6 +121,8 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs.mShooters.removeAll(gamePcs.mShooters);
 
         gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
+
+        mTouchHandler.setPlayerRef(gamePcs.mPlayer);
         gameProgress.reset(gamePcs, factory, oppType);
         factory.reset();
     }
@@ -144,12 +155,6 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     gameProgress.startNextLevel(gamePcs, factory, objType);
                     mCollision.resetEnemies();
                 }
-
-
-                // check for collision between player and police laser
-                // check for collision between player's laser and powerup
-                // check for collision between player's laser and asteroids
-                //detectCollisions();
             }
             // on pause..
             else if(userPause){
@@ -178,11 +183,12 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
     private void update() {
-
+        // synchronize call to touch handler for player's angle calculation.
+        mTouchHandler.requestAngleUpdate();
         // EXPLOSION
         mParticleSystem.update(gameClock.getTimeElapsed() , display);
 
-        // shooting action each update.
+        // shooting action each update. (FIXME: PUT THIS SHOOT RESULT AFTER PLAYER UPDATE..)
         Laser shootResult = gamePcs.mPlayer.shoot(gameClock.getTimeElapsed(), factory);
 
         if(DEBUGGING) {
@@ -194,6 +200,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         }
 
         // PLAYER
+//        if()
         gamePcs.mPlayer.update(gameClock.getTimeElapsed(), display);
         gamePcs.mPlayer.configMatrix(gameView.getBitmapDim(), blockSize);
 
@@ -225,13 +232,13 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         Laser oppShootResult;
 
         for(Opponent o : gamePcs.mOpponents){
-            if(o instanceof Shooter){
-                oppType = SpaceObjectType.SHOOTER;
-            }
-            else{
-                oppType = SpaceObjectType.SUICIDER;
-            }
-            oppShootResult = o.attack(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition(), oppType);
+//            if(o instanceof Shooter){
+//                oppType = SpaceObjectType.SHOOTER;
+//            }
+//            else{
+//                oppType = SpaceObjectType.SUICIDER;
+//            }
+            oppShootResult = o.attack(gameClock.getTimeElapsed(), factory, gamePcs.mPlayer.getPosition());
             if(oppShootResult != null) {
                 gamePcs.mOpponentLasers.add(oppShootResult);
 
@@ -279,183 +286,38 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
 
 
-    // Handle all the screen touches
+    /*
+        Receive touch event.
+        Three possible events:
+            - Enable Mobility
+            - Rotation based on pixel drag per update cycle.
+            - Pause menu area touched.
+    */
     @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        int index = motionEvent.getActionIndex();
-        int pointerId = motionEvent.getPointerId(index);
-        int action = motionEvent.getActionMasked();
-        PointF pauseRadius = new PointF(2497, 116);
-
-        int oldX, oldY;
-        // This switch block replaces the
-        // if statement from the Sub Hunter game
-        switch (motionEvent.getAction() &
-                MotionEvent.ACTION_MASK) {
-
-            // The player has put their finger on the screen
-            case MotionEvent.ACTION_DOWN:
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.e("Controlls", "Action DOWN "+ pointerId);
-//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-                // If the game was paused unpause
-//                if(nowPaused == true){
-//                    nowPaused = false;
-//                }
-
-//                Log.e("LOCATION: ", "THIS POINT IS AT: "
-//                        + motionEvent.getX() + ", " + motionEvent.getY());
-//                Log.e("LOCATION: ", "nowPaused: " + nowPaused);
-
-                //
-                // need to consider pause for multi-touch also... need to test on Android
-                // determines if user paused game or not
-                if(motionEvent.getX() > pauseRadius.x && motionEvent.getY() < pauseRadius.y && nowPaused == false){
-                    nowPaused = true;
-                }
-                else {
-                    nowPaused = false;
-
-                }
-                userPause = nowPaused;
-
-                // starts new game if user presses the screen
-                // following game over
-                // "if( game is over == true)
-                if(gameProgress.getGameStatus()){
+    public boolean onTouchEvent(MotionEvent event) {
+//        Log.d("TouchEvent:", event.actionToString(event.getAction()) + " Index: " + event.getActionIndex());
+        switch(event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN: // First touch point
+            case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
+                nowPaused = mTouchHandler.inputEvent(event, nowPaused);
+                userPause = nowPaused; // synchronize userpause and nowpause after initial start.
+                if(gameProgress.getGameStatus()) // Allows user to touch and restart
                     userRestart = true;
-                }
-
-
-
-
-                // If finger pressed on right side of screen
-                // then the ship will accelerate
-                if(motionEvent.getX() > display.width / 2){
-                    // call method that will accelerate ship
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-                // If finger pressed on left side of screen...
-
-                else if(motionEvent.getX() < display.width / 2){
-
-                    // If finger pressed on upper left of screen
-                    // then the ship will rotate counter-clockwise
-                    if(motionEvent.getY() < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-                    }
-                    else{
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-                    }
-                }
-
                 break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.e("Controlls", "Action Pointer DOWN "+ pointerId);
-//                Log.e("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                //
-                // HANDLE PAUSE HERE TOO.. NEED ANDROID TO TEST
-                // nowPaused = false;
-                //
-                //
-
-                if(motionEvent.getX(0) < display.width / 2){
-                    if(motionEvent.getY(0) < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
-                    }
-                    else if (motionEvent.getY(0) > display.height / 2){
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
-                    }
-                }
-                else if(motionEvent.getX(0) > display.width ){
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-
-                if( motionEvent.getX(1) < display.width / 2){
-                    // If finger pressed on upper left of screen
-                    // then the ship will rotate counter-clockwise
-                    if(motionEvent.getY(1) < display.height / 2){
-                        // rotate ship counter-clockwise
-                        gamePcs.mPlayer.setRotationState(1);
-//                        Log.e("Controlls", "ROTATE SECOND HERE TOP"+ pointerId);
-                    }
-                    else if (motionEvent.getY(1) > display.height / 2){
-                        // rotate ship clockwise
-                        gamePcs.mPlayer.setRotationState(2);
-//                        Log.e("Controlls", "ROTATE SECOND HERE BOT "+ pointerId);
-                    }
-                }
-                else if(motionEvent.getX(1) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(true);
-                }
-
+            case MotionEvent.ACTION_MOVE: // A pointer has moved.
+                mTouchHandler.updateRotation(event); // Only thing we care in touch event when it comes to move is rotate.
                 break;
-
-
-
-            // The player lifted their finger
-            // from anywhere on screen.
-            case MotionEvent.ACTION_UP:
-
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.d("Controlls", "Action UP "+ pointerId);
-//                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                if(motionEvent.getX() > display.width / 2){
-                    // stop position
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-                if(motionEvent.getX() < display.width / 2){
-
-                    // stop rotation / fix orientation
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-
+            case MotionEvent.ACTION_POINTER_UP:  // A touch pointer has been lifted.
+            case MotionEvent.ACTION_UP: // Last pointer up action
+                mTouchHandler.removeEvent(event);
                 break;
-
-            case MotionEvent.ACTION_POINTER_UP: // when order of touch and release is the same
-                index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                pointerId = motionEvent.getPointerId(index);
-//                Log.d("Controlls", "Action Pointer UP "+ pointerId);
-//                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+  motionEvent.getY(index));
-
-                if((pointerId == 0 || pointerId == 1) &&
-                        ((motionEvent.getX(0) < display.width / 2) ||
-                        ((motionEvent.getX(1) < display.width / 2))))
-                {
-                   gamePcs.mPlayer.setRotationState(0);
-                }
-
-                if(pointerId == 1 && motionEvent.getX(1) < display.width / 2){
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-                if(pointerId == 1 && motionEvent.getX(1) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-                if(pointerId == 0 && motionEvent.getX(0) < display.width / 2){
-                    gamePcs.mPlayer.setRotationState(0);
-                }
-                if(pointerId == 0 && motionEvent.getX(0) > display.width / 2){
-                    gamePcs.mPlayer.setMoveState(false);
-                }
-
+            case MotionEvent.ACTION_CANCEL:
+                mTouchHandler.reset(); // This case exist for just incase a cancel action is received
                 break;
-
         }
         return true;
     }
+
 
 
 

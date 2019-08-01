@@ -120,10 +120,13 @@ public class GameProgress {
             if(level < 3 || Math.random() > 0.35){
                 gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SHOOTER));
                 gamePcs.mOpponents.get(i).setOppType(objType.SHOOTER);
+                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
             }
             else {
                 gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SUICIDER));
                 gamePcs.mOpponents.get(i).setOppType(objType.SUICIDER);
+
+                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
             }
         }
 

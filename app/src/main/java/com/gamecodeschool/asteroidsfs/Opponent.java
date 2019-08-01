@@ -27,11 +27,11 @@ public class Opponent extends SpaceObject {
         super(position, angle, velocityMag, hitRadius);
     }
 
-    Laser attack(long timeIncrement, ObjectFactory fac, PointF playerPos, SpaceObjectType type) {
+    Laser attack(long timeIncrement, ObjectFactory fac, PointF playerPos) {
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
         angle = (float)Math.atan2(getY, getX);
-        switch (type) {
+        switch (this.oppType) {
             case SHOOTER:
                 laserTimer += timeIncrement;
                 if (laserTimer > SHOOT_INTERVAL) {
