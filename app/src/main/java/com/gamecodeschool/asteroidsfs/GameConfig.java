@@ -46,6 +46,8 @@ public class GameConfig {
     static final float ZONE_1_MIN_MULTIPLIER = 0.25f;
     static final float ZONE_2_MIN_MULTIPLIER = 0.50f;
     static final int SHIP_SCALE_FACTOR = 20;
+    static final float OPPONENT_HIT_RADIUS = 100;
+    static final float POWERUP_HIT_RADIUS = 50;
 
     // OPPONENT CLASS
     static final long SHOOT_INTERVAL = 2900;

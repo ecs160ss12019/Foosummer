@@ -14,6 +14,8 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_SIZE_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ZONE_1_MIN_MULTIPLIER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ZONE_2_MIN_MULTIPLIER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.SHIP_SCALE_FACTOR;
+import static com.gamecodeschool.asteroidsfs.GameConfig.OPPONENT_HIT_RADIUS;
+import static com.gamecodeschool.asteroidsfs.GameConfig.POWERUP_HIT_RADIUS;
 
 import android.graphics.PointF;
 
@@ -88,17 +90,17 @@ public class ObjectFactory {
 
                                 return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
                                                 rand.nextInt(MAX_ANGLE) * Math.PI/180,
-                                                opponentVelocity, 100);
+                                                opponentVelocity, OPPONENT_HIT_RADIUS);
 
 
                         case POWERUP:
-                                return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), 50);
+                                return new PowerUps(new PointF(zone1.randomX(), zone1.randomY()), POWERUP_HIT_RADIUS);
 
 
                         case SUICIDER:
                                 return new Suicider(new PointF(zone2.randomX(), zone2.randomY()),
                                         rand.nextInt(MAX_ANGLE) * Math.PI/180,
-                                        suiciderVelocity, 100);
+                                        suiciderVelocity, OPPONENT_HIT_RADIUS);
 
 
                 }
