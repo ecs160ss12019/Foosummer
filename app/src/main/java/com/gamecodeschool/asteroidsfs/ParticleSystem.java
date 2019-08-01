@@ -55,7 +55,7 @@ public class ParticleSystem {
 
     public void draw(Canvas canvas, Paint paint) {
         for (Particle p : mParticles) {
-            paint.setColor(Color.argb(255,255,255,255));
+            paint.setColor(Color.argb(255,30,255,5));
             canvas.drawRect(p.getPosition().x, p.getPosition().y,
                             p.getPosition().x+5, p.getPosition().y+5, paint);
         }
