@@ -6,6 +6,13 @@ package com.gamecodeschool.asteroidsfs;
     import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ * The Asteroid class represents an asteroid moving in space.
+ * Thus, it extends SpaceObject to inherit all moving functionality.
+ * The asteroid class extra functionality such as increasing its speed,
+ * used for asteroids that were disintegrated, and collision detection.
+ */
+
 public class Asteroid extends SpaceObject {
     private int size;       //Define different size asteroids
     private final int DEFAULT_SPLIT_ANGLE = 30; // DEFAULT MAX SPLIT POSSIBLE ANGLE
@@ -16,6 +23,9 @@ public class Asteroid extends SpaceObject {
         this.size = size;
     }
 
+    // This constructor is used to make a copy of the asteroid w/ a different size and direction.
+    // It is used when the player hits an asteroid and it disintegrates into two smaller copies
+    // of itself.
     Asteroid(SpaceObject copy, int newSize, int theta) {
         super(copy);
         size = newSize;
