@@ -1,7 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.NUM_BLOCKS_WIDE;
-// import static com.gamecodeschool.asteroidsfs.GameConfig.MILLIS_IN_SECOND; FIXME: not used/needed?
 
 import android.content.Context;
 import android.util.Log;
@@ -12,9 +11,7 @@ import android.view.SurfaceView;
 
 class AsteroidsGame extends SurfaceView implements Runnable{
 
-    private final int NUM_BLOCKS_WIDE = 40;
-
-    int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
+    int blockSize;
 
     // Toggle for debugging
     static final boolean DEBUGGING = false;

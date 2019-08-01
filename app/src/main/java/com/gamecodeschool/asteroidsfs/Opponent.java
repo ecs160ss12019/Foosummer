@@ -5,16 +5,18 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.SHOOT_INTERVAL;
 import android.graphics.PointF;
 
 public class Opponent extends SpaceObject {
+    // Gets the X and Y component between Opponent and Player
     protected float getX;
     protected float getY;
-    protected boolean updatePosition = false;
 
-    private long laserTimer = 0; // Everytime this is > 2900ms, we shoot.
-    private double addAngle = 200; // Ideal angle change after each shot
+    private long laserTimer = 0; // Every time this is > SHOOT_INTERVAL, Opponent shoots.
     private double shootAngle;
     private double angleToPlayer;
+    private boolean updatePosition = false;
     private SpaceObjectType oppType;
 
+    // Called from AsteroidsGame after each Shooter's shot
+    // to initiate Shooter's movement pattern
     public void updateOppPosition(boolean status) {
         updatePosition = status;
     }
@@ -25,7 +27,7 @@ public class Opponent extends SpaceObject {
 
         // After Shooter shoots a laser, it moves away
         if(updatePosition){
-            angle += addAngle;
+            angle += 200; // Ideal angle change after each shot
             updatePosition = false;
         }
 
@@ -36,9 +38,9 @@ public class Opponent extends SpaceObject {
         super(position, angle, velocityMag, hitRadius);
     }
 
-    // Lower level and onward opponents - Shooters, shoot at the player
+    // Initial opponents - Shooters, shoot at the player
     // Higher level opponents - Suiciders, have no lasers and
-    // are on a suicide mission to destroy player
+    // are on a suicide mission to destroy Player
     Laser attack(long timeIncrement, ObjectFactory fac, PointF playerPos) {
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
@@ -49,7 +51,7 @@ public class Opponent extends SpaceObject {
                 laserTimer += timeIncrement;
                 if (laserTimer > SHOOT_INTERVAL) {
                     laserTimer = 0;
-                    // Update the laser's shoot angle, not this Shooter's actual angle position
+                    // Update the laser's shoot angle
                     shootAngle = angleToPlayer;
                     return fac.getOpponentLaser(new PointF(position.x, position.y), (float)shootAngle, 1);
                 }
