@@ -6,6 +6,7 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LIFE;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LEVEL;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_OPPONENTS;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_ASTEROIDS;
+import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_MIN_SCORE_ADD_LIFE;
 
 /* *
  * GameProgress's responsibilities
@@ -23,6 +24,7 @@ public class GameProgress {
     private boolean gameOver = false;
     private int numOpps = INITIAL_NUM_OPPONENTS;
     private int numAsteroids = INITIAL_NUM_ASTEROIDS;
+    private int minScoreAddLife = INITIAL_MIN_SCORE_ADD_LIFE;
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
     final public int OppMultiplier = 5;
@@ -47,6 +49,7 @@ public class GameProgress {
         numOpps = INITIAL_NUM_OPPONENTS;
         numAsteroids = INITIAL_NUM_ASTEROIDS;
         gameOver = false;
+        minScoreAddLife = INITIAL_MIN_SCORE_ADD_LIFE;
         generateEnemies(level, gamePcs, factory, objType);
     }
 
@@ -68,6 +71,10 @@ public class GameProgress {
      */
     public void updateScore(int scoreMultiplier) {
         myScore += baseScore * scoreMultiplier;
+        if(myScore >= minScoreAddLife && myLives < 3 && myLives > 0){
+            myLives += 1;
+            minScoreAddLife = minScoreAddLife * 2;
+        }
     }
 
     public void startNextLevel(SObjectsCollection gamePcs,

@@ -35,7 +35,7 @@ public class GameConfig {
     static final int INITIAL_LEVEL = 1;
     static final int INITIAL_NUM_OPPONENTS = 1;
     static final int INITIAL_NUM_ASTEROIDS = 2;
-    static final int INITIAL_NUM_POWERUPS = 1;
+    static final int INITIAL_MIN_SCORE_ADD_LIFE = 2500;
 
     // GAMEVIEW CLASS
     static final int LASER_SIZE_FACTOR = 2;
