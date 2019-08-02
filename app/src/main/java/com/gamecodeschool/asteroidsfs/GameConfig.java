@@ -1,5 +1,13 @@
 package com.gamecodeschool.asteroidsfs;
 
+import android.graphics.PointF;
+
+/*
+    This GameConfig class contains all static
+    final constants within our code
+ */
+
+
 public class GameConfig {
     // PLAYER CLASS (including PowerMods)
     static final double MAX_DEG = 6.28318530718; // RADIAN VALUE FOR 360
@@ -16,7 +24,6 @@ public class GameConfig {
 
     // ASTEROIDS_GAME CLASS
     static final int NUM_BLOCKS_WIDE = 40;
-    static final int MILLIS_IN_SECOND = 1000; //FIXME: delete if not needed
 
     // COLLISION_ENGINE CLASS
     static final double ASTEROID_DROP_PROB = 0.10;
@@ -24,8 +31,7 @@ public class GameConfig {
 
     // GAME_PROGRESS CLASS
     static final int INITIAL_SCORE = 0;
-    //FIXME: RESET THE INTITIAL LIVES TO 3
-    static final int INITIAL_LIFE = 100;
+    static final int INITIAL_LIFE = 3;
     static final int INITIAL_LEVEL = 1;
     static final int INITIAL_NUM_OPPONENTS = 1;
     static final int INITIAL_NUM_ASTEROIDS = 2;
@@ -33,6 +39,7 @@ public class GameConfig {
 
     // GAMEVIEW CLASS
     static final int LASER_SIZE_FACTOR = 2;
+    static final PointF PAUSE_BUTTON_SCALE = new PointF(100, 10);
 
     // OBJECT_FACTORY CLASS
     static final int MAX_ANGLE = 360;

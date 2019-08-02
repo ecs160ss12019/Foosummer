@@ -3,6 +3,7 @@ package com.gamecodeschool.asteroidsfs;
 import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_SIZE_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.DIVISION_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.SHIP_SCALE_FACTOR;
+import static com.gamecodeschool.asteroidsfs.GameConfig.PAUSE_BUTTON_SCALE;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -321,7 +322,6 @@ public class  GameView {
 
         private void drawOpponent(SObjectsCollection render, GameProgress gProg){
                 // OPPONENT
-
                 for (int i = 0; i < render.mOpponents.size(); i++) {
                         switch(render.mOpponents.get(i).getOppType()) {
                                 case SHOOTER:
@@ -345,14 +345,10 @@ public class  GameView {
                         ps.draw(myCanvas, myPaint);
         }
 
-        // draw the pause button
-        private void drawPauseButton(){ myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint); }
+        private void drawPauseButton(){ myCanvas.drawBitmap(pauseButtonBM,
+                screenRes.x - PAUSE_BUTTON_SCALE.x, PAUSE_BUTTON_SCALE.y, myPaint); }
 
         private void drawPowerUps(SObjectsCollection render){
-                // add switch case for power ups..?
-                // POWER UPS
-//                switch (powerUpType)
-
                 for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
                         switch(render.mMineralPowerUps.get(i).getPowerUpType()){
                                 case FIRE_RATE:
@@ -415,37 +411,24 @@ public class  GameView {
         }
 
         void drawPauseMenu(){
-//                if (myHolder.getSurface().isValid()) {
-//                        // Lock the canvas (graphics memory) ready to draw
-//                        myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
-                        myCanvas.drawARGB(150, 0, 0, 0);
-
-                        // Choose a color to paint with
-                        myPaint.setColor(Color.argb(255, 75, 180, 250));
-                        // Choose the font size
-                        myPaint.setTextSize(screenRes.x / 20);
-
-                        myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
-                        myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
-//                        // unlockCanvasAndPost is a method of SurfaceView
-//                        myHolder.unlockCanvasAndPost(myCanvas);
-//                }
+                myCanvas.drawARGB(150, 0, 0, 0);
+                // Choose a color to paint with
+                myPaint.setColor(Color.argb(255, 75, 180, 250));
+                // Choose the font size
+                myPaint.setTextSize(screenRes.x / 20);
+                myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
+                myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
         }
 
         void drawGameOver(GameProgress gProg){
                 if (myHolder.getSurface().isValid()) {
                         myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawARGB(255, 100, 100, 100);
                         myCanvas.drawBitmap(gameOverBM, 0, 0, myPaint);
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
-//                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
-                        // Draw some text to prompt restarting
-                        //                myPaint.setTextSize(blockSize * 2);
+
                         myCanvas.drawText("Tap anywhere to restart",
                                 (screenRes.x / 4) - 30, (screenRes.y / 2) + 500, myPaint);
-
 
                         myPaint.setColor(Color.argb(100, 244, 232, 104));
                         myPaint.setTextSize(screenRes.x / 40);
