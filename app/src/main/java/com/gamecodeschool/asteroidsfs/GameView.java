@@ -3,6 +3,7 @@ package com.gamecodeschool.asteroidsfs;
 import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_SIZE_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.DIVISION_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.SHIP_SCALE_FACTOR;
+import static com.gamecodeschool.asteroidsfs.GameConfig.PAUSE_BUTTON_SCALE;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,10 +15,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.content.Context;
 import android.graphics.PointF;
-
 import java.util.ArrayList;
-
-// make this an interface
 
 public class  GameView {
         private boolean toggleTransparency= false;
@@ -122,21 +120,15 @@ public class  GameView {
 
 
         Bitmap mBackGround;
-        Bitmap mAsteroid1;
-        Bitmap mAsteroid2;
-        Bitmap mAsteroid3;
         Bitmap shipBitmap;
         Bitmap mOpponentBitmap;
         Bitmap mOpponent2Bitmap;
         Bitmap mPlayerLaserBM;
         Bitmap yellowPowerUpBM;
-        Bitmap redPowerUpBM;
         Bitmap bluePowerUpBM;
-        Bitmap greenPowerUpBM;
         Bitmap mOpponentLaserBM;
         Bitmap pauseButtonBM;
         Bitmap gameOverBM;
-        Bitmap[] mBackGroundGif;
         Bitmap[] spaceshipGIF;
         Bitmap[] spaceship2GIF;
         Bitmap[] spaceship3GIF;
@@ -156,19 +148,6 @@ public class  GameView {
                 myPaint = new Paint();
                 screenRes = new PointF(screen.width, screen.height);
                 ships = new ArrayList<>();
-                // Preload bitmaps for asteroids and make 3 different scale ones.
-//                Bitmap asteroidBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroid);
-//                Bitmap asteroidSmallBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroidsmall_0);
-//                Bitmap asteroidMediumBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroidmedium_0);
-//                Bitmap asteroidLargeBMP = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.asteroidlarge_0);
-//                mAsteroid1 = Bitmap.createScaledBitmap(asteroidSmallBMP, asteroidSizeFactor * 1,
-//                                asteroidSizeFactor , false);
-//                mAsteroid2 = Bitmap.createScaledBitmap(asteroidMediumBMP, asteroidSizeFactor * 2,
-//                                asteroidSizeFactor * 2, false);
-//                mAsteroid3 = Bitmap.createScaledBitmap(asteroidLargeBMP, asteroidSizeFactor * 3,
-//                                asteroidSizeFactor * 3, false);
-
-
 
                 shipBitmap = BitmapFactory.decodeResource(ourContext.getResources(), R.drawable.spaceship_0);
                 // // Modify the bitmaps to face the ship
@@ -266,18 +245,15 @@ public class  GameView {
                                 // Methods are ordered alphabetically below draw()
                                 drawAsteroids(render);
                                 drawPlayer(render, spaceshipGIF);
-                                myPaint.setAlpha(255);
                                 drawOpponent(render, gProg);
-                                //drawSuicider(render, gProg);
                                 drawLasers(render, gProg);
                                 drawPowerUps(render);
                                 drawParticleExplosion(ps);
                                 drawPauseButton();
                                 drawHUD(gProg);
 
-//                                Log.e("GameView", "CURRENT GAME LEVEL: " + gProg.getLevel());
-
                         }
+                        // if user paused the game, draw the pause menu only
                         else{ drawPauseMenu(); }
 
 
@@ -346,7 +322,6 @@ public class  GameView {
 
         private void drawOpponent(SObjectsCollection render, GameProgress gProg){
                 // OPPONENT
-
                 for (int i = 0; i < render.mOpponents.size(); i++) {
                         switch(render.mOpponents.get(i).getOppType()) {
                                 case SHOOTER:
@@ -370,14 +345,10 @@ public class  GameView {
                         ps.draw(myCanvas, myPaint);
         }
 
-        // draw the pause button
-        private void drawPauseButton(){ myCanvas.drawBitmap(pauseButtonBM, 2500, 10, myPaint); }
+        private void drawPauseButton(){ myCanvas.drawBitmap(pauseButtonBM,
+                screenRes.x - PAUSE_BUTTON_SCALE.x, PAUSE_BUTTON_SCALE.y, myPaint); }
 
         private void drawPowerUps(SObjectsCollection render){
-                // add switch case for power ups..?
-                // POWER UPS
-//                switch (powerUpType)
-
                 for (int i = 0; i < render.mMineralPowerUps.size(); i++) {
                         switch(render.mMineralPowerUps.get(i).getPowerUpType()){
                                 case FIRE_RATE:
@@ -397,9 +368,7 @@ public class  GameView {
         private void drawPlayer(SObjectsCollection render, Bitmap[] shipGIF){
                 if(render.mPlayer.getShieldState()){
                         myCanvas.drawArc(render.mPlayer.getHitbox(), 0, 360, true, myPaint);
-                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == shipGIF.length)
-                                ss = 0;
+
                 }
                 else if(render.mPlayer.getRespawnState()){
                         if(toggleTransparency){
@@ -410,24 +379,12 @@ public class  GameView {
                                 myPaint.setAlpha(255);
                                 toggleTransparency = true;
                         }
-                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == shipGIF.length)
-                                ss = 0;
                 }
-                else{
-                        myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
-                        if(ss == shipGIF.length)
-                                ss = 0;
-                }
+                myCanvas.drawBitmap(shipGIF[ss++], render.mPlayer.getMatrix(), myPaint);
+                if(ss == shipGIF.length)
+                        ss = 0;
+                myPaint.setAlpha(255);
         }
-
-//        private void drawSuicider(SObjectsCollection render, GameProgress gProg){
-//                for(int i = 0; i < render.mSuiciders.size(); i++){
-//                        myCanvas.drawBitmap(mOpponent2Bitmap, render.mSuiciders.get(i).getBitmapX(),
-//                                render.mSuiciders.get(i).getBitmapY(), myPaint);
-//                }
-//        }
-
 
         void drawShipMenu() {
                 if (myHolder.getSurface().isValid()) {
@@ -454,37 +411,23 @@ public class  GameView {
         }
 
         void drawPauseMenu(){
-//                if (myHolder.getSurface().isValid()) {
-//                        // Lock the canvas (graphics memory) ready to draw
-//                        myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
-                        myCanvas.drawARGB(150, 0, 0, 0);
-
-                        // Choose a color to paint with
-                        myPaint.setColor(Color.argb(255, 75, 180, 250));
-                        // Choose the font size
-                        myPaint.setTextSize(screenRes.x / 20);
-
-                        myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
-                        myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
-//                        // unlockCanvasAndPost is a method of SurfaceView
-//                        myHolder.unlockCanvasAndPost(myCanvas);
-//                }
+                myCanvas.drawARGB(150, 0, 0, 0);
+                // Choose a color to paint with
+                myPaint.setColor(Color.argb(255, 75, 180, 250));
+                // Choose the font size
+                myPaint.setTextSize(screenRes.x / 20);
+                myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
+                myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
         }
 
         void drawGameOver(GameProgress gProg){
                 if (myHolder.getSurface().isValid()) {
                         myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawARGB(255, 100, 100, 100);
                         myCanvas.drawBitmap(gameOverBM, 0, 0, myPaint);
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
-//                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
-                        // Draw some text to prompt restarting
-                        //                myPaint.setTextSize(blockSize * 2);
                         myCanvas.drawText("Tap anywhere to restart",
                                 (screenRes.x / 4) - 30, (screenRes.y / 2) + 500, myPaint);
-
 
                         myPaint.setColor(Color.argb(100, 244, 232, 104));
                         myPaint.setTextSize(screenRes.x / 40);

@@ -1,7 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.NUM_BLOCKS_WIDE;
-// import static com.gamecodeschool.asteroidsfs.GameConfig.MILLIS_IN_SECOND; FIXME: not used/needed?
 
 import android.content.Context;
 import android.util.Log;
@@ -12,9 +11,7 @@ import android.view.SurfaceView;
 
 class AsteroidsGame extends SurfaceView implements Runnable{
 
-    private final int NUM_BLOCKS_WIDE = 40;
-
-    int blockSize; // FIXME TODO SUGGESTION: Tuck this into SObjectsCollection, might not be a necessary fix.
+    int blockSize;
 
     // Toggle for debugging
     static final boolean DEBUGGING = false;
@@ -75,7 +72,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         mParticleSystem.init(1000, display);
         mTouchHandler = new TouchHandler(display);
         gameClock = new GameClock();
-        gamePcs.mBlockSize = blockSize; // FIXME Need to get other blocksizes tucked away for this eventually.
+        gamePcs.mBlockSize = blockSize;
         audio = new Audio(context);
         startNewGame();
     }
@@ -97,7 +94,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs.mSuiciders.removeAll(gamePcs.mSuiciders);
         gamePcs.mShooters.removeAll(gamePcs.mShooters);
 
-        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
+        gamePcs.mPlayer = Player.getInstance(display , factory.getPlayerLength());
 
         mTouchHandler.setPlayerRef(gamePcs.mPlayer);
         gameProgress.reset(gamePcs, factory, oppType);
@@ -238,6 +235,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_POINTER_DOWN: // Additional touch pointer initiated
                 nowPaused = mTouchHandler.inputEvent(event, nowPaused);
                 userPause = nowPaused; // Synchronize userPause and nowPause after initial start.
+
                 if(gameProgress.getGameStatus()) // Allows user to touch and restart
                     userRestart = true;
                 break;

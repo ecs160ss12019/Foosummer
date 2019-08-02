@@ -47,7 +47,7 @@ public class TouchHandler {
 	public boolean inputEvent(MotionEvent event, boolean pause) {
 		int newestIndex = event.getActionIndex();
 		TouchClass classificationResult = getClassification(new PointF(event.getX(newestIndex),
-									event.getY(newestIndex))); // Receives new classification based on touch position.
+									event.getY(newestIndex)), pause); // Receives new classification based on touch position.
 		// Dispatch to util method based on classification.
 		switch(classificationResult) {
 			case MOVE:
@@ -57,7 +57,7 @@ public class TouchHandler {
 				rotate(event);
 				break;
 			case PAUSE:
-				pause = (pause) ? false : true; // flips pause values when pause button is touched.
+				pause = !pause;
 				break;
 		}
 		return pause;
@@ -122,9 +122,13 @@ public class TouchHandler {
 	// ----------------------------------- UTIL METHODS -----------------------------------
 	// ------------------------------------------------------------------------------------
 
-	// Based on the touch position X, get classification of the method.
-	private TouchClass getClassification(PointF input) {
-		return (input.x < (display.width / 2)) ? TouchClass.ROTATION : rightsideTouchClass(input);
+	// Based on the touch position X and current paused state, get classification of the method.
+	private TouchClass getClassification(PointF input, boolean paused) {
+		if(paused == false) {
+			return (input.x < (display.width / 2)) ? TouchClass.ROTATION : rightsideTouchClass(input);
+		} else {
+			return TouchClass.PAUSE; // Classification is Always pause for touch down while paused.
+		}
 	}	
 
 	// We keep the ID of what we're tracking if current tracking motion is invalid.
