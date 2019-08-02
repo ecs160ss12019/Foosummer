@@ -56,33 +56,16 @@ public class  GameView {
         int[] asteroidMediumDrawables = {
                 R.drawable.asteroidmedium_0,
                 R.drawable.asteroidmedium_1,
-//                R.drawable.asteroidmedium_2,
-//                R.drawable.asteroidmedium_3,
-//                R.drawable.asteroidmedium_4,
                 R.drawable.asteroidmedium_5,
                 R.drawable.asteroidmedium_6,
-//                R.drawable.asteroidmedium_7,
-//                R.drawable.asteroidmedium_8,
-//                R.drawable.asteroidmedium_9,
                 R.drawable.asteroidmedium_10,
                 R.drawable.asteroidmedium_11,
-//                R.drawable.asteroidmedium_12,
-//                R.drawable.asteroidmedium_13
-//                R.drawable.asteroidmedium_14,
                 R.drawable.asteroidmedium_15,
                 R.drawable.asteroidmedium_16,
-//                R.drawable.asteroidmedium_17,
-//                R.drawable.asteroidmedium_18,
-//                R.drawable.asteroidmedium_19,
                 R.drawable.asteroidmedium_20,
                 R.drawable.asteroidmedium_21,
-//                R.drawable.asteroidmedium_22,
-//                R.drawable.asteroidmedium_23
-//                R.drawable.asteroidmedium_24,
                 R.drawable.asteroidmedium_25,
                 R.drawable.asteroidmedium_26,
-//                R.drawable.asteroidmedium_27,
-//                R.drawable.asteroidmedium_28,
                 R.drawable.asteroidmedium_29,
         };
         int[] asteroidLargeDrawables = {
@@ -90,32 +73,26 @@ public class  GameView {
                 R.drawable.asteroidlarge_1,
                 R.drawable.asteroidlarge_2,
                 R.drawable.asteroidlarge_3,
-//                R.drawable.asteroidlarge_4,
                 R.drawable.asteroidlarge_5,
                 R.drawable.asteroidlarge_6,
                 R.drawable.asteroidlarge_7,
                 R.drawable.asteroidlarge_8,
-//                R.drawable.asteroidlarge_9,
                 R.drawable.asteroidlarge_10,
                 R.drawable.asteroidlarge_11,
                 R.drawable.asteroidlarge_12,
                 R.drawable.asteroidlarge_13,
-//                R.drawable.asteroidlarge_14,
                 R.drawable.asteroidlarge_15,
                 R.drawable.asteroidlarge_16,
                 R.drawable.asteroidlarge_17,
                 R.drawable.asteroidlarge_18,
-//                R.drawable.asteroidlarge_19,
                 R.drawable.asteroidlarge_20,
                 R.drawable.asteroidlarge_21,
                 R.drawable.asteroidlarge_22,
                 R.drawable.asteroidlarge_23,
-//                R.drawable.asteroidlarge_24,
                 R.drawable.asteroidlarge_25,
                 R.drawable.asteroidlarge_26,
                 R.drawable.asteroidlarge_27,
                 R.drawable.asteroidlarge_28,
-//                R.drawable.asteroidlarge_29,
         };
 
 
@@ -136,7 +113,7 @@ public class  GameView {
         Bitmap[] mAsteroidSmallGif;
         Bitmap[] mAsteroidMediumGif;
         Bitmap[] mAsteroidLargeGif;
-        int b, ss, s, m, l = 0;
+        int ss, s, m, l = 0;
 
 
 

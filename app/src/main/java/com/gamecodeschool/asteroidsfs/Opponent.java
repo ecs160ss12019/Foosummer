@@ -4,6 +4,11 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.SHOOT_INTERVAL;
 
 import android.graphics.PointF;
 
+/* Initial opponents - Shooters, shoot at the player
+ * Higher level opponents - Suiciders, have no lasers and
+ * go on a suicide mission to destroy Player
+ */
+
 public class Opponent extends SpaceObject {
     // Gets the X and Y component between Opponent and Player
     protected float getX;
@@ -38,9 +43,6 @@ public class Opponent extends SpaceObject {
         super(position, angle, velocityMag, hitRadius);
     }
 
-    // Initial opponents - Shooters, shoot at the player
-    // Higher level opponents - Suiciders, have no lasers and
-    // are on a suicide mission to destroy Player
     Laser attack(long timeIncrement, ObjectFactory fac, PointF playerPos) {
         getX = playerPos.x - position.x;
         getY = playerPos.y - position.y;
@@ -65,7 +67,7 @@ public class Opponent extends SpaceObject {
         return null;
     }
 
-    // Shooter or Suicider?
+    // Is the opponent of type Shooter or Suicider?
     public void setOppType(SpaceObjectType oppType) {
         this.oppType = oppType;
     }

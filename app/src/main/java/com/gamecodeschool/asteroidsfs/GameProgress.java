@@ -6,13 +6,6 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LIFE;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_LEVEL;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_OPPONENTS;
 import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_ASTEROIDS;
-import static com.gamecodeschool.asteroidsfs.GameConfig.INITIAL_NUM_POWERUPS;
-
-
-import android.util.Log;
-import android.widget.Space;
-import android.graphics.PointF;
-import java.util.Random;
 
 /* *
  * GameProgress's responsibilities
@@ -25,21 +18,14 @@ public class GameProgress {
     // track user score and lives
     private int myScore = INITIAL_SCORE;
     private int highScore = INITIAL_SCORE;
-    private int myLives = INITIAL_LIFE; // abstract this to UserShip class?
+    private int myLives = INITIAL_LIFE;
     private int level = INITIAL_LEVEL; // we increment each time the player clears a level.
     private boolean gameOver = false;
     private int numOpps = INITIAL_NUM_OPPONENTS;
     private int numAsteroids = INITIAL_NUM_ASTEROIDS;
-    private int numPowerUps = INITIAL_NUM_POWERUPS;
-    private Random rand = new Random();
-
 
     final private int baseScore = 50; // This is the score multiplier for each hostile object player destroys.
     final public int OppMultiplier = 5;
-
-    public int getLevel() {
-        return level;
-    }
 
     public int getMyScore() {
         return myScore;
@@ -70,11 +56,9 @@ public class GameProgress {
         if (myLives < 1) {
             setHighScore();
             gameOver = true;
-//            reset();
         } else {
             gameOver = false;
         }
-//        Log.d("GameProgress", "myLives after decrementing: " + myLives);
     }
 
 
@@ -88,29 +72,19 @@ public class GameProgress {
 
     public void startNextLevel(SObjectsCollection gamePcs,
                                ObjectFactory factory, SpaceObjectType objType) {
-        // call this function when all asteroids and opponents are destroyed
-        // increment level counter: currLevel ++;
+        // Called when all asteroids and opponents are destroyed
         level++;
         generateEnemies(level, gamePcs, factory, objType);
-
-
-        // asteroidsElim == false;
-        // oppsElim == false;
     }
 
     public void generateEnemies(int level, SObjectsCollection gamePcs,
                                 ObjectFactory factory, SpaceObjectType objType) {
-        // number of opponents and asteroids
-        // for the corresponding level
-        // numAsteroids = currLevel * (numAsteroids multiplier)
-        // numOpps = currLevel * (numOpps multiplier)
         if (level > INITIAL_LEVEL) {
             numAsteroids += 2;
         }
         if (level % 3 == 0) {
             numOpps += 1;
         }
-        // add boosts every 5 levels?
 
         for (int i = 0; i < numAsteroids; i++) {
             gamePcs.mAsteroids.add((Asteroid) factory.getSpaceObject(objType.ASTEROID));
@@ -121,21 +95,15 @@ public class GameProgress {
             if(level < 3 || Math.random() > 0.35){
                 gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SHOOTER));
                 gamePcs.mOpponents.get(i).setOppType(objType.SHOOTER);
-                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
             }
             else {
                 gamePcs.mOpponents.add((Opponent) factory.getSpaceObject(objType.SUICIDER));
                 gamePcs.mOpponents.get(i).setOppType(objType.SUICIDER);
-
-                Log.e("GameProgress ", "opponent " + i + " type is " + gamePcs.mOpponents.get(i).getOppType());
             }
         }
 
 
     }
-//    public int getNumAsteroids(){
-//        return numAsteroids;
-//    }
 
     private void setHighScore() {
         if(myScore > highScore){

@@ -1,7 +1,6 @@
 package com.gamecodeschool.asteroidsfs;
 
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_ANGLE;
-//import static com.gamecodeschool.asteroidsfs.GameConfig.DEFAULT_OPPONENT_HEALTH; FIXME: not needed/used?
 import static com.gamecodeschool.asteroidsfs.GameConfig.TIME;
 import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_TIME;
 import static com.gamecodeschool.asteroidsfs.GameConfig.OPPONENT_TIME;
@@ -10,7 +9,6 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.MS_PER_S;
 import static com.gamecodeschool.asteroidsfs.GameConfig.MAX_ASTEROID_SIZE_LEVEL;
 import static com.gamecodeschool.asteroidsfs.GameConfig.DIVISION_FACTOR;
 import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_SIZE_FACTOR;
-//import static com.gamecodeschool.asteroidsfs.GameConfig.LASER_VEL_FACTOR; FIXME: not needed/used?
 import static com.gamecodeschool.asteroidsfs.GameConfig.ZONE_1_MIN_MULTIPLIER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.ZONE_2_MIN_MULTIPLIER;
 import static com.gamecodeschool.asteroidsfs.GameConfig.SHIP_SCALE_FACTOR;
@@ -33,13 +31,11 @@ public class ObjectFactory {
         final private Display screen;
         final private float defaultVelocity; // Default is 10 seconds to cross width of screen.
         final private float defaultLaserVelocity;
-//        final private int defaultOpponentHealth = 3;
         final private Zone zone1; // Area in between 25% to 100% of screen
         final private Zone zone2; // Area in between 50% to 100% of screen
 
         private float currentVelocityMagnitude;
         private Random rand = new Random();
-        private int opponentHealth = 3;
         private float opponentVelocity;
         private float suiciderVelocity;
 
@@ -96,14 +92,12 @@ public class ObjectFactory {
                                 return new Suicider(new PointF(zone2.randomX(), zone2.randomY()),
                                         rand.nextInt(MAX_ANGLE) * Math.PI/180,
                                         suiciderVelocity, OPPONENT_HIT_RADIUS);
-
-
                 }
                 return null;
         }
 
 
-        // BELOW are methods for generating specific objects with different parameters.
+        // Below are methods for generating specific objects with different parameters.
         public PowerUps getPowerUp(PointF pos){
                 return new PowerUps(pos, 50);
         }
@@ -127,13 +121,9 @@ public class ObjectFactory {
 
 
         // ------------------- Begins Variable Controls ------------------------
-        public void addSpeed(float speedIncrement) {
-        currentVelocityMagnitude += speedIncrement;
-        }
 
         public void reset() {
                 currentVelocityMagnitude = defaultVelocity;
-                //opponentHealth = defaultOpponentHealth; FIXME: ARE WE USING THIS? IF SO DEFINE CONST IN GAMECONFIG
         }
 
         // ------------------- Ends Variable Controls --------------------------
