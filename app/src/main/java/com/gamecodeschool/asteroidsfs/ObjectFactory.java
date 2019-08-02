@@ -74,20 +74,15 @@ public class ObjectFactory {
                 double angle = rand.nextInt(MAX_ANGLE) * Math.PI / 180;
 
                 switch(type) {
-                        case PLAYER:
-                                return new Player(new PointF(screen.width/2, screen.height/2),
-                                                defaultShipSize.x/2);
                         case ASTEROID:
                                 PointF point = new PointF(zone2.randomX(), zone2.randomY());
                                 int sizeMultiplier = rand.nextInt(MAX_ASTEROID_SIZE_LEVEL) + 1;
-
                                 return new Asteroid(angle,
                                                 point,
                                                 currentVelocityMagnitude,
                                                 sizeMultiplier * asteroidSizeFactor / 2, sizeMultiplier);
 
                         case SHOOTER:
-
                                 return new Opponent(new PointF(zone2.randomX(), zone2.randomY()),
                                                 rand.nextInt(MAX_ANGLE) * Math.PI/180,
                                                 opponentVelocity, OPPONENT_HIT_RADIUS);
@@ -126,11 +121,15 @@ public class ObjectFactory {
                 return new Laser(temp, dmg);
         }
 
+        public float getPlayerLength() {
+                return defaultShipSize.x / 2;
+        }
+
 
         // ------------------- Begins Variable Controls ------------------------
         public void addSpeed(float speedIncrement) {
         currentVelocityMagnitude += speedIncrement;
-}
+        }
 
         public void reset() {
                 currentVelocityMagnitude = defaultVelocity;

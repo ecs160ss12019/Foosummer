@@ -15,7 +15,7 @@ import android.graphics.RectF;
 import android.graphics.Point;
 
 public class Player extends SpaceObject{
-
+	private static Player instance = null;
 	private RectF mRect;
 	protected Matrix playerMatrix = new Matrix();
 	private PowerMods pow = new PowerMods();
@@ -29,7 +29,14 @@ public class Player extends SpaceObject{
 	private boolean respawnInvincibility;
 	private long respawnCountdown;
 
-	Player(PointF pos, float playerLength) {
+	// If instance is null, return a newly constructed player pointer.
+	public static Player getInstance(Display dis, float length) {
+		instance = (instance == null) ?
+					new Player(new PointF(dis.width/2, dis.height/2), length) : instance;
+		return instance;
+	}
+
+	private Player(PointF pos, float playerLength) {
 		super(pos, 0, 0, playerLength);
 		resetPos = new PointF(pos.x, pos.y);
 		boxLength = (int) playerLength;

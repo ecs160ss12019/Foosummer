@@ -94,7 +94,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         gamePcs.mSuiciders.removeAll(gamePcs.mSuiciders);
         gamePcs.mShooters.removeAll(gamePcs.mShooters);
 
-        gamePcs.mPlayer = (Player)factory.getSpaceObject(objType.PLAYER);
+        gamePcs.mPlayer = Player.getInstance(display , factory.getPlayerLength());
 
         mTouchHandler.setPlayerRef(gamePcs.mPlayer);
         gameProgress.reset(gamePcs, factory, oppType);

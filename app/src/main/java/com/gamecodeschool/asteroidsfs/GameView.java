@@ -415,10 +415,6 @@ public class  GameView {
         }
 
         void drawPauseMenu(){
-//                if (myHolder.getSurface().isValid()) {
-//                        // Lock the canvas (graphics memory) ready to draw
-//                        myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawBitmap(pauseMenuBM, 0, 0, myPaint);
                         myCanvas.drawARGB(150, 0, 0, 0);
 
                         // Choose a color to paint with
@@ -428,21 +424,14 @@ public class  GameView {
 
                         myCanvas.drawText("PAUSED", (screenRes.x / 2) - 225, screenRes.y / 2, myPaint);
                         myCanvas.drawText("PRESS ANYWHERE TO RESUME", screenRes.x/7,  (screenRes.y / 2) + 150, myPaint);
-//                        // unlockCanvasAndPost is a method of SurfaceView
-//                        myHolder.unlockCanvasAndPost(myCanvas);
-//                }
         }
 
         void drawGameOver(GameProgress gProg){
                 if (myHolder.getSurface().isValid()) {
                         myCanvas = myHolder.lockCanvas();
-//                        myCanvas.drawARGB(255, 100, 100, 100);
                         myCanvas.drawBitmap(gameOverBM, 0, 0, myPaint);
                         myPaint.setColor(Color.argb(255, 255, 255, 255));
                         myPaint.setTextSize(screenRes.x / 20);
-//                        myCanvas.drawText("Game over!", (screenRes.x / 2) - 250, screenRes.y / 2, myPaint);
-                        // Draw some text to prompt restarting
-                        //                myPaint.setTextSize(blockSize * 2);
                         myCanvas.drawText("Tap anywhere to restart",
                                 (screenRes.x / 4) - 30, (screenRes.y / 2) + 500, myPaint);
 

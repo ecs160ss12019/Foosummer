@@ -37,7 +37,7 @@ public class GameConfig {
     // OBJECT_FACTORY CLASS
     static final int MAX_ANGLE = 360;
     static final float TIME = 20; // time it should take to cross screen in seconds
-    static final float LASER_TIME = 3.0f; // Default seconds it takes for laser to cross screen width.
+    static final float LASER_TIME = 4; // Default seconds it takes for laser to cross screen width.
     static final float OPPONENT_TIME = 20;
     static final float SUICIDER_TIME = 15;
     static final float MS_PER_S = 1000; // 1000 milliseconds per 1 second
