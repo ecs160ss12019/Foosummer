@@ -299,18 +299,5 @@ class AsteroidsGame extends SurfaceView implements Runnable{
         startNewGame();
     }
 
-    private void startMenu() {
-        audio.pause();
-        gameView.drawShipMenu();
-        gameClock.frameStop();
-        while(!userStart) {
-            gameClock.frameStart();
-            if(userStart) break;
-            gameClock.frameStop();
-        }
-        // pause here until user presses screen to resume for a new game..
-        // nest "startNewGame()" into if statement conditioned on pause until touch
-        userStart = false;
-    }
 }
 
