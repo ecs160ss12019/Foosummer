@@ -21,6 +21,8 @@ public class Audio {
         sounds.add(MediaPlayer.create(ct, R.raw.asteroid_explosion));
         sounds.add(MediaPlayer.create(ct, R.raw.laser_powerup));
         sounds.add(MediaPlayer.create(ct, R.raw.shield_powerup));
+        sounds.add(MediaPlayer.create(ct, R.raw.crash));
+        sounds.add(MediaPlayer.create(ct, R.raw.lasers));
     }
 
     public void playClick(ArrayList<MediaPlayer> song, int idx) {

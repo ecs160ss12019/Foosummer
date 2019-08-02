@@ -173,6 +173,8 @@ class PowerMods {
 	long currentShootThreshold;
 	long currentElapsedTime;
 	long invincibilityCountDown;
+//	public Audio audio;
+
 	// initialize with default initial states.
 	PowerMods() {
 		currentShootThreshold    = DEFAULT_SHOOT_THRESHOLD;
@@ -191,6 +193,7 @@ class PowerMods {
 
 	// Power up increases Player fire rate up to max threshold
 	public void increaseFireRate(){
+//		audio.playClick(audio.sounds, 3);
 		if(currentShootThreshold > MINIMUM_SHOOT_INTERVAL){
 			currentShootThreshold -= DEFAULT_THRESHOLD_DECREMENT;
 		}
@@ -199,6 +202,7 @@ class PowerMods {
 	// if invincibility power up is picked up,
 	// increment the invincibility shield duration
 	public void activateShield(){
+//		audio.playClick(audio.sounds, 4);
 		invincibilityCountDown += DEFAULT_INVINCIBILITY_DURATION;
 	}
 

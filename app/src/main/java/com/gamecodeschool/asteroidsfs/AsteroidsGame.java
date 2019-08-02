@@ -36,7 +36,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
     private GameView gameView;
     private CollisionEngine mCollision;
     private SObjectsCollection gamePcs;
-    private Audio audio;
+    public Audio audio;
     private TouchHandler mTouchHandler;
     private ParticleSystem mParticleSystem;
 
@@ -117,7 +117,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
                     gameView.draw(gamePcs, gameProgress, userPause, mParticleSystem);
                     audio.playClick(audio.sounds, 0);
                 }
-                mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem);
+                mCollision.checkCollision(gamePcs, gameProgress, mParticleSystem, audio);
                 if(gameProgress.getGameStatus()){
                     gameOver();
                 }
@@ -285,6 +285,7 @@ class AsteroidsGame extends SurfaceView implements Runnable{
 
     private void gameOver(){
         audio.pause();
+        audio.playClick(audio.sounds, 1);
         gameView.drawGameOver(gameProgress);
         gameClock.frameStop();
         while(!userRestart){

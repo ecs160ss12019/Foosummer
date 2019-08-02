@@ -25,7 +25,7 @@ public class GameConfig {
     // GAME_PROGRESS CLASS
     static final int INITIAL_SCORE = 0;
     //FIXME: RESET THE INTITIAL LIVES TO 3
-    static final int INITIAL_LIFE = 100;
+    static final int INITIAL_LIFE = 300;
     static final int INITIAL_LEVEL = 1;
     static final int INITIAL_NUM_OPPONENTS = 1;
     static final int INITIAL_NUM_ASTEROIDS = 2;

@@ -4,7 +4,7 @@ import static com.gamecodeschool.asteroidsfs.GameConfig.ASTEROID_DROP_PROB;
 import static com.gamecodeschool.asteroidsfs.GameConfig.OPPONENT_DROP_PROB;
 
 import android.graphics.PointF;
-
+import android.content.Context;
 import java.util.ArrayList;
 
 
@@ -20,7 +20,6 @@ public class CollisionEngine {
     boolean oppsEliminated = false;
     boolean dropPowerUp = false;
     private PointF powerUpPos;
-
     /*
         We run through all object pairs that can be collided.
         player laser - asteroid
@@ -30,34 +29,37 @@ public class CollisionEngine {
         powerup - player 
         These should cover the basic cases of collision within the game.
     */
-    public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps) {
+    public void checkCollision(SObjectsCollection collection, GameProgress gProg, ParticleSystem ps, Audio audio) {
         dropPowerUp = false;
 
         // player vs asteroid.
         if(collection.mPlayer.getShieldState() || collection.mPlayer.getRespawnState()){
-            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
-            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
-            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps, audio);
+            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps, audio);
+            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg, audio);
         }
         else {
-            playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg);
-            playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg);
-            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps);
-            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps);
-            oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg);
-            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg);
+            playerAsteroidCollision(collection.mPlayer, collection.mAsteroids, gProg, audio);
+            playerEnemyCollision(collection.mPlayer, collection.mOpponents, gProg, audio);
+            PLaserEnemyCollision(collection.mPlayerLasers, collection.mOpponents, gProg, ps, audio);
+            PLaserAsteroidCollision(collection.mPlayerLasers, collection.mAsteroids, gProg, ps, audio);
+            oLaserPlayerCollision(collection.mOpponentLasers, collection.mPlayer, gProg, audio);
+            playerPowerUpCollision(collection.mPlayer, collection.mMineralPowerUps, gProg, audio);
         }
 
     }
 
     // When player collides with asteroid, trigger asteroid collision and reset player.
     // Also, life is decremented since player died
-    private void playerAsteroidCollision(Player P, ArrayList<Asteroid> aList, GameProgress gp) {
+    private void playerAsteroidCollision(Player P, ArrayList<Asteroid> aList, GameProgress gp,
+                                         Audio audio) {
         for(int i = 0; i < aList.size(); i++) {
             Asteroid temp = aList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
+                audio.playClick(audio.sounds, 5);
                 P.resetPos();
                 gp.decLife(); // You pay for the mistake with your life
+
 
                 // add invincibility for respawn
                 aList.addAll(temp.collisionAction());
@@ -71,14 +73,17 @@ public class CollisionEngine {
         }
     }
 
-    private void playerEnemyCollision(Player P, ArrayList<Opponent> oList, GameProgress gp){
+    private void playerEnemyCollision(Player P, ArrayList<Opponent> oList, GameProgress gp,
+                                      Audio audio){
         for(int i = 0; i < oList.size(); i++) {
             Opponent temp = oList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 P.resetPos();
+                audio.playClick(audio.sounds, 5);
             // add subtract life logic here and possible start grace period count down.
             // should the enemy ship be destroyed on collision with Player ship?
             gp.decLife();
+
 
             oList.remove(i);
             if(oList.size() == 0){
@@ -89,17 +94,19 @@ public class CollisionEngine {
         }
     }
 
-    private void playerPowerUpCollision(Player P, ArrayList<PowerUps> puList, GameProgress gp){
+    private void playerPowerUpCollision(Player P, ArrayList<PowerUps> puList, GameProgress gp, Audio audio){
         for(int i = 0; i < puList.size(); i++) {
             PowerUps temp = puList.get(i);
             if(SpaceObject.collisionCheck(P, temp)) {
                 // add power up feature on collision
                 switch(temp.getPowerUpType()){
                     case FIRE_RATE:
+                        audio.playClick(audio.sounds, 3);
                         P.receivePowerUp(PowerUp.FIRE_RATE);
                         break;
 
                     case SHIELD:
+                        audio.playClick(audio.sounds, 4);
                         P.receivePowerUp(PowerUp.SHIELD);
                         break;
                 }
@@ -110,7 +117,8 @@ public class CollisionEngine {
     }
 
 
-    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList, GameProgress gp, ParticleSystem ps) {
+    private void PLaserEnemyCollision(ArrayList<Laser> pList, ArrayList<Opponent> oList,
+                                      GameProgress gp, ParticleSystem ps, Audio audio) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < oList.size(); k++) {
                 Opponent temp = oList.get(k);
@@ -123,6 +131,7 @@ public class CollisionEngine {
                             )
                     );
 
+                    audio.playClick(audio.sounds, 6);
                     pList.remove(i);
                     // For now enemy dies in 1 hit.
                     gp.updateScore(gp.OppMultiplier);
@@ -141,7 +150,8 @@ public class CollisionEngine {
         }
     }
 
-    private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList, GameProgress gp, ParticleSystem ps) {
+    private void PLaserAsteroidCollision(ArrayList<Laser> pList, ArrayList<Asteroid> aList,
+                                         GameProgress gp, ParticleSystem ps, Audio audio) {
         for(int i = 0; i < pList.size(); i++) {
             for(int k = 0; k < aList.size(); k++) {
                 Asteroid temp = aList.get(k);
@@ -163,6 +173,7 @@ public class CollisionEngine {
                     aList.addAll(temp.collisionAction());
                     aList.remove(k);
                     pList.remove(i);
+                    audio.playClick(audio.sounds, 2);
                     i--;
                     if(aList.size() == 0){
                         asteroidsEliminated = true;
@@ -173,13 +184,15 @@ public class CollisionEngine {
         }
     }
 
-    private void oLaserPlayerCollision(ArrayList<Laser>oLaserList, Player P, GameProgress gp) {
+    private void oLaserPlayerCollision(ArrayList<Laser>oLaserList, Player P, GameProgress gp,
+                                       Audio audio) {
         for(int i = 0; i < oLaserList.size(); i++) {
             if(SpaceObject.collisionCheck(oLaserList.get(i), P)) {
                 P.resetPos();
                 // add subtract life logic here and possible grace period count down.
                 gp.decLife();
 
+                audio.playClick(audio.sounds, 6);
                 oLaserList.remove(i);
                 break;
             }
