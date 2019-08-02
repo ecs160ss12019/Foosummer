@@ -117,7 +117,7 @@ public class ObjectFactory {
         //want to shoot in direction of player
         public Laser getOpponentLaser(PointF oppPos, float playerAngle, int dmg) {
                 SpaceObject temp = new SpaceObject(oppPos, playerAngle, defaultLaserVelocity,
-                        screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR);
+                        screen.width / DIVISION_FACTOR / LASER_SIZE_FACTOR / 2);
                 return new Laser(temp, dmg);
         }
 
